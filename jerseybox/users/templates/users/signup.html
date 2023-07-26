@@ -1,0 +1,114 @@
+
+  {%extends "users/base.html"%}
+
+  {%block content%}
+    <div
+      class="flex items-center min-h-screen p-4 bg-gray-100 lg:justify-center"
+    >
+      <div
+        class="flex flex-col overflow-hidden bg-white rounded-md shadow-lg max md:flex-row md:flex-1 lg:max-w-screen-md"
+      >
+        <div class="p-5 bg-white md:flex-1">
+          {% load static %}
+          <div><img class='w-28 item-center h-10 mt-4' src="{% static 'logo.png' %}" alt=""></div>
+          <h3 class="my-4 text-center text-xl font-semibold text-gray-700">
+            CREATE ACCOUNT
+          </h3>
+          
+          <form action="#" class="flex flex-col space-y-5" method="POST">
+            {%csrf_token%}
+            <div class="flex flex-col space-y-1">
+              <label for="email" class="text-sm font-semibold text-gray-500"
+                >Full Name</label
+              >
+              <input
+                type="name"
+                name="username"
+                id="name"
+                autofocus
+                class="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
+              />
+            </div>
+
+            <div class="flex flex-col space-y-1">
+              <label for="email" class="text-sm font-semibold text-gray-500"
+                >Email</label
+              >
+              <input
+                type="email"
+                name="email"
+                id="email"
+                autofocus
+                class="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
+              />
+            </div>
+            <div class="flex flex-col space-y-1">
+              <label for="email" class="text-sm font-semibold text-gray-500"
+                >Mobile</label
+              >
+              <input
+                type="mobile"
+                name="mobile"
+                id="mobile"
+                autofocus
+                class="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
+              />
+            </div>
+            <div class="flex flex-col space-y-1">
+              <div class="flex items-center justify-between">
+                <label
+                  for="password"
+                  class="text-sm font-semibold text-gray-500"
+                  >Password</label
+                >
+              </div>
+              <input
+                type="password"
+                name="pass1"
+                id="password"
+                class="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
+              />
+            </div>
+            <div class="flex flex-col space-y-1">
+              <div class="flex items-center justify-between">
+                <label
+                  for="password"
+                  class="text-sm font-semibold text-gray-500"
+                  >Confirm Password</label
+                >
+              </div>
+              <input
+                type="password"
+                name="pass2"
+                id="password"
+                class="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
+              />
+              
+            </div>
+
+
+            <div>
+              <button
+                type="submit"
+                class="w-full px-4 py-2 text-lg font-semibold text-white transition-colors duration-300 bg-black rounded-md shadow hover:bg-gray-600 focus:outline-none focus:ring-gray-200 focus:ring-4"
+              >
+                CREATE
+              </button>
+            </div>
+            <div class="flex flex-col space-y-5">
+              <span class="flex items-center justify-center space-x-2">
+                <span class="h-px bg-gray-400 w-14"></span>
+                <span class="font-normal text-gray-500">or</span>
+                <span class="h-px bg-gray-400 w-14"></span>
+              </span>
+              <div class="flex flex-col space-y-4"></div>
+            </div>
+          </form>
+          <div class="text-center mb-16 text-sm">
+            <p>Already Have Account? <a href="">Log In Here</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+{%endblock%}

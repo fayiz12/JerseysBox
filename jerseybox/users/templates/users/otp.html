@@ -1,0 +1,49 @@
+{%extends "template.html"%}
+
+{%block content%}
+
+    <div class="flex items-center min-h-screen p-4 bg-gray-100 lg:justify-center">
+        <div
+          class="flex flex-col overflow-hidden bg-white rounded-md shadow-lg max md:flex-row md:flex-1 lg:max-w-screen-md"
+        >
+        
+          
+          <div class="p-5 bg-white md:flex-1">
+            <div><img class='w-28 item-center h-10 mt-4' src="/jerseybox/Screenshot from 2023-07-20 11-15-04.png" alt=""></div>
+            <h3 class="my-4 text-center text-xl font-semibold text-gray-700">Verify mobile number</h3>
+            
+                <p class="text-center m-8">A text with a One Time Password(OTP) has been sent to your mobile number:8590029995</p>
+                
+            
+            
+            <form action="#" class="flex flex-col space-y-5">
+              
+              <div class="flex flex-col space-y-1">
+                <div class="flex items-center justify-between">
+                  <label for="password" class="text-sm font-semibold text-gray-500">Enter OTP</label>
+                  <a href="#" class="text-sm text-black hover:underline focus:text-blue-800">Resend OTP</a>
+                </div>
+                <input
+                  type="password"
+                  id="password"
+                  class="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
+                />
+              </div>
+                  
+              <div>
+                <button
+                  type="submit"
+                  class="w-full px-4 py-2 text-lg font-semibold text-white transition-colors duration-300 bg-black rounded-md shadow hover:bg-gray-600 focus:outline-none focus:ring-gray-200 focus:ring-4"
+                >
+                  Create Account
+                </button>
+              </div>
+              
+              
+            </form>
+                          
+          </div>
+        </div>
+      </div>
+    
+{%endblock%}
