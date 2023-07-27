@@ -1,6 +1,6 @@
 from django.shortcuts import render,HttpResponse
 from django.contrib.auth.forms import UserCreationForm
-from .models import UserProfile
+from .models import UserProfile,UserProfileManager
 
 
 

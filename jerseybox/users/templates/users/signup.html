@@ -16,7 +16,8 @@
           </h3>
           
           <form action="#" class="flex flex-col space-y-5" method="POST">
-            {%csrf_token%}
+          {% csrf_token %}
+            
             <div class="flex flex-col space-y-1">
               <label for="email" class="text-sm font-semibold text-gray-500"
                 >Full Name</label
