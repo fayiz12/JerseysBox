@@ -1,4 +1,4 @@
-from django.shortcuts import render,HttpResponse
+from django.shortcuts import redirect, render,HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from .models import UserProfile,UserProfileManager
 
@@ -7,7 +7,7 @@ from .models import UserProfile,UserProfileManager
 
 
 def home(request):
-    pass
+    return render(request,'users/product.html')
 
 def signup(request):
     if request.method=='POST':
@@ -21,6 +21,7 @@ def signup(request):
             my_user=UserProfile.objects.create_user(email,name,mobile,pass1)
             my_user.save()
             print(email,name,mobile,pass1)
+            return redirect("login")
             
 
         
