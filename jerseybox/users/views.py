@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render,HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from .models import UserProfile,UserProfileManager
+from django.contrib.auth import authenticate,login as auth_login
 
 
 
@@ -24,10 +25,23 @@ def signup(request):
             return redirect("login")
             
 
-        
 
     return render(request,'users/signup.html')
 
 
 def login(request):
+    if request.method=='POST':
+        name = request.POST.get('username')  
+        pass1 = request.POST.get('pass1')
+
+        user=authenticate(username=name,password=pass1)
+        if user is not None:
+            print(name)
+            auth_login(request,user)
+            
+            return redirect('home')
+        else:
+            
+            return redirect("login")
+
     return render(request,"users/login.html")
