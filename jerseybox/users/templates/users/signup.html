@@ -2,6 +2,7 @@
   {%extends "users/base.html"%}
 
   {%block content%}
+ 
     <div
       class="flex items-center min-h-screen p-4 bg-gray-100 lg:justify-center"
     >
@@ -14,6 +15,14 @@
           <h3 class="my-4 text-center text-xl font-semibold text-gray-700">
             CREATE ACCOUNT
           </h3>
+
+          {%if messages%}
+          {%for message in messages%}
+          <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
+            <p class="font-bold">{{message}}</p>
+          </div>
+          {%endfor%}
+          {%endif%}
           
           <form action="#" class="flex flex-col space-y-5" method="POST">
           {% csrf_token %}
@@ -40,7 +49,7 @@
                 name="email"
                 id="email"
                 autofocus
-                class="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
+                class="required px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
               />
             </div>
             <div class="flex flex-col space-y-1">
@@ -52,7 +61,7 @@
                 name="mobile"
                 id="mobile"
                 autofocus
-                class="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
+                class="required px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
               />
             </div>
             <div class="flex flex-col space-y-1">
@@ -67,7 +76,7 @@
                 type="password"
                 name="pass1"
                 id="password"
-                class="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
+                class="required px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
               />
             </div>
             <div class="flex flex-col space-y-1">
@@ -75,17 +84,17 @@
                 <label
                   for="password"
                   class="text-sm font-semibold text-gray-500"
-                  >Confirm Password</label
+                  >Password</label
                 >
               </div>
               <input
                 type="password"
                 name="pass2"
                 id="password"
-                class="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
+                class="required px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
               />
-              
             </div>
+            
 
 
             <div>

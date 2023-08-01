@@ -135,3 +135,11 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 AUTH_USER_MODEL = "users.UserProfile"
 
 CSRF_TRUSTED_ORIGINS=['http://127.0.0.1:8000/']
+
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_USE_TLS=True
+EMAIL_PORT=587
+EMAIL_HOST_USER='jerseybox2@gmail.com'
+EMAIL_HOST_PASSWORD='erhmijnahulswpws'
+DEFAULT_FROM_EMAIL='jerseybox2@gmail.com'

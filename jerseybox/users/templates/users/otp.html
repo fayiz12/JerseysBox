@@ -1,4 +1,4 @@
-{%extends "template.html"%}
+{%extends "users/base.html"%}
 
 {%block content%}
 
@@ -9,24 +9,32 @@
         
           
           <div class="p-5 bg-white md:flex-1">
-            <div><img class='w-28 item-center h-10 mt-4' src="/jerseybox/Screenshot from 2023-07-20 11-15-04.png" alt=""></div>
-            <h3 class="my-4 text-center text-xl font-semibold text-gray-700">Verify mobile number</h3>
+            {% load static %}
+            <div><img class='w-28 item-center h-10 mt-4' src="{% static 'logo.png' %}" alt=""></div>
+            <h3 class="my-4 text-center text-xl font-semibold text-gray-700">Verify Email</h3>
             
-                <p class="text-center m-8">A text with a One Time Password(OTP) has been sent to your mobile number:8590029995</p>
+                <p class="text-center m-8">A text with a One Time Password(OTP) has been sent to your email address</p>
                 
+                {%if messages%}
+                {%for message in messages%}
+                <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
+                  <p class="font-bold">{{message}}</p>
+                </div>
+                {%endfor%}
+                {%endif%}
             
-            
-            <form action="#" class="flex flex-col space-y-5">
+            <form action="#" class="flex flex-col space-y-5" method='POST'>
               {% csrf_token %}
               <div class="flex flex-col space-y-1">
                 <div class="flex items-center justify-between">
-                  <label for="password" class="text-sm font-semibold text-gray-500">Enter OTP</label>
+                  <label for="OTP" class="text-sm font-semibold text-gray-500">Enter OTP</label>
                   <a href="#" class="text-sm text-black hover:underline focus:text-blue-800">Resend OTP</a>
                 </div>
                 <input
-                  type="password"
-                  id="password"
-                  class="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
+                  type="text"
+                  id="OTP"
+                  name="otp"
+                  class="required px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
                 />
               </div>
                   
