@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,7 +33,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'unfold',
+    "unfold.contrib.filters",  # optional, if special filters are needed
+    "unfold.contrib.forms",  # optional, if special form elements are needed
+    "unfold.contrib.import_export",
+    "django.contrib.admin",
+    #'jazzmin',
+    #'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -40,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tailwind',
     'theme',
+    
 
     #Custom Apps
 
@@ -83,8 +91,12 @@ WSGI_APPLICATION = 'jerseybox.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'JERSEYBOX',
+        'USER':'postgres',
+        'PASSWORD':'test123',
+        'HOST':'127.0.0.1',
+        'PORT':'5432',
     }
 }
 
@@ -136,6 +148,10 @@ AUTH_USER_MODEL = "users.UserProfile"
 
 CSRF_TRUSTED_ORIGINS=['http://127.0.0.1:8000/']
 
+MEDIA_URL="/media/"
+MEDIA_root=os.path.join(BASE_DIR,"media")
+
+
 EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST='smtp.gmail.com'
 EMAIL_USE_TLS=True
@@ -143,3 +159,69 @@ EMAIL_PORT=587
 EMAIL_HOST_USER='jerseybox2@gmail.com'
 EMAIL_HOST_PASSWORD='erhmijnahulswpws'
 DEFAULT_FROM_EMAIL='jerseybox2@gmail.com'
+
+
+
+
+"""
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Jersey Box",
+    "site_header": "jersey_box_logo",
+    "site_brand": "Jersey Box",
+    "site_icon": None,
+    # Add your own branding here
+    "site_logo": "adminlogo.png",
+    "welcome_sign": "Welcome to the Jersey Box",
+    # Copyright on the footer
+    "copyright": "Jersey Box",
+    "user_avatar": None,
+    ############
+    # Top Menu #
+    ############
+    # Links to put along the top menu
+    "topmenu_links": [
+        # Url that gets reversed (Permissions can be added)
+        {"name": "jersey box", "url": "home", "permissions": ["auth.view_user"]},
+        # model admin to link to (Permissions checked against model)
+        {"model": "auth.User"},
+    ],
+   }
+
+   """
+
+UNFOLD = {
+    "SITE_TITLE": 'JERSEY BOX',
+    "SITE_HEADER": 'JERSEY BOX',
+    "SITE_URL": "/",
+   
+    "SITE_SYMBOL": "speed",  # symbol from icon set
+    
+    
+   
+    
+    "COLORS": {
+        "primary": {
+            "50": "250 245 255",
+            "100": "243 232 255",
+            "200": "233 213 255",
+            "300": "216 180 254",
+            "400": "192 132 252",
+            "500": "168 85 247",
+            "600": "147 51 234",
+            "700": "126 34 206",
+            "800": "107 33 168",
+            "900": "88 28 135",
+        },
+    },
+    "EXTENSIONS": {
+        "modeltranslation": {
+            "flags": {
+                "en": "🇬🇧",
+                "fr": "🇫🇷",
+                "nl": "🇧🇪",
+            },
+        },
+    },
+    
+}
