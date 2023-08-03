@@ -11,7 +11,7 @@ from django.core.cache import cache
 
 
 def home(request):
-    return render(request,'users/product.html')
+    return render(request,'product.html')
 
 def signup(request):
     if request.method=='POST':
@@ -32,7 +32,7 @@ def signup(request):
         send_otp_email(email,name,mobile,pass1)
         return redirect(verify_otp)
 
-    return render(request,'users/signup.html')
+    return render(request,'signup.html')
 
 
 
@@ -56,7 +56,7 @@ def verify_otp(request):
             return redirect(verify_otp)
         UserProfile.objects.create_user(username=name,email=email,mobile=mobile,password=password)
         return redirect(login)
-    return render(request,'users/otp.html')
+    return render(request,'otp.html')
 
 
 
@@ -76,6 +76,6 @@ def login(request):
             
             return redirect("login")
 
-    return render(request,"users/login.html")
+    return render(request,"login.html")
 
 

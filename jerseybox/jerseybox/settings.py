@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     #Custom Apps
 
     'users',
+    'products'
 ]
 TAILWIND_APP_NAME = 'theme'
 
@@ -70,7 +71,7 @@ ROOT_URLCONF = 'jerseybox.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -141,15 +142,22 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+
+
 
 AUTH_USER_MODEL = "users.UserProfile"
 
 CSRF_TRUSTED_ORIGINS=['http://127.0.0.1:8000/']
 
+
+
 MEDIA_URL="/media/"
 MEDIA_root=os.path.join(BASE_DIR,"media")
+
+
 
 
 EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
