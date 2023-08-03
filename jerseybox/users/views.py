@@ -1,17 +1,24 @@
-from django.shortcuts import redirect, render,HttpResponse
+from django.shortcuts import redirect, render,get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from .models import UserProfile,UserProfileManager
 from django.contrib import messages
 from django.contrib.auth import authenticate,login as auth_login
 from .email import send_otp_email
 from django.core.cache import cache
+from products.models import *
 
 
 
 
 
 def home(request):
-    return render(request,'product.html')
+    products=Product.objects.all()
+    return render(request,'product.html',{'products':products})
+
+def product_detail(request,id):
+    details=get_object_or_404(Product,id=id)
+    return render(request,'SingleProduct.html',{'product':details})
+
 
 def signup(request):
     if request.method=='POST':

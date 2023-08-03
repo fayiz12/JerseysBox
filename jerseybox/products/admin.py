@@ -25,7 +25,7 @@ class JerseyAdmin(admin.ModelAdmin):
     list_display = ('team', 'jersey_type')
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'team', 'actual_price','selling_price')
+    list_display = ('id','name', 'team', 'actual_price','selling_price','image1','image2')
 
 admin.site.register(Continent, ContinentAdmin)
 admin.site.register(Nation, NationAdmin)

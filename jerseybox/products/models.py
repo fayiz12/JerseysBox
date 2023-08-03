@@ -48,6 +48,8 @@ class Jersey(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
+    image1=models.ImageField(upload_to='product/',null=True)
+    image2=models.ImageField(upload_to='product/',null=True)
     actual_price = models.DecimalField(max_digits=10, decimal_places=2)
     selling_price=models.DecimalField(max_digits=10, decimal_places=2)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
