@@ -1,59 +1,74 @@
-
-
-
 from django.db import models
+from django.forms import ValidationError
+import uuid
+from categories.models import *
 
-class Gender(models.Model):
-    name = models.CharField(max_length=20)
-
-    def __str__(self):
-        return self.name
-
-
-class Continent(models.Model):
-    name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
-
-class Nation(models.Model):
-    name = models.CharField(max_length=50)
-    continent = models.ForeignKey(Continent, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
-
-class League(models.Model):
-    name = models.CharField(max_length=100)
-    nation = models.ForeignKey(Nation, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
-
-class Team(models.Model):
-    name = models.CharField(max_length=100)
-    league = models.ForeignKey(League, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
-
-class Jersey(models.Model):
-    
-    team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    jersey_type = models.CharField(max_length=20, choices=[('Home', 'Home'), ('Away', 'Away')])
-
-    def __str__(self):
-        return f" {self.jersey_type} Jersey"
 
 class Product(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    TYPE_CHOICES = [
+        ("away", "Away Jersey"),
+        ("home", "Home Jersey"),
+    ]
+
+    CATEGORY_CHOICES = [
+        ("club", "Club"),
+        ("country", "Country"),
+    ]
     name = models.CharField(max_length=100)
     description = models.TextField()
-    image1=models.ImageField(upload_to='product/',null=True)
-    image2=models.ImageField(upload_to='product/',null=True)
-    actual_price = models.DecimalField(max_digits=10, decimal_places=2)
-    selling_price=models.DecimalField(max_digits=10, decimal_places=2)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    # Add other product attributes as needed
+    is_active = models.BooleanField(default=True)
+    is_featured = models.BooleanField(default=False)
+    country_id = models.ForeignKey(
+        Country, on_delete=models.CASCADE, null=True, blank=True
+    )
+    club_id = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
+    type = models.CharField(max_length=10, choices=TYPE_CHOICES)
+    category = models.CharField(max_length=10, choices=CATEGORY_CHOICES)
 
     def __str__(self):
         return self.name
+
+
+class ProductItem(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
+    stock = models.PositiveIntegerField()
+    is_active = models.BooleanField(default=True)
+
+    GENDER_CHOICES = [
+        ("male", "Male"),
+        ("female", "Female"),
+        ("kids", "Kids"),
+    ]
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
+
+    SIZE_CHOICES = [
+        ("S", "Small"),
+        ("M", "Medium"),
+        ("L", "Large"),
+    ]
+
+    AGE_BASED_SIZE_CHOICES = [
+        ("baby", "Baby (0-2 years)"),
+        ("toddler", "Toddler (3-5 years)"),
+        ("child", "Child (6-12 years)"),
+    ]
+    size = models.CharField(max_length=10, choices=SIZE_CHOICES)
+
+    def __str__(self):
+        return f"{self.product.name} - {self.get_gender_display()} - {self.get_size_display()}"
+
+    def save(self, *args, **kwargs):
+        if self.gender == "kids":
+            self.SIZE_CHOICES = self.AGE_BASED_SIZE_CHOICES
+            self.size = "baby"  
+        else:
+            self.SIZE_CHOICES = self.SIZE_CHOICES
+        super().save(*args, **kwargs)
+
+class image(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    product_id = models.ForeignKey(ProductItem, on_delete=models.CASCADE)
+    image=models.ImageField()
+    is_active=models.BooleanField(default=True)

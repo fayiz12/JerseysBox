@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_countries',
     'unfold',
     "unfold.contrib.filters",  # optional, if special filters are needed
     "unfold.contrib.forms",  # optional, if special form elements are needed
@@ -48,11 +49,13 @@ INSTALLED_APPS = [
     'tailwind',
     'theme',
     
+    
 
     #Custom Apps
 
     'users',
-    'products'
+    'products',
+    'categories',
 ]
 TAILWIND_APP_NAME = 'theme'
 
@@ -93,7 +96,7 @@ WSGI_APPLICATION = 'jerseybox.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'JERSEYBOX',
+        'NAME': 'JERSEYBOX1',
         'USER':'postgres',
         'PASSWORD':'test123',
         'HOST':'127.0.0.1',
