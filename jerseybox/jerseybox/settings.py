@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tailwind',
     'theme',
+    'django_countries.fields',
+    
     
     
 

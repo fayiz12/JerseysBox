@@ -1,14 +1,18 @@
+
 import hashlib
+from django.http import Http404
 from django.shortcuts import redirect, render, get_object_or_404
+from django.urls import reverse
 
 from .models import UserProfile
 from django.contrib import messages
-from django.contrib.auth import authenticate, login as auth_login
-from .email import send_otp_email
+from django.contrib.auth import authenticate, login as auth_login,logout
+from .email import *
 from django.core.cache import cache
 from products.models import *
 from django.views import View
 import random
+from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 
 
 class HomeView(View):
@@ -30,7 +34,7 @@ class SignupView(View):
     def post(self, request):
         email = request.POST.get("email")
         name = request.POST.get("username")
-        #mobile = request.POST.get("mobile")
+        # mobile = request.POST.get("mobile")
         pass1 = request.POST.get("pass1")
         pass2 = request.POST.get("pass2")
 
@@ -49,7 +53,7 @@ class SignupView(View):
         key = hashlib.sha256(email.encode()).hexdigest()
         cache.set(key, {'email': email, 'name': name,
                   'password': pass1, 'otp': otp}, timeout=600)
-        return redirect("otp",key=key)
+        return redirect("otp", key=key)
 
 
 class VerifyOtpView(View):
@@ -59,8 +63,6 @@ class VerifyOtpView(View):
 
     def post(self, request, key):
         receivedotp = request.POST.get("otp")
-
-        #email = request.POST.get("email")
 
         signup_data = cache.get(key)
         print(signup_data)
@@ -83,6 +85,61 @@ class VerifyOtpView(View):
         cache.delete(key)
         return redirect("login")
 
+class ResendOTP(View):
+  def get(self, request, key):
+    signup_data = cache.get(key)
+    if signup_data:
+      email = signup_data.get('email')
+      name = signup_data.get('name')
+      otp = str(random.randint(100000, 999999))
+      print(otp)
+      send_otp_email(email, name, otp)
+      signup_data['otp'] = otp
+      existing_timeout = signup_data.get('timeout', None)
+      cache.set(key, signup_data, timeout=existing_timeout)
+      return redirect('otp', key=key)
+    return redirect('signup')
+
+class ForgotPassword(View):
+
+  def get(self, request):
+    return render(request, 'password_forgot_form.html')
+  
+  def post(self, request):
+    email=request.POST.get('email')
+    try:
+      user = UserProfile.objects.get(email=email)
+    except:
+      messages.warning(request , 'You are not registerd, Please sign up')
+      return redirect('register')
+    encrypt_id = urlsafe_base64_encode(str(user.pk).encode())
+    reset_link = f"{request.scheme}://{request.get_host()}{reverse('reset', args=[encrypt_id])}"
+    cache_key = f"reset_link_{encrypt_id}"
+    cache.set(cache_key, {'reset_link':reset_link}, timeout=60) 
+    reset_password_email(email, reset_link)
+    messages.success(request, 'Password reset link sent to your email.')
+    return redirect('login')
+
+class UserResetPassword(View):
+  
+  def get(self, request, encrypt_id):
+    cache_key = f"reset_link_{encrypt_id}"
+    cache_data = cache.get(cache_key)
+    if not cache_data:
+      raise Http404("Reset link has expired")
+    reset_id = cache_data.get('reset_link')
+    return render(request, 'password_reset.html',{'reset':reset_id})
+
+  def post(self, request, encrypt_id):
+    cache_key = f"reset_link_{encrypt_id}"
+    id = str(urlsafe_base64_decode(encrypt_id), 'utf-8')
+    user = UserProfile.objects.get(pk=id)
+    new_password = request.POST.get('pass1')
+    user.set_password(new_password)
+    user.save()
+    cache.delete(cache_key)
+    messages.success(request, 'Password reset successful. You can now log in with your new password.')
+    return redirect('login')
 
 class LoginView(View):
     def post(self, request):
@@ -100,5 +157,14 @@ class LoginView(View):
         return render(request, "login.html")
 
 
+
+
+class UserSignout(View):
+
+  def get(self, request):
+    logout(request)
+    return redirect('login')
+
+
 def homePage(request):
-    return render(request, 'homePage.html')
+    return render(request, 'cart.html')

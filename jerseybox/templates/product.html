@@ -1,215 +1,634 @@
 {%extends 'base.html'%} {%block content%} {%load static%} {%csrf_token%}
 <!-- Main navigation container -->
-<nav
-  class="flex-no-wrap relative flex w-full items-center justify-between bg-[#FBFBFB] py-2 shadow-md shadow-black/5 dark:bg-neutral-600 dark:shadow-black/10 lg:flex-wrap lg:justify-start lg:py-4"
-  data-te-navbar-ref>
-  <div class="flex w-full flex-wrap items-center justify-between px-3">
-    <!-- Hamburger button for mobile view -->
-    <button
-      class="block border-0 bg-transparent px-2 text-neutral-500 hover:no-underline hover:shadow-none focus:no-underline focus:shadow-none focus:outline-none focus:ring-0 dark:text-neutral-200 lg:hidden"
-      type="button"
-      data-te-collapse-init
-      data-te-target="#navbarSupportedContent1"
-      aria-controls="navbarSupportedContent1"
-      aria-expanded="false"
-      aria-label="Toggle navigation">
-      <!-- Hamburger icon -->
-      <span class="[&>svg]:w-7">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          class="h-7 w-7">
-          <path
-            fill-rule="evenodd"
-            d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm0 5.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z"
-            clip-rule="evenodd" />
-        </svg>
-      </span>
-    </button>
+<div class="h-full w-full">
+  <!-- Code block starts -->
 
-    <!-- Collapsible navigation container -->
-    <div
-      class="!visible hidden flex-grow basis-[100%] items-center lg:!flex lg:basis-auto"
-      id="navbarSupportedContent1"
-      data-te-collapse-item>
-      <!-- Logo -->
-      <a
-        class="mb-4 ml-2 mr-5 mt-3 flex items-center text-neutral-900 hover:text-neutral-900 focus:text-neutral-900 dark:text-neutral-200 dark:hover:text-neutral-400 dark:focus:text-neutral-400 lg:mb-0 lg:mt-0"
-        href="#">
-        <img
-          src="https://tecdn.b-cdn.net/img/logo/te-transparent-noshadows.webp"
-          style="height: 15px"
-          alt="TE Logo"
-          loading="lazy" />
-      </a>
-      <!-- Left navigation links -->
-      <ul
-        class="list-style-none mr-auto flex flex-col pl-0 lg:flex-row"
-        data-te-navbar-nav-ref>
-        <li class="mb-4 lg:mb-0 lg:pr-2" data-te-nav-item-ref>
-          <!-- Dashboard link -->
-          <a
-            class="text-neutral-500 transition duration-200 hover:text-neutral-700 hover:ease-in-out focus:text-neutral-700 disabled:text-black/30 motion-reduce:transition-none dark:text-neutral-200 dark:hover:text-neutral-300 dark:focus:text-neutral-300 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-zinc-400"
-            href="#"
-            data-te-nav-link-ref
-            >Dashboard</a
+  <nav role="navigation" class="bg-white shadow xl:block hidden">
+    <div class="mx-auto container px-6 py-2 xl:py-0">
+      <div class="flex items-center justify-between">
+        <div class="inset-y-0 left-0 flex items-center xl:hidden">
+          <div
+            class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-100 focus:outline-none transition duration-150 ease-in-out"
           >
-        </li>
-        <!-- Team link -->
-        <li class="mb-4 lg:mb-0 lg:pr-2" data-te-nav-item-ref>
-          <a
-            class="text-neutral-500 transition duration-200 hover:text-neutral-700 hover:ease-in-out focus:text-neutral-700 disabled:text-black/30 motion-reduce:transition-none dark:text-neutral-200 dark:hover:text-neutral-300 dark:focus:text-neutral-300 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
-            href="#"
-            data-te-nav-link-ref
-            >Team</a
-          >
-        </li>
-        <!-- Projects link -->
-        <li class="mb-4 lg:mb-0 lg:pr-2" data-te-nav-item-ref>
-          <a
-            class="text-neutral-500 transition duration-200 hover:text-neutral-700 hover:ease-in-out focus:text-neutral-700 disabled:text-black/30 motion-reduce:transition-none dark:text-neutral-200 dark:hover:text-neutral-300 dark:focus:text-neutral-300 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
-            href="#"
-            data-te-nav-link-ref
-            >Projects</a
-          >
-        </li>
-      </ul>
+            <div class="visible xl:hidden">
+              <ul
+                class="p-2 border-r bg-white absolute rounded left-0 right-0 shadow mt-8 md:mt-8 hidden"
+              >
+                <li
+                  class="flex xl:hidden cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none"
+                >
+                  <div class="flex items-center">
+                    <span class="ml-2 font-bold">men</span>
+                  </div>
+                </li>
+                <li
+                  class="xl:hidden flex-col cursor-pointer text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none flex justify-center"
+                  onclick="dropdownHandler(this)"
+                >
+                  <div class="flex items-center">
+                    <span class="ml-2 font-bold">Women</span>
+                  </div>
+                </li>
+                <li
+                  class="xl:hidden cursor-pointer text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 flex items-center focus:text-indigo-700 focus:outline-none"
+                >
+                  <span class="ml-2 font-bold">Kids</span>
+                </li>
+
+                <li
+                  class="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 flex items-center focus:text-indigo-700 focus:outline-none"
+                >
+                  <div class="flex items-center">
+                    <div
+                      class="w-12 cursor-pointer flex text-sm border-2 border-transparent rounded focus:outline-none focus:border-white transition duration-150 ease-in-out"
+                    >
+                      <img
+                        class="rounded h-10 w-10 object-cover"
+                        src="https://tuk-cdn.s3.amazonaws.com/assets/components/horizontal_navigation/hn_1.png"
+                        alt="logo"
+                      />
+                    </div>
+                    <p class="text-sm ml-2 cursor-pointer">Jane Doe</p>
+                    <div class="sm:ml-2 text-white relative">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="icon icon-tabler icon-tabler-chevron-down cursor-pointer"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z"></path>
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </div>
+                  </div>
+                </li>
+                <li
+                  class="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none"
+                >
+                  <div class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="icon icon-tabler icon-tabler-user"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z" />
+                      <circle cx="12" cy="7" r="4" />
+                      <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                    </svg>
+                    <span class="ml-2">Profile</span>
+                  </div>
+                </li>
+              </ul>
+              <svg
+                onclick="MenuHandler(this,true)"
+                aria-haspopup="true"
+                aria-label="Main Menu"
+                xmlns="http://www.w3.org/2000/svg"
+                class="show-m-menu icon icon-tabler icon-tabler-menu"
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z"></path>
+                <line x1="4" y1="8" x2="20" y2="8"></line>
+                <line x1="4" y1="16" x2="20" y2="16"></line>
+              </svg>
+            </div>
+            <div
+              class="hidden close-m-menu text-gray-700"
+              onclick="MenuHandler(this,false)"
+            >
+              <svg
+                aria-label="Close"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" />
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <button
+          class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 rounded-md flex w-full sm:w-auto items-center sm:items-stretch justify-end sm:justify-start"
+        >
+          <div class="flex items-center">
+            <a href="{%url 'home'%}"><img
+              class="w-28 item-center h-10 mt-2"
+              src="{% static 'logo.png' %}"
+              alt="logo"
+            /></a>
+          </div>
+        </button>
+        <div class="flex center">
+          <div class="hidden xl:flex md:mr-6 xl:mr-16">
+            <a
+              href="javascript: void(0)"
+              class="focus:text-indigo-700 border-b-2 border-transparent focus:border-indigo-700 flex px-5 items-center py-6 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition duration-150 ease-in-out"
+            >
+              <span class="mr-2"> </span>
+              Men
+            </a>
+            <a
+              href="javascript: void(0)"
+              class="focus:text-indigo-700 border-b-2 border-transparent focus:border-indigo-700 flex px-5 items-center py-6 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition duration-150 ease-in-out"
+            >
+              <span class="mr-2"> </span>
+              Women
+            </a>
+            <a
+              href="javascript: void(0)"
+              class="focus:text-indigo-700 border-b-2 border-transparent focus:border-indigo-700 flex px-5 items-center py-6 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition duration-150 ease-in-out"
+            >
+              <span class="mr-2"> </span>
+              Kids
+            </a>
+          </div>
+          <div class="hidden xl:flex items-center">
+            <div class="relative md:mr-6 my-2">
+              {%if user.is_authenticated%}
+              <a
+                class="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 focus:text-indigo-700 focus:outline-none bg-gray-100 border-gray-300 border transition duration-150 ease-in-out hover:bg-gray-300 rounded text-gray-600 px-5 py-2 text-xs"
+                href="{% url 'signout' %}">
+                signOut
+              </a>
+              {%else%}
+              <a
+                class="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 focus:text-indigo-700 focus:outline-none bg-gray-100 border-gray-300 border transition duration-150 ease-in-out hover:bg-gray-300 rounded text-gray-600 px-5 py-2 text-xs"
+                href="{% url 'register' %}"
+                >
+                signIn
+              </a>
+              {% endif %}
+            </div>
+            <div class="ml-6 relative">
+              <button
+                aria-label="dropdown"
+                class="focus:outline-none border-b-2 border-transparent focus:border-indigo-700 py-3 focus:text-indigo-700 text-gray-600 hover:text-indigo-700 flex items-center relative"
+                onclick="dropdownHandler(this)"
+              >
+                <ul
+                  class="p-2 w-40 border-r bg-white absolute rounded right-0 shadow top-0 mt-16 hidden"
+                >
+                  <li
+                    class="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none"
+                  >
+                    <a
+                      href=""
+                      class="focus:underline focus:text-indigo-700 focus:outline-none flex items-center"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="icon icon-tabler icon-tabler-user"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" />
+                        <circle cx="12" cy="7" r="4" />
+                        <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                      </svg>
+                      <span class="ml-2">My Profile</span>
+                    </a>
+                  </li>
+                  <li
+                    class="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none flex items-center"
+                  >
+                    <a
+                      href="javascript:void(0)"
+                      class="focus:underline focus:text-indigo-700 focus:outline-none flex items-center"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="icon icon-tabler icon-tabler-help"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" />
+                        <circle cx="12" cy="12" r="9" />
+                        <line x1="12" y1="17" x2="12" y2="17.01" />
+                        <path
+                          d="M12 13.5a1.5 1.5 0 0 1 1 -1.5a2.6 2.6 0 1 0 -3 -4"
+                        />
+                      </svg>
+                      <span class="ml-2">Help Center</span>
+                    </a>
+                  </li>
+                  <li
+                    class="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 flex items-center focus:text-indigo-700 focus:outline-none"
+                  >
+                    <a
+                      href="javascript:void(0)"
+                      class="focus:underline focus:text-indigo-700 focus:outline-none flex items-center"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="icon icon-tabler icon-tabler-settings"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" />
+                        <path
+                          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                        />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                      <span class="ml-2">Account Settings</span>
+                    </a>
+                  </li>
+                </ul>
+                <div
+                  class="cursor-pointer flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white transition duration-150 ease-in-out"
+                >
+                  <img
+                    class="rounded-full h-10 w-10 object-cover"
+                    src="https://tuk-cdn.s3.amazonaws.com/assets/components/horizontal_navigation/hn_2.png"
+                    alt="logo"
+                  />
+                </div>
+                <div class="ml-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon icon-tabler icon-tabler-chevron-down cursor-pointer"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z"></path>
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <!-- Right elements -->
-    <div class="relative flex items-center">
-      <!-- Cart Icon -->
-      <a
-        class="mr-4 text-neutral-600 transition duration-200 hover:text-neutral-700 hover:ease-in-out focus:text-neutral-700 disabled:text-black/30 motion-reduce:transition-none dark:text-neutral-200 dark:hover:text-neutral-300 dark:focus:text-neutral-300 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
-        href="#">
-        <span class="[&>svg]:w-5">
+  </nav>
+  <nav>
+    <div
+      class="py-4 px-6 w-full flex xl:hidden justify-between items-center bg-white fixed top-0 z-40"
+    >
+      <div
+        aria-label="logo"
+        role="img"
+        tabindex="0"
+        class="focus:outline-none w-24"
+      >
+        <img
+          class="w-28 item-center h-10 mt-2"
+          src="{% static 'logo.png' %}"
+          alt=""
+        />
+      </div>
+      <div class="flex items-center">
+        <div class="relative mr-6">
+          <button
+            class="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 focus:outline-none bg-gray-100 border-gray-300 border transition duration-150 ease-in-out hover:bg-gray-300 rounded text-gray-600 px-5 py-2 text-xs"
+          >
+            signIn
+          </button>
+        </div>
+        <button
+          id="menu"
+          aria-label="open menu"
+          class="focus:outline-none focus:ring-2 focus:ring-gray-600 rounded-md text-gray-800"
+          onclick="sidebarHandler(true)"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
+            class="icon icon-tabler icon-tabler-menu-2"
+            width="24"
+            height="24"
             viewBox="0 0 24 24"
-            fill="currentColor"
-            class="h-5 w-5">
-            <path
-              d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.96-7.228.75.75 0 00-.525-.965A60.864 60.864 0 005.68 4.509l-.232-.867A1.875 1.875 0 003.636 2.25H2.25zM3.75 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" />
-          </svg>
-        </span>
-      </a>
-
-      <!-- Container with two dropdown menus -->
-      <div class="relative" data-te-dropdown-ref>
-        <!-- First dropdown trigger -->
-        <a
-          class="hidden-arrow mr-4 flex items-center text-neutral-600 transition duration-200 hover:text-neutral-700 hover:ease-in-out focus:text-neutral-700 disabled:text-black/30 motion-reduce:transition-none dark:text-neutral-200 dark:hover:text-neutral-300 dark:focus:text-neutral-300 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
-          href="#"
-          id="dropdownMenuButton1"
-          role="button"
-          data-te-dropdown-toggle-ref
-          aria-expanded="false">
-          <!-- Dropdown trigger icon -->
-          <span class="[&>svg]:w-5">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              class="h-5 w-5">
-              <path
-                fill-rule="evenodd"
-                d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z"
-                clip-rule="evenodd" />
-            </svg>
-          </span>
-          <!-- Notification counter -->
-          <span
-            class="absolute -mt-4 ml-2.5 rounded-full bg-danger px-[0.35em] py-[0.15em] text-[0.6rem] font-bold leading-none text-white"
-            >1</span
+            stroke-width="1.5"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           >
-        </a>
-        <!-- First dropdown menu -->
-        <ul
-          class="absolute left-auto right-0 z-[1000] float-left m-0 mt-1 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg dark:bg-neutral-700 [&[data-te-dropdown-show]]:block"
-          aria-labelledby="dropdownMenuButton1"
-          data-te-dropdown-menu-ref>
-          <!-- First dropdown menu items -->
-          <li>
-            <a
-              class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
-              href="#"
-              data-te-dropdown-item-ref
-              >Action</a
-            >
-          </li>
-          <li>
-            <a
-              class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
-              href="#"
-              data-te-dropdown-item-ref
-              >Another action</a
-            >
-          </li>
-          <li>
-            <a
-              class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
-              href="#"
-              data-te-dropdown-item-ref
-              >Something else here</a
-            >
-          </li>
-        </ul>
-      </div>
-
-      <!-- Second dropdown container -->
-      <div class="relative" data-te-dropdown-ref>
-        <!-- Second dropdown trigger -->
-        <a
-          class="hidden-arrow flex items-center whitespace-nowrap transition duration-150 ease-in-out motion-reduce:transition-none"
-          href="#"
-          id="dropdownMenuButton2"
-          role="button"
-          data-te-dropdown-toggle-ref
-          aria-expanded="false">
-          <!-- User avatar -->
-          <img
-            src="https://tecdn.b-cdn.net/img/new/avatars/2.jpg"
-            class="rounded-full"
-            style="height: 25px; width: 25px"
-            alt=""
-            loading="lazy" />
-        </a>
-        <!-- Second dropdown menu -->
-        <ul
-          class="absolute left-auto right-0 z-[1000] float-left m-0 mt-1 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg dark:bg-neutral-700 [&[data-te-dropdown-show]]:block"
-          aria-labelledby="dropdownMenuButton2"
-          data-te-dropdown-menu-ref>
-          <!-- Second dropdown menu items -->
-          <li>
-            <a
-              class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
-              href="#"
-              data-te-dropdown-item-ref
-              >Action</a
-            >
-          </li>
-          <li>
-            <a
-              class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
-              href="#"
-              data-te-dropdown-item-ref
-              >Another action</a
-            >
-          </li>
-          <li>
-            <a
-              class="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
-              href="#"
-              data-te-dropdown-item-ref
-              >Something else here</a
-            >
-          </li>
-        </ul>
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <line x1="4" y1="6" x2="20" y2="6" />
+            <line x1="4" y1="12" x2="20" y2="12" />
+            <line x1="4" y1="18" x2="20" y2="18" />
+          </svg>
+        </button>
       </div>
     </div>
-  </div>
-</nav>
+    <!--Mobile responsive sidebar-->
+    <div
+      class="absolute w-full h-full transform -translate-x-full z-40 xl:hidden"
+      id="mobile-nav"
+    >
+      <div
+        class="bg-gray-800 opacity-50 w-full h-full"
+        onclick="sidebarHandler(false)"
+      ></div>
+      <div
+        class="w-64 z-40 fixed overflow-y-auto top-0 bg-white shadow h-full flex-col justify-between xl:hidden pb-4 transition duration-150 ease-in-out"
+      >
+        <div class="px-6 h-full">
+          <div class="flex flex-col justify-between h-full w-full">
+            <div>
+              <div class="mt-6 flex w-full items-center justify-between">
+                <div class="flex items-center justify-between w-full">
+                  <div class="flex items-center">
+                    <img
+                      class="w-28 item-center h-10 mt-2"
+                      src="{% static 'logo.png' %}"
+                      alt=""
+                    />
+                  </div>
+                  <button
+                    id="cross"
+                    aria-label="close menu"
+                    class="focus:outline-none focus:ring-2 rounded-md text-gray-800"
+                    onclick="sidebarHandler(false)"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="icon icon-tabler icon-tabler-x"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z"></path>
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <ul class="f-m-m">
+                <li>
+                  <a class="cursor-pointer">
+                    <div class="text-gray-800 pt-10">
+                      <div class="flex items-center">
+                        <div
+                          class="w-6 h-6 md:w-8 md:h-8 text-indigo-700"
+                        ></div>
+                        <p
+                          tabindex="0"
+                          class="focus:outline-none focus:text-indigo-600 text-indigo-700 xl:text-base text-base ml-3"
+                        >
+                          Men
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a class="cursor-pointer">
+                    <div class="text-gray-800 pt-8">
+                      <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                          <div
+                            class="w-6 h-6 md:w-8 md:h-8 text-gray-800"
+                          ></div>
+                          <p
+                            tabindex="0"
+                            class="focus:outline-none focus:text-indigo-600 text-gray-800 xl:text-base md:text-2xl text-base ml-3"
+                          >
+                            Women
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a class="cursor-pointer">
+                    <div class="text-gray-800 pt-8">
+                      <div class="flex items-center">
+                        <div class="w-6 h-6 md:w-8 md:h-8 text-gray-800"></div>
+                        <p
+                          tabindex="0"
+                          class="focus:outline-none focus:text-indigo-600 text-gray-800 xl:text-base md:text-2xl text-base ml-3"
+                        >
+                          Kids
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="w-full pt-4">
+              <div class="flex justify-center mb-4 w-full">
+                <div class="relative w-full">
+                  <div
+                    class="text-gray-500 absolute ml-4 inset-0 m-auto w-4 h-4"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="icon icon-tabler icon-tabler-search"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      stroke-width="1"
+                      stroke="#A0AEC0"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z"></path>
+                      <circle cx="10" cy="10" r="7"></circle>
+                      <line x1="21" y1="21" x2="15" y2="15"></line>
+                    </svg>
+                  </div>
+                  <input
+                    class="focus:ring-2 focus:ring-gray-600 bg-gray-100 focus:outline-none rounded w-full text-sm text-gray-500 pl-10 py-2"
+                    type="text"
+                    placeholder="Search"
+                  />
+                </div>
+              </div>
+              <div class="border-t border-gray-300">
+                <div class="w-full flex items-center justify-between pt-1">
+                  <div class="flex items-center">
+                    <img
+                      alt="profile-pic"
+                      src="https://tuk-cdn.s3.amazonaws.com/assets/components/boxed_layout/bl_1.png"
+                      tabindex="0"
+                      class="focus:outline-none w-8 h-8 rounded-md"
+                    />
+                    <p
+                      tabindex="0"
+                      class="focus:outline-none text-gray-800 text-base leading-4 ml-2"
+                    >
+                      Jane Doe
+                    </p>
+                  </div>
+                  <ul class="flex">
+                    <li class="cursor-pointer text-gray-800 pt-5 pb-3">
+                      <div
+                        tabindex="0"
+                        class="focus:outline-none focus:text-indigo-600 w-6 h-6 md:w-8 md:h-8"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="icon icon-tabler icon-tabler-messages"
+                          viewBox="0 0 24 24"
+                          stroke-width="1"
+                          stroke="currentColor"
+                          fill="none"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path stroke="none" d="M0 0h24v24H0z"></path>
+                          <path
+                            d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10"
+                          ></path>
+                          <path
+                            d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2"
+                          ></path>
+                        </svg>
+                      </div>
+                    </li>
+                    <li class="cursor-pointer text-gray-800 pt-5 pb-3 pl-3">
+                      <div
+                        tabindex="0"
+                        class="focus:outline-none focus:text-indigo-600 w-6 h-6 md:w-8 md:h-8"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="icon icon-tabler icon-tabler-bell"
+                          viewBox="0 0 24 24"
+                          stroke-width="1"
+                          stroke="currentColor"
+                          fill="none"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path stroke="none" d="M0 0h24v24H0z"></path>
+                          <path
+                            d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"
+                          ></path>
+                          <path d="M9 17v1a3 3 0 0 0 6 0v-1"></path>
+                        </svg>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    function dropdownHandler(element) {
+      let single = element.getElementsByTagName("ul")[0];
+      single.classList.toggle("hidden");
+    }
+
+    function MenuHandler(el, val) {
+      let MainList =
+        el.parentElement.parentElement.getElementsByTagName("ul")[0];
+      let closeIcon =
+        el.parentElement.parentElement.getElementsByClassName(
+          "close-m-menu"
+        )[0];
+      let showIcon =
+        el.parentElement.parentElement.getElementsByClassName("show-m-menu")[0];
+      if (val) {
+        MainList.classList.remove("hidden");
+        el.classList.add("hidden");
+        closeIcon.classList.remove("hidden");
+      } else {
+        showIcon.classList.remove("hidden");
+        MainList.classList.add("hidden");
+        el.classList.add("hidden");
+      }
+    }
+    // ------------------------------------------------------
+    let sideBar = document.getElementById("mobile-nav");
+    let menu = document.getElementById("menu");
+    let cross = document.getElementById("cross");
+    const sidebarHandler = (check) => {
+      if (check) {
+        sideBar.style.transform = "translateX(0px)";
+        menu.classList.add("hidden");
+        cross.classList.remove("hidden");
+      } else {
+        sideBar.style.transform = "translateX(-100%)";
+        menu.classList.remove("hidden");
+        cross.classList.add("hidden");
+      }
+    };
+    let list = document.getElementById("list");
+    let chevrondown = document.getElementById("chevrondown");
+    let chevronup = document.getElementById("chevronup");
+    const listHandler = (check) => {
+      if (check) {
+        list.classList.remove("hidden");
+        chevrondown.classList.remove("hidden");
+        chevronup.classList.add("hidden");
+      } else {
+        list.classList.add("hidden");
+        chevrondown.classList.add("hidden");
+        chevronup.classList.remove("hidden");
+      }
+    };
+  </script>
+
+  <!-- Code block ends -->
+</div>
 
 <!-- ✅ Grid Section - Starts Here 👇 -->
 <section

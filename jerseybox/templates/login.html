@@ -36,7 +36,7 @@
               >Password</label
             >
             <a
-              href="#"
+              href="{% url 'forgot' %}"
               class="text-sm text-black hover:underline focus:text-gray-800"
               >Forgot Password?</a
             >
@@ -67,7 +67,9 @@
         </div>
       </form>
       <div class="text-center mb-16 text-sm">
-        <p>Don’t Have Account? <a href="{% url 'register' %}">Sign Up Here</a></p>
+        <p>
+          Don’t Have Account? <a href="{% url 'register' %}">Sign Up Here</a>
+        </p>
       </div>
     </div>
   </div>

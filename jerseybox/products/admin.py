@@ -13,8 +13,12 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class ProductItemAdmin(admin.ModelAdmin):
-    list_display=('id',)
+    list_display = ( 'product_id', 'stock', 'is_active', 'gender', 'size')
+
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ('product_id',)
+
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductItem, ProductItemAdmin)
-admin.site.register(image)
+admin.site.register(image,ImageAdmin)
