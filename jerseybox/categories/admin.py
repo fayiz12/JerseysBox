@@ -8,7 +8,7 @@ class ContinentAdmin(admin.ModelAdmin):
 
 
 class CountryModelAdmin(admin.ModelAdmin):
-    list_display = ('country', 'continent', 'display_country_flag', )
+    list_display = ('id','country', 'continent', 'display_country_flag', )
     list_filter = ('continent',)
     list_per_page = 20
     search_fields = ('country',)
@@ -23,7 +23,7 @@ class LeagueAdmin(admin.ModelAdmin):
     list_display = ('name', 'display_logo',)  # Use 'display_logo' here
 
     def display_logo(self, obj):  # Define the method as 'display_logo'
-        return mark_safe(f'<img src="{obj.logo.url}" alt="{obj.name} logo" width="30">')
+        return mark_safe(f'<img src="{obj.logo.url}" alt="{obj.name} logo" style="max-width: 50px; max-height: 50px;">')
 
     display_logo.short_description = 'Logo'
 
@@ -31,7 +31,7 @@ class LeagueAdmin(admin.ModelAdmin):
 class ClubAdmin(admin.ModelAdmin):
     list_display = ('name', 'league', 'club_logo',)
     list_filter = ('league',)
-    
+
     def club_logo(self, obj):
         return mark_safe(f'<img src="{obj.logo.url}" alt="{obj.name} logo" width="30">')
 

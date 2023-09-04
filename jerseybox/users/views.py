@@ -15,16 +15,43 @@ import random
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 
 
+
 class HomeView(View):
     def get(self, request):
-        products = Product.objects.all()
-        return render(request, "product.html", {"products": products})
+      max_to_display = 4
+      featured_product_items = ProductItem.objects.filter(product_id__is_featured=True)
+      featured_items_with_images = []
+
+      for product_item in featured_product_items:
+        featured_images = product_item.image.filter(is_featured=True)
+        for featured_image in featured_images:
+            featured_items_with_images.append({
+                'product_item': product_item,
+                'image_url': featured_image.image.url
+            })
+      print(featured_items_with_images)
 
 
-class ProductDetailView(View):
-    def get(self, request, id):
-        details = get_object_or_404(Product, id=id)
-        return render(request, "SingleProduct.html", {"product": details})
+      products = Product.objects.filter(
+        country_id__isnull=False, club_id__isnull=True, is_active=True
+      )
+
+    # Create a dictionary to store product images
+      product_images = {}
+
+      for product in products:
+        # Get the featured image for each product
+        featured_image = image.objects.filter(
+            product_id__product_id=product, is_featured=True
+        ).first()
+
+        if featured_image:
+            product_images[product] = featured_image.image.url
+      leagues = League.objects.all()[:max_to_display]
+      clubs=Club.objects.all()[:max_to_display]
+      return render(request, 'product.html', {'leagues': leagues,'clubs':clubs,'featured_items_with_images': featured_items_with_images,'products':products,'product_images': product_images})
+
+
 
 
 class SignupView(View):
@@ -166,5 +193,135 @@ class UserSignout(View):
     return redirect('login')
 
 
-def homePage(request):
-    return render(request, 'cart.html')
+
+
+
+class LeagueProductsView(View):
+    def get(self, request, league_id):
+        league = get_object_or_404(League, id=league_id)
+        
+        # Get all the clubs in the league
+        clubs = Club.objects.filter(league=league)
+        
+        # Create an empty list to store product details
+        all_products = []
+        
+        for club in clubs:
+            # Retrieve products associated with the current club
+            products = Product.objects.filter(club_id=club, is_active=True)
+            
+            for product in products:
+                # Retrieve the related ProductItem for the current product
+                product_item = ProductItem.objects.filter(product_id=product).first()
+                
+                # Retrieve related images for the current product
+                images = image.objects.filter(product_id=product_item, is_featured=True)
+                
+                # Append the product, ProductItem, and images to the list
+                all_products.append({
+                    'product': product,
+                    'product_item': product_item,
+                    'images': images,
+                })
+        
+        context = {
+            'league': league,
+            'clubs': clubs,
+            'all_products': all_products,
+        }
+        
+        return render(request, 'product_list.html', context)
+
+
+class GenderProductsView(View):
+    template_name = 'gender_products.html'
+
+    def get(self, request, gender):
+        # Fetch featured ProductItem objects for the selected gender
+        gender_products = ProductItem.objects.filter(gender=gender, is_active=True)
+
+        # Fetch related images for the featured ProductItem objects
+        featured_images = image.objects.filter(product_id__in=gender_products, is_featured=True)
+
+        context = {
+            'gender': gender,
+            'gender_products': gender_products,
+            'featured_images': featured_images,
+        }
+
+        return render(request, self.template_name, context)
+
+
+class club_products(View):   
+  def get(self,request, club_id):
+      club = get_object_or_404(Club, id=club_id)
+      
+      # Get all the products for the club
+      products = Product.objects.filter(club_id=club, is_active=True)
+      
+      # Create a dictionary to store products and their images
+      products_with_images = {}
+      
+      for product in products:
+          # Retrieve related images for the current product
+          product_images = image.objects.filter(product_id__product_id=product, is_featured=True)
+          
+          # Add the product and its images to the dictionary
+          products_with_images[product] = product_images
+      
+      context = {
+          'club': club,
+          'products_with_images': products_with_images,
+          'product_items': ProductItem.objects.filter(product_id__in=products, is_active=True),
+      }
+      
+      return render(request, 'club_products.html', context)
+
+class country_products(View):
+  def get(self,request, country_id):
+      country = get_object_or_404(CountryModel, id=country_id)
+      
+      # Get all the products for the country
+      products = Product.objects.filter(country_id=country, is_active=True)
+      
+      # Create a list to store product information including images and selling prices
+      products_info = []
+      
+      for product in products:
+          # Retrieve related images for the current product that are featured
+          featured_images = image.objects.filter(product_id__product_id=product, is_featured=True)
+          
+          # Get the associated ProductItem for this product (if it exists)
+          product_item = ProductItem.objects.filter(product_id=product, is_active=True).first()
+          
+          # Add the product information to the list
+          products_info.append({
+              'product': product,
+              'images': featured_images,
+              'product_item': product_item,
+          })
+      
+      context = {
+          'country': country,
+          'products_info': products_info,
+      }
+      
+      return render(request, 'country_products.html', context)
+
+
+
+
+class ProductDetailView(View):
+    template_name = 'SingleProduct.html'
+
+    def get(self, request, product_id):
+        product_item = ProductItem.objects.get(product_id=product_id)
+        images = image.objects.filter(product_id=product_item)
+        # You can fetch additional information related to the product here if needed
+
+        context = {
+            'product': product_item,
+            'images':images,
+        }
+
+        return render(request, self.template_name, context)

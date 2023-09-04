@@ -30,6 +30,7 @@ class League(models.Model):
     name = models.CharField(max_length=100)
     country = models.ForeignKey(CountryModel, on_delete=models.CASCADE)
     logo = models.ImageField(upload_to='league_logos/')
+    thumbnail=models.ImageField(upload_to='league_thumbnail/',null=True)
 
     def __str__(self):
         return self.name
@@ -38,8 +39,8 @@ class League(models.Model):
 class Club(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
-    league = models.ForeignKey(League, on_delete=models.CASCADE)
+    league = models.ForeignKey(League, on_delete=models.CASCADE,related_name='clubs')
     logo = models.ImageField(upload_to='club_logos/')
-
+    thumbnail=models.ImageField(upload_to='club_thumbnail/',null=True)
     def __str__(self):
         return self.name

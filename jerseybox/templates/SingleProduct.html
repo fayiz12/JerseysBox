@@ -6,21 +6,9 @@
       <div class="flex flex-wrap -mx-4 mb-12">
         <div class="w-full lg:w-1/2 px-4 mb-12 lg:mb-0">
           <div class="lg:w-112">
-            <a
-              class="relative group block mb-6 h-112 w-full bg-blueGray-900 rounded-md"
-              href="#"
-            >
-              <div
-                class="absolute top-0 left-0 h-full w-full transform -translate-y-1 -translate-x-1 group-hover:translate-y-0 group-hover:translate-x-0 transition duration-300"
-              >
-                <img
-                  class="img-fluid w-full h-full object-cover rounded-md border-2 border-black"
-                  src="{{ product.image2.url }}"
-                  alt=""
-                />
-              </div>
-            </a>
+            
             <div class="flex flex-row -mx-3 -mb-3 justify-between">
+            {% for image in images %}
               <a
                 class="relative group block h-80 w-full bg-blueGray-900 rounded-md"
                 href="#"
@@ -28,34 +16,17 @@
                 <div
                   class="absolute top-0 left-0 h-full w-full transform -translate-y-1 -translate-x-1 group-hover:translate-y-0 group-hover:translate-x-0 transition duration-300"
                 >
-                  <img
-                    class="img-fluid w-full h-full object-cover rounded-md border-2 border-black"
-                    src="{{ product.image2.url }}"
-                    alt=""
-                  />
+                  <img src="{{ image.image.url }}" alt="{{ image.product_id.product_id.name }}" />
                 </div>
               </a>
-
-              <a
-                class="relative group block h-80 w-full bg-blueGray-900 rounded-md"
-                href="#"
-              >
-                <div
-                  class="absolute top-0 left-0 h-full w-full transform -translate-y-1 -translate-x-1 group-hover:translate-y-0 group-hover:translate-x-0 transition duration-300"
-                >
-                  <img
-                    class="img-fluid w-full h-full object-cover rounded-md border-2 border-black"
-                    src="{{ product.image1.url }}"
-                    alt=""
-                  />
-                </div>
-              </a>
+            {% endfor %}
+             
             </div>
           </div>
         </div>
         <div class="w-full lg:w-1/2 px-4">
           <div class="max-w-lg">
-            <h2 class="text-4xl font-black mb-1">{{product.name}}</h2>
+            <h2 class="text-4xl font-black mb-1">{{product.product_id.name}}</h2>
 
             <div class="flex items-center mb-4">
               <button class="inline-block mr-2">
@@ -132,26 +103,19 @@
             </div>
             <div class='flex'>
             <p class="text-lg font-semibold text-black cursor-auto my-3">
-              {{product.selling_price}}
+              {{product.selling_price}}₹
             </p>
             <del>
               <p class="text-sm text-gray-600 cursor-auto ml-2 my-3">
-                {{product.actual_price}}
+                {{product.actual_price}}₹
               </p>
             </del>
-            </div>
-            <p class="font-bold mb-2">
-              Pariatur ex aliqua elit ut enim consequat amet non do ut. Ad aute
-              deserunt fugiat qui Lorem in quis velit labore voluptate.
+            <div>
+            <p class="text-lg ml-4 font-semibold text-red-500 cursor-auto my-3">
+              {{product.discount_percent}}%
             </p>
-            <ul class="list-disc list-inside font-medium mb-6">
-              <li>Pariatur ex aliqua elit ut enim consequat amet non do ut.</li>
-              <li>
-                Ad aute deserunt fugiat qui Lorem in quis velit labore
-                voluptate.
-              </li>
-              <li>Lorem in quis velit labore</li>
-            </ul>
+            </div>
+            </div>
             <div class="flex flex-wrap mb-4">
               <div class="w-full sm:w-auto mb-4 sm:mb-0 sm:mr-4">
                 <span class="block text-sm font-black mb-2">Amount</span>
@@ -399,7 +363,7 @@
         </div>
       </div>
       <div>
-        <p class="text-lg font-bold">{{product.description}}</p>
+        <p class="text-lg font-bold">{{product.product_id.description}}</p>
       </div>
     </div>
   </div>

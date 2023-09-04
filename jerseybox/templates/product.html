@@ -1,692 +1,176 @@
 {%extends 'base.html'%} {%block content%} {%load static%} {%csrf_token%}
 <!-- Main navigation container -->
-<div class="h-full w-full">
-  <!-- Code block starts -->
 
-  <nav role="navigation" class="bg-white shadow xl:block hidden">
-    <div class="mx-auto container px-6 py-2 xl:py-0">
-      <div class="flex items-center justify-between">
-        <div class="inset-y-0 left-0 flex items-center xl:hidden">
-          <div
-            class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-100 focus:outline-none transition duration-150 ease-in-out"
-          >
-            <div class="visible xl:hidden">
-              <ul
-                class="p-2 border-r bg-white absolute rounded left-0 right-0 shadow mt-8 md:mt-8 hidden"
-              >
-                <li
-                  class="flex xl:hidden cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none"
-                >
-                  <div class="flex items-center">
-                    <span class="ml-2 font-bold">men</span>
-                  </div>
-                </li>
-                <li
-                  class="xl:hidden flex-col cursor-pointer text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none flex justify-center"
-                  onclick="dropdownHandler(this)"
-                >
-                  <div class="flex items-center">
-                    <span class="ml-2 font-bold">Women</span>
-                  </div>
-                </li>
-                <li
-                  class="xl:hidden cursor-pointer text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 flex items-center focus:text-indigo-700 focus:outline-none"
-                >
-                  <span class="ml-2 font-bold">Kids</span>
-                </li>
 
-                <li
-                  class="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 flex items-center focus:text-indigo-700 focus:outline-none"
-                >
-                  <div class="flex items-center">
-                    <div
-                      class="w-12 cursor-pointer flex text-sm border-2 border-transparent rounded focus:outline-none focus:border-white transition duration-150 ease-in-out"
-                    >
-                      <img
-                        class="rounded h-10 w-10 object-cover"
-                        src="https://tuk-cdn.s3.amazonaws.com/assets/components/horizontal_navigation/hn_1.png"
-                        alt="logo"
-                      />
-                    </div>
-                    <p class="text-sm ml-2 cursor-pointer">Jane Doe</p>
-                    <div class="sm:ml-2 text-white relative">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="icon icon-tabler icon-tabler-chevron-down cursor-pointer"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z"></path>
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                      </svg>
-                    </div>
-                  </div>
-                </li>
-                <li
-                  class="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none"
-                >
-                  <div class="flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="icon icon-tabler icon-tabler-user"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" />
-                      <circle cx="12" cy="7" r="4" />
-                      <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                    </svg>
-                    <span class="ml-2">Profile</span>
-                  </div>
-                </li>
-              </ul>
-              <svg
-                onclick="MenuHandler(this,true)"
-                aria-haspopup="true"
-                aria-label="Main Menu"
-                xmlns="http://www.w3.org/2000/svg"
-                class="show-m-menu icon icon-tabler icon-tabler-menu"
-                width="28"
-                height="28"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path stroke="none" d="M0 0h24v24H0z"></path>
-                <line x1="4" y1="8" x2="20" y2="8"></line>
-                <line x1="4" y1="16" x2="20" y2="16"></line>
-              </svg>
-            </div>
-            <div
-              class="hidden close-m-menu text-gray-700"
-              onclick="MenuHandler(this,false)"
-            >
-              <svg
-                aria-label="Close"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" />
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </div>
-          </div>
-        </div>
-        <button
-          class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 rounded-md flex w-full sm:w-auto items-center sm:items-stretch justify-end sm:justify-start"
-        >
-          <div class="flex items-center">
-            <a href="{%url 'home'%}"><img
-              class="w-28 item-center h-10 mt-2"
-              src="{% static 'logo.png' %}"
-              alt="logo"
-            /></a>
-          </div>
-        </button>
-        <div class="flex center">
-          <div class="hidden xl:flex md:mr-6 xl:mr-16">
-            <a
-              href="javascript: void(0)"
-              class="focus:text-indigo-700 border-b-2 border-transparent focus:border-indigo-700 flex px-5 items-center py-6 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition duration-150 ease-in-out"
-            >
-              <span class="mr-2"> </span>
-              Men
-            </a>
-            <a
-              href="javascript: void(0)"
-              class="focus:text-indigo-700 border-b-2 border-transparent focus:border-indigo-700 flex px-5 items-center py-6 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition duration-150 ease-in-out"
-            >
-              <span class="mr-2"> </span>
-              Women
-            </a>
-            <a
-              href="javascript: void(0)"
-              class="focus:text-indigo-700 border-b-2 border-transparent focus:border-indigo-700 flex px-5 items-center py-6 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition duration-150 ease-in-out"
-            >
-              <span class="mr-2"> </span>
-              Kids
-            </a>
-          </div>
-          <div class="hidden xl:flex items-center">
-            <div class="relative md:mr-6 my-2">
-              {%if user.is_authenticated%}
-              <a
-                class="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 focus:text-indigo-700 focus:outline-none bg-gray-100 border-gray-300 border transition duration-150 ease-in-out hover:bg-gray-300 rounded text-gray-600 px-5 py-2 text-xs"
-                href="{% url 'signout' %}">
-                signOut
-              </a>
-              {%else%}
-              <a
-                class="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 focus:text-indigo-700 focus:outline-none bg-gray-100 border-gray-300 border transition duration-150 ease-in-out hover:bg-gray-300 rounded text-gray-600 px-5 py-2 text-xs"
-                href="{% url 'register' %}"
-                >
-                signIn
-              </a>
-              {% endif %}
-            </div>
-            <div class="ml-6 relative">
-              <button
-                aria-label="dropdown"
-                class="focus:outline-none border-b-2 border-transparent focus:border-indigo-700 py-3 focus:text-indigo-700 text-gray-600 hover:text-indigo-700 flex items-center relative"
-                onclick="dropdownHandler(this)"
-              >
-                <ul
-                  class="p-2 w-40 border-r bg-white absolute rounded right-0 shadow top-0 mt-16 hidden"
-                >
-                  <li
-                    class="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none"
-                  >
-                    <a
-                      href=""
-                      class="focus:underline focus:text-indigo-700 focus:outline-none flex items-center"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="icon icon-tabler icon-tabler-user"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <circle cx="12" cy="7" r="4" />
-                        <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                      </svg>
-                      <span class="ml-2">My Profile</span>
-                    </a>
-                  </li>
-                  <li
-                    class="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none flex items-center"
-                  >
-                    <a
-                      href="javascript:void(0)"
-                      class="focus:underline focus:text-indigo-700 focus:outline-none flex items-center"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="icon icon-tabler icon-tabler-help"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <circle cx="12" cy="12" r="9" />
-                        <line x1="12" y1="17" x2="12" y2="17.01" />
-                        <path
-                          d="M12 13.5a1.5 1.5 0 0 1 1 -1.5a2.6 2.6 0 1 0 -3 -4"
-                        />
-                      </svg>
-                      <span class="ml-2">Help Center</span>
-                    </a>
-                  </li>
-                  <li
-                    class="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 flex items-center focus:text-indigo-700 focus:outline-none"
-                  >
-                    <a
-                      href="javascript:void(0)"
-                      class="focus:underline focus:text-indigo-700 focus:outline-none flex items-center"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="icon icon-tabler icon-tabler-settings"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <path
-                          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                        />
-                        <circle cx="12" cy="12" r="3" />
-                      </svg>
-                      <span class="ml-2">Account Settings</span>
-                    </a>
-                  </li>
-                </ul>
-                <div
-                  class="cursor-pointer flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white transition duration-150 ease-in-out"
-                >
-                  <img
-                    class="rounded-full h-10 w-10 object-cover"
-                    src="https://tuk-cdn.s3.amazonaws.com/assets/components/horizontal_navigation/hn_2.png"
-                    alt="logo"
-                  />
-                </div>
-                <div class="ml-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="icon icon-tabler icon-tabler-chevron-down cursor-pointer"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path stroke="none" d="M0 0h24v24H0z"></path>
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                </div>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+  <!-- navbar -->
+
+
+
+<!-- Carousel Container -->
+<!-- component -->
+<script defer src="https://unpkg.com/alpinejs@3.2.3/dist/cdn.min.js"></script>
+
+<article x-data="slider" class="relative w-full flex flex-shrink-0 overflow-hidden shadow-2xl">
+    <div class="rounded-full bg-gray-600 text-white absolute top-5 right-5 text-sm px-2 text-center z-10">
+        <span x-text="currentIndex"></span>/
+        <span x-text="images.length"></span>
     </div>
-  </nav>
-  <nav>
-    <div
-      class="py-4 px-6 w-full flex xl:hidden justify-between items-center bg-white fixed top-0 z-40"
-    >
-      <div
-        aria-label="logo"
-        role="img"
-        tabindex="0"
-        class="focus:outline-none w-24"
-      >
-        <img
-          class="w-28 item-center h-10 mt-2"
-          src="{% static 'logo.png' %}"
-          alt=""
-        />
-      </div>
-      <div class="flex items-center">
-        <div class="relative mr-6">
-          <button
-            class="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 focus:outline-none bg-gray-100 border-gray-300 border transition duration-150 ease-in-out hover:bg-gray-300 rounded text-gray-600 px-5 py-2 text-xs"
-          >
-            signIn
-          </button>
-        </div>
-        <button
-          id="menu"
-          aria-label="open menu"
-          class="focus:outline-none focus:ring-2 focus:ring-gray-600 rounded-md text-gray-800"
-          onclick="sidebarHandler(true)"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="icon icon-tabler icon-tabler-menu-2"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <line x1="4" y1="6" x2="20" y2="6" />
-            <line x1="4" y1="12" x2="20" y2="12" />
-            <line x1="4" y1="18" x2="20" y2="18" />
-          </svg>
-        </button>
-      </div>
-    </div>
-    <!--Mobile responsive sidebar-->
-    <div
-      class="absolute w-full h-full transform -translate-x-full z-40 xl:hidden"
-      id="mobile-nav"
-    >
-      <div
-        class="bg-gray-800 opacity-50 w-full h-full"
-        onclick="sidebarHandler(false)"
-      ></div>
-      <div
-        class="w-64 z-40 fixed overflow-y-auto top-0 bg-white shadow h-full flex-col justify-between xl:hidden pb-4 transition duration-150 ease-in-out"
-      >
-        <div class="px-6 h-full">
-          <div class="flex flex-col justify-between h-full w-full">
-            <div>
-              <div class="mt-6 flex w-full items-center justify-between">
-                <div class="flex items-center justify-between w-full">
-                  <div class="flex items-center">
-                    <img
-                      class="w-28 item-center h-10 mt-2"
-                      src="{% static 'logo.png' %}"
-                      alt=""
-                    />
-                  </div>
-                  <button
-                    id="cross"
-                    aria-label="close menu"
-                    class="focus:outline-none focus:ring-2 rounded-md text-gray-800"
-                    onclick="sidebarHandler(false)"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="icon icon-tabler icon-tabler-x"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z"></path>
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <ul class="f-m-m">
-                <li>
-                  <a class="cursor-pointer">
-                    <div class="text-gray-800 pt-10">
-                      <div class="flex items-center">
-                        <div
-                          class="w-6 h-6 md:w-8 md:h-8 text-indigo-700"
-                        ></div>
-                        <p
-                          tabindex="0"
-                          class="focus:outline-none focus:text-indigo-600 text-indigo-700 xl:text-base text-base ml-3"
-                        >
-                          Men
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a class="cursor-pointer">
-                    <div class="text-gray-800 pt-8">
-                      <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                          <div
-                            class="w-6 h-6 md:w-8 md:h-8 text-gray-800"
-                          ></div>
-                          <p
-                            tabindex="0"
-                            class="focus:outline-none focus:text-indigo-600 text-gray-800 xl:text-base md:text-2xl text-base ml-3"
-                          >
-                            Women
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a class="cursor-pointer">
-                    <div class="text-gray-800 pt-8">
-                      <div class="flex items-center">
-                        <div class="w-6 h-6 md:w-8 md:h-8 text-gray-800"></div>
-                        <p
-                          tabindex="0"
-                          class="focus:outline-none focus:text-indigo-600 text-gray-800 xl:text-base md:text-2xl text-base ml-3"
-                        >
-                          Kids
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div class="w-full pt-4">
-              <div class="flex justify-center mb-4 w-full">
-                <div class="relative w-full">
-                  <div
-                    class="text-gray-500 absolute ml-4 inset-0 m-auto w-4 h-4"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="icon icon-tabler icon-tabler-search"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      stroke-width="1"
-                      stroke="#A0AEC0"
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z"></path>
-                      <circle cx="10" cy="10" r="7"></circle>
-                      <line x1="21" y1="21" x2="15" y2="15"></line>
-                    </svg>
-                  </div>
-                  <input
-                    class="focus:ring-2 focus:ring-gray-600 bg-gray-100 focus:outline-none rounded w-full text-sm text-gray-500 pl-10 py-2"
-                    type="text"
-                    placeholder="Search"
-                  />
-                </div>
-              </div>
-              <div class="border-t border-gray-300">
-                <div class="w-full flex items-center justify-between pt-1">
-                  <div class="flex items-center">
-                    <img
-                      alt="profile-pic"
-                      src="https://tuk-cdn.s3.amazonaws.com/assets/components/boxed_layout/bl_1.png"
-                      tabindex="0"
-                      class="focus:outline-none w-8 h-8 rounded-md"
-                    />
-                    <p
-                      tabindex="0"
-                      class="focus:outline-none text-gray-800 text-base leading-4 ml-2"
-                    >
-                      Jane Doe
-                    </p>
-                  </div>
-                  <ul class="flex">
-                    <li class="cursor-pointer text-gray-800 pt-5 pb-3">
-                      <div
-                        tabindex="0"
-                        class="focus:outline-none focus:text-indigo-600 w-6 h-6 md:w-8 md:h-8"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="icon icon-tabler icon-tabler-messages"
-                          viewBox="0 0 24 24"
-                          stroke-width="1"
-                          stroke="currentColor"
-                          fill="none"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <path stroke="none" d="M0 0h24v24H0z"></path>
-                          <path
-                            d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10"
-                          ></path>
-                          <path
-                            d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2"
-                          ></path>
-                        </svg>
-                      </div>
-                    </li>
-                    <li class="cursor-pointer text-gray-800 pt-5 pb-3 pl-3">
-                      <div
-                        tabindex="0"
-                        class="focus:outline-none focus:text-indigo-600 w-6 h-6 md:w-8 md:h-8"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="icon icon-tabler icon-tabler-bell"
-                          viewBox="0 0 24 24"
-                          stroke-width="1"
-                          stroke="currentColor"
-                          fill="none"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <path stroke="none" d="M0 0h24v24H0z"></path>
-                          <path
-                            d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"
-                          ></path>
-                          <path d="M9 17v1a3 3 0 0 0 6 0v-1"></path>
-                        </svg>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>
 
-  <script>
-    function dropdownHandler(element) {
-      let single = element.getElementsByTagName("ul")[0];
-      single.classList.toggle("hidden");
-    }
+    <template x-for="(image, index) in images">
+        <figure class="h-96" x-show="currentIndex == index + 1" x-transition:enter="transition transform duration-300"
+        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+        x-transition:leave="transition transform duration-300" x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0">
+        <img :src="image" alt="Image" class="absolute inset-0 z-10 h-full w-full object-cover opacity-70" />
+        
+        </figure>
+    </template>
 
-    function MenuHandler(el, val) {
-      let MainList =
-        el.parentElement.parentElement.getElementsByTagName("ul")[0];
-      let closeIcon =
-        el.parentElement.parentElement.getElementsByClassName(
-          "close-m-menu"
-        )[0];
-      let showIcon =
-        el.parentElement.parentElement.getElementsByClassName("show-m-menu")[0];
-      if (val) {
-        MainList.classList.remove("hidden");
-        el.classList.add("hidden");
-        closeIcon.classList.remove("hidden");
-      } else {
-        showIcon.classList.remove("hidden");
-        MainList.classList.add("hidden");
-        el.classList.add("hidden");
-      }
-    }
-    // ------------------------------------------------------
-    let sideBar = document.getElementById("mobile-nav");
-    let menu = document.getElementById("menu");
-    let cross = document.getElementById("cross");
-    const sidebarHandler = (check) => {
-      if (check) {
-        sideBar.style.transform = "translateX(0px)";
-        menu.classList.add("hidden");
-        cross.classList.remove("hidden");
-      } else {
-        sideBar.style.transform = "translateX(-100%)";
-        menu.classList.remove("hidden");
-        cross.classList.add("hidden");
-      }
-    };
-    let list = document.getElementById("list");
-    let chevrondown = document.getElementById("chevrondown");
-    let chevronup = document.getElementById("chevronup");
-    const listHandler = (check) => {
-      if (check) {
-        list.classList.remove("hidden");
-        chevrondown.classList.remove("hidden");
-        chevronup.classList.add("hidden");
-      } else {
-        list.classList.add("hidden");
-        chevrondown.classList.add("hidden");
-        chevronup.classList.remove("hidden");
-      }
-    };
-  </script>
+    <button @click="back()"
+        class="absolute left-14 top-1/2 -translate-y-1/2 w-11 h-11 flex justify-center items-center rounded-full shadow-md z-10 bg-gray-100 hover:bg-gray-200">
+        <svg class=" w-8 h-8 font-bold transition duration-500 ease-in-out transform motion-reduce:transform-none text-gray-500 hover:text-gray-600 hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7">
+            </path>
+        </svg>
+    </button>
 
-  <!-- Code block ends -->
-</div>
+    <button @click="next()"
+    class="absolute right-14 top-1/2 translate-y-1/2 w-11 h-11 flex justify-center items-center rounded-full shadow-md z-10 bg-gray-100 hover:bg-gray-200">
+        <svg class=" w-8 h-8 font-bold transition duration-500 ease-in-out transform motion-reduce:transform-none text-gray-500 hover:text-gray-600 hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+        </svg>
+    </button>
+</article>
 
-<!-- ✅ Grid Section - Starts Here 👇 -->
-<section
-  class="w-fit mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5"
->
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('slider', () => ({
+            currentIndex: 1,
+            images: [
+                "{% static 'slides/Manchester-United-landingPage.jpg'%}",
+                "{% static 'slides/ManchesterCitylanding_page.jpg'%}",
+                "{% static 'slides/barcelona-landingPage.jpg'%}",
+                
+                
+            ],
+            back() {
+                if (this.currentIndex > 1) {
+                    this.currentIndex = this.currentIndex - 1;
+                }
+            },
+            next() {
+                if (this.currentIndex < this.images.length) {
+                    this.currentIndex = this.currentIndex + 1;
+                } else if (this.currentIndex <= this.images.length){
+                    this.currentIndex = this.images.length - this.currentIndex + 1
+                }
+            },
+        }))
+    })
+</script>
+
+
   <!--   ✅ Product card 1 - Starts Here 👇 -->
 
-  {% for product in products %}
+<div class="bg-white">
 
-  <div
-    class="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl"
-  >
-    <a href="{% url 'detail' product.id %}">
-      <img
-        src="{{ product.image1.url }}"
-        alt="Product"
-        class="h-80 w-72 object-cover rounded-t-xl"
-      />
-      <div class="px-4 py-3 w-72 product-list">
-        <span class="text-gray-400 mr-3 uppercase text-xs">Brand</span>
-        <p class="text-lg font-bold text-black truncate block capitalize">
-          {{product.name}}
-        </p>
-        <div class="flex items-center">
-          <p class="text-lg font-semibold text-black cursor-auto my-3">
-            {{product.selling_price}}
-          </p>
-          <del>
-            <p class="text-sm text-gray-600 cursor-auto ml-2">
-              {{product.actual_price}}
-            </p>
-          </del>
-          <div class="ml-auto">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              fill="currentColor"
-              class="bi bi-bag-plus"
-              viewBox="0 0 16 16"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z"
-              />
-              <path
-                d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"
-              />
-            </svg>
-          </div>
+  <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+    <h2 class=" text-2xl font-bold tracking-tight text-gray-900">New Arrival</h2>
+
+    <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+    
+     {% for item in featured_items_with_images %}
+      <a href="{% url 'product_detail' item.product_item.product_id.id %}" class="group">
+        <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
+         
+                <img src="{{item.image_url}}" alt="{{ item.product_item.product_id.name }} Image">
+                <p>{{ item.product_item.product_id.name }}</p>
         </div>
-      </div>
-    </a>
+        <h3 class="mt-4 text-sm text-gray-700 ">{{ club.name }}</h3>
+        
+      </a>
+    {% endfor %}
+      <!-- More products... -->
+    </div>
   </div>
-  {% endfor %}
-  <!--   🛑 Product card 1 - Ends Here  -->
-</section>
+</div>
 
-<!-- 🛑 Grid Section - Ends Here -->
+  
+<div class="bg-white">
+
+  <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+    <h2 class=" text-2xl font-bold tracking-tight text-gray-900">Leagues</h2>
+
+    <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+    
+    {% for league in leagues %}
+      <a href="{% url 'league_products' league.id %}" class="group ml-8">
+        <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
+          <img src="{{ league.thumbnail.url }}" alt="{{ league.name }}" class="h-full w-full object-cover object-center group-hover:opacity-75">
+        </div>
+        <h3 class="mt-4 text-sm text-gray-700 ">{{ league.name }}</h3>
+        
+      </a>
+    {% endfor %}
+      <!-- More products... -->
+    </div>
+  </div>
+</div>
+
+
+
+<div class="bg-white">
+
+  <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+    <h2 class=" text-2xl font-bold tracking-tight text-gray-900">Popular Clubs</h2>
+
+    <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+    
+    {% for club in clubs %}
+      <a href="{% url 'club_products' club.id %}" class="group">
+        <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
+          <img src="{{ club.thumbnail.url }}" alt="{{ club.name }}" class="h-full w-full object-cover object-center group-hover:opacity-75">
+        </div>
+        <h3 class="mt-4 text-sm text-gray-700 ">{{ club.name }}</h3>
+        
+      </a>
+    {% endfor %}
+      <!-- More products... -->
+    </div>
+  </div>
+</div>
+ 
+ 
+<div class="bg-white">
+
+  <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+    <h2 class=" text-2xl font-bold tracking-tight text-gray-900">Nations</h2>
+
+    <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+    
+    {% for product, image_url in product_images.items %}
+      <a href="{% url 'country_products' country_id=product.country_id.id  %}" class="group">
+        <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
+          <img src="{{ image_url }}" alt="{{ product.name }}" class="h-full w-full object-cover object-center group-hover:opacity-75">
+        </div>
+        <h3 class="mt-4 text-sm text-gray-700 ">{{ product.name }}</h3>
+        
+      </a>
+    {% endfor %}
+      <!-- More products... -->
+    </div>
+  </div>
+</div>
+{% comment %} {% for product, image_url in product_images.items %}
+    <div class="product">
+        <h2>{{ product.name }}</h2>
+        <img src="{{ image_url }}" alt="{{ product.name }} Image">
+    </div>
+{% endfor %}
+
+  {% endcomment %}
+
 
 {% endblock %}
