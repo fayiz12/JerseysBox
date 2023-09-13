@@ -1,4 +1,6 @@
 {% extends 'base.html' %}{%load static%} {%csrf_token%} {% block content %}
+
+
 <!-- component -->
 <!-- Create By Joker Banny -->
 <style>
@@ -11,684 +13,40 @@
   }
 </style>
 
-<body>
- <div class="h-full w-full">
-  <!-- Code block starts -->
-
-  <nav role="navigation" class="bg-white shadow xl:block hidden">
-    <div class="mx-auto container px-6 py-2 xl:py-0">
-      <div class="flex items-center justify-between">
-        <div class="inset-y-0 left-0 flex items-center xl:hidden">
-          <div
-            class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-100 focus:outline-none transition duration-150 ease-in-out"
-          >
-            <div class="visible xl:hidden">
-              <ul
-                class="p-2 border-r bg-white absolute rounded left-0 right-0 shadow mt-8 md:mt-8 hidden"
-              >
-                <li
-                  class="flex xl:hidden cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none"
-                >
-                  <div class="flex items-center">
-                    <span class="ml-2 font-bold">men</span>
-                  </div>
-                </li>
-                <li
-                  class="xl:hidden flex-col cursor-pointer text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none flex justify-center"
-                  onclick="dropdownHandler(this)"
-                >
-                  <div class="flex items-center">
-                    <span class="ml-2 font-bold">Women</span>
-                  </div>
-                </li>
-                <li
-                  class="xl:hidden cursor-pointer text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 flex items-center focus:text-indigo-700 focus:outline-none"
-                >
-                  <span class="ml-2 font-bold">Kids</span>
-                </li>
-
-                <li
-                  class="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 flex items-center focus:text-indigo-700 focus:outline-none"
-                >
-                  <div class="flex items-center">
-                    <div
-                      class="w-12 cursor-pointer flex text-sm border-2 border-transparent rounded focus:outline-none focus:border-white transition duration-150 ease-in-out"
-                    >
-                      <img
-                        class="rounded h-10 w-10 object-cover"
-                        src="https://tuk-cdn.s3.amazonaws.com/assets/components/horizontal_navigation/hn_1.png"
-                        alt="logo"
-                      />
-                    </div>
-                    <p class="text-sm ml-2 cursor-pointer">Jane Doe</p>
-                    <div class="sm:ml-2 text-white relative">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="icon icon-tabler icon-tabler-chevron-down cursor-pointer"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z"></path>
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                      </svg>
-                    </div>
-                  </div>
-                </li>
-                <li
-                  class="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none"
-                >
-                  <div class="flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="icon icon-tabler icon-tabler-user"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" />
-                      <circle cx="12" cy="7" r="4" />
-                      <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                    </svg>
-                    <span class="ml-2">Profile</span>
-                  </div>
-                </li>
-              </ul>
-              <svg
-                onclick="MenuHandler(this,true)"
-                aria-haspopup="true"
-                aria-label="Main Menu"
-                xmlns="http://www.w3.org/2000/svg"
-                class="show-m-menu icon icon-tabler icon-tabler-menu"
-                width="28"
-                height="28"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path stroke="none" d="M0 0h24v24H0z"></path>
-                <line x1="4" y1="8" x2="20" y2="8"></line>
-                <line x1="4" y1="16" x2="20" y2="16"></line>
-              </svg>
-            </div>
-            <div
-              class="hidden close-m-menu text-gray-700"
-              onclick="MenuHandler(this,false)"
-            >
-              <svg
-                aria-label="Close"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" />
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </div>
-          </div>
-        </div>
-        <button
-          class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 rounded-md flex w-full sm:w-auto items-center sm:items-stretch justify-end sm:justify-start"
-        >
-          <div class="flex items-center">
-            <a href="{%url 'home'%}"><img
-              class="w-28 item-center h-10 mt-2"
-              src="{% static 'logo.png' %}"
-              alt="logo"
-            /></a>
-          </div>
-        </button>
-        <div class="flex center">
-          <div class="hidden xl:flex md:mr-6 xl:mr-16">
-            <a
-              href="javascript: void(0)"
-              class="focus:text-indigo-700 border-b-2 border-transparent focus:border-indigo-700 flex px-5 items-center py-6 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition duration-150 ease-in-out"
-            >
-              <span class="mr-2"> </span>
-              Men
-            </a>
-            <a
-              href="javascript: void(0)"
-              class="focus:text-indigo-700 border-b-2 border-transparent focus:border-indigo-700 flex px-5 items-center py-6 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition duration-150 ease-in-out"
-            >
-              <span class="mr-2"> </span>
-              Women
-            </a>
-            <a
-              href="javascript: void(0)"
-              class="focus:text-indigo-700 border-b-2 border-transparent focus:border-indigo-700 flex px-5 items-center py-6 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition duration-150 ease-in-out"
-            >
-              <span class="mr-2"> </span>
-              Kids
-            </a>
-          </div>
-          <div class="hidden xl:flex items-center">
-            <div class="relative md:mr-6 my-2">
-              {%if user.is_authenticated%}
-              <a
-                class="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 focus:text-indigo-700 focus:outline-none bg-gray-100 border-gray-300 border transition duration-150 ease-in-out hover:bg-gray-300 rounded text-gray-600 px-5 py-2 text-xs"
-                href="{% url 'signout' %}">
-                signOut
-              </a>
-              {%else%}
-              <a
-                class="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 focus:text-indigo-700 focus:outline-none bg-gray-100 border-gray-300 border transition duration-150 ease-in-out hover:bg-gray-300 rounded text-gray-600 px-5 py-2 text-xs"
-                href="{% url 'register' %}"
-                >
-                signIn
-              </a>
-              {% endif %}
-            </div>
-            <div class="ml-6 relative">
-              <button
-                aria-label="dropdown"
-                class="focus:outline-none border-b-2 border-transparent focus:border-indigo-700 py-3 focus:text-indigo-700 text-gray-600 hover:text-indigo-700 flex items-center relative"
-                onclick="dropdownHandler(this)"
-              >
-                <ul
-                  class="p-2 w-40 border-r bg-white absolute rounded right-0 shadow top-0 mt-16 hidden"
-                >
-                  <li
-                    class="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none"
-                  >
-                    <a
-                      href=""
-                      class="focus:underline focus:text-indigo-700 focus:outline-none flex items-center"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="icon icon-tabler icon-tabler-user"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <circle cx="12" cy="7" r="4" />
-                        <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                      </svg>
-                      <span class="ml-2">My Profile</span>
-                    </a>
-                  </li>
-                  <li
-                    class="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none flex items-center"
-                  >
-                    <a
-                      href="javascript:void(0)"
-                      class="focus:underline focus:text-indigo-700 focus:outline-none flex items-center"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="icon icon-tabler icon-tabler-help"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <circle cx="12" cy="12" r="9" />
-                        <line x1="12" y1="17" x2="12" y2="17.01" />
-                        <path
-                          d="M12 13.5a1.5 1.5 0 0 1 1 -1.5a2.6 2.6 0 1 0 -3 -4"
-                        />
-                      </svg>
-                      <span class="ml-2">Help Center</span>
-                    </a>
-                  </li>
-                  <li
-                    class="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 flex items-center focus:text-indigo-700 focus:outline-none"
-                  >
-                    <a
-                      href="javascript:void(0)"
-                      class="focus:underline focus:text-indigo-700 focus:outline-none flex items-center"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="icon icon-tabler icon-tabler-settings"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <path
-                          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                        />
-                        <circle cx="12" cy="12" r="3" />
-                      </svg>
-                      <span class="ml-2">Account Settings</span>
-                    </a>
-                  </li>
-                </ul>
-                <div
-                  class="cursor-pointer flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white transition duration-150 ease-in-out"
-                >
-                  <img
-                    class="rounded-full h-10 w-10 object-cover"
-                    src="https://tuk-cdn.s3.amazonaws.com/assets/components/horizontal_navigation/hn_2.png"
-                    alt="logo"
-                  />
-                </div>
-                <div class="ml-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="icon icon-tabler icon-tabler-chevron-down cursor-pointer"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path stroke="none" d="M0 0h24v24H0z"></path>
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                </div>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>
-  <nav>
-    <div
-      class="py-4 px-6 w-full flex xl:hidden justify-between items-center bg-white fixed top-0 z-40"
-    >
-      <div
-        aria-label="logo"
-        role="img"
-        tabindex="0"
-        class="focus:outline-none w-24"
-      >
-        <img
-          class="w-28 item-center h-10 mt-2"
-          src="{% static 'logo.png' %}"
-          alt=""
-        />
-      </div>
-      <div class="flex items-center">
-        <div class="relative mr-6">
-          <button
-            class="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 focus:outline-none bg-gray-100 border-gray-300 border transition duration-150 ease-in-out hover:bg-gray-300 rounded text-gray-600 px-5 py-2 text-xs"
-          >
-            signIn
-          </button>
-        </div>
-        <button
-          id="menu"
-          aria-label="open menu"
-          class="focus:outline-none focus:ring-2 focus:ring-gray-600 rounded-md text-gray-800"
-          onclick="sidebarHandler(true)"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="icon icon-tabler icon-tabler-menu-2"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <line x1="4" y1="6" x2="20" y2="6" />
-            <line x1="4" y1="12" x2="20" y2="12" />
-            <line x1="4" y1="18" x2="20" y2="18" />
-          </svg>
-        </button>
-      </div>
-    </div>
-    <!--Mobile responsive sidebar-->
-    <div
-      class="absolute w-full h-full transform -translate-x-full z-40 xl:hidden"
-      id="mobile-nav"
-    >
-      <div
-        class="bg-gray-800 opacity-50 w-full h-full"
-        onclick="sidebarHandler(false)"
-      ></div>
-      <div
-        class="w-64 z-40 fixed overflow-y-auto top-0 bg-white shadow h-full flex-col justify-between xl:hidden pb-4 transition duration-150 ease-in-out"
-      >
-        <div class="px-6 h-full">
-          <div class="flex flex-col justify-between h-full w-full">
-            <div>
-              <div class="mt-6 flex w-full items-center justify-between">
-                <div class="flex items-center justify-between w-full">
-                  <div class="flex items-center">
-                    <img
-                      class="w-28 item-center h-10 mt-2"
-                      src="{% static 'logo.png' %}"
-                      alt=""
-                    />
-                  </div>
-                  <button
-                    id="cross"
-                    aria-label="close menu"
-                    class="focus:outline-none focus:ring-2 rounded-md text-gray-800"
-                    onclick="sidebarHandler(false)"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="icon icon-tabler icon-tabler-x"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z"></path>
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <ul class="f-m-m">
-                <li>
-                  <a class="cursor-pointer">
-                    <div class="text-gray-800 pt-10">
-                      <div class="flex items-center">
-                        <div
-                          class="w-6 h-6 md:w-8 md:h-8 text-indigo-700"
-                        ></div>
-                        <p
-                          tabindex="0"
-                          class="focus:outline-none focus:text-indigo-600 text-indigo-700 xl:text-base text-base ml-3"
-                        >
-                          Men
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a class="cursor-pointer">
-                    <div class="text-gray-800 pt-8">
-                      <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                          <div
-                            class="w-6 h-6 md:w-8 md:h-8 text-gray-800"
-                          ></div>
-                          <p
-                            tabindex="0"
-                            class="focus:outline-none focus:text-indigo-600 text-gray-800 xl:text-base md:text-2xl text-base ml-3"
-                          >
-                            Women
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a class="cursor-pointer">
-                    <div class="text-gray-800 pt-8">
-                      <div class="flex items-center">
-                        <div class="w-6 h-6 md:w-8 md:h-8 text-gray-800"></div>
-                        <p
-                          tabindex="0"
-                          class="focus:outline-none focus:text-indigo-600 text-gray-800 xl:text-base md:text-2xl text-base ml-3"
-                        >
-                          Kids
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div class="w-full pt-4">
-              <div class="flex justify-center mb-4 w-full">
-                <div class="relative w-full">
-                  <div
-                    class="text-gray-500 absolute ml-4 inset-0 m-auto w-4 h-4"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="icon icon-tabler icon-tabler-search"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      stroke-width="1"
-                      stroke="#A0AEC0"
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z"></path>
-                      <circle cx="10" cy="10" r="7"></circle>
-                      <line x1="21" y1="21" x2="15" y2="15"></line>
-                    </svg>
-                  </div>
-                  <input
-                    class="focus:ring-2 focus:ring-gray-600 bg-gray-100 focus:outline-none rounded w-full text-sm text-gray-500 pl-10 py-2"
-                    type="text"
-                    placeholder="Search"
-                  />
-                </div>
-              </div>
-              <div class="border-t border-gray-300">
-                <div class="w-full flex items-center justify-between pt-1">
-                  <div class="flex items-center">
-                    <img
-                      alt="profile-pic"
-                      src="https://tuk-cdn.s3.amazonaws.com/assets/components/boxed_layout/bl_1.png"
-                      tabindex="0"
-                      class="focus:outline-none w-8 h-8 rounded-md"
-                    />
-                    <p
-                      tabindex="0"
-                      class="focus:outline-none text-gray-800 text-base leading-4 ml-2"
-                    >
-                      Jane Doe
-                    </p>
-                  </div>
-                  <ul class="flex">
-                    <li class="cursor-pointer text-gray-800 pt-5 pb-3">
-                      <div
-                        tabindex="0"
-                        class="focus:outline-none focus:text-indigo-600 w-6 h-6 md:w-8 md:h-8"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="icon icon-tabler icon-tabler-messages"
-                          viewBox="0 0 24 24"
-                          stroke-width="1"
-                          stroke="currentColor"
-                          fill="none"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <path stroke="none" d="M0 0h24v24H0z"></path>
-                          <path
-                            d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10"
-                          ></path>
-                          <path
-                            d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2"
-                          ></path>
-                        </svg>
-                      </div>
-                    </li>
-                    <li class="cursor-pointer text-gray-800 pt-5 pb-3 pl-3">
-                      <div
-                        tabindex="0"
-                        class="focus:outline-none focus:text-indigo-600 w-6 h-6 md:w-8 md:h-8"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="icon icon-tabler icon-tabler-bell"
-                          viewBox="0 0 24 24"
-                          stroke-width="1"
-                          stroke="currentColor"
-                          fill="none"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <path stroke="none" d="M0 0h24v24H0z"></path>
-                          <path
-                            d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"
-                          ></path>
-                          <path d="M9 17v1a3 3 0 0 0 6 0v-1"></path>
-                        </svg>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <script>
-    function dropdownHandler(element) {
-      let single = element.getElementsByTagName("ul")[0];
-      single.classList.toggle("hidden");
-    }
-
-    function MenuHandler(el, val) {
-      let MainList =
-        el.parentElement.parentElement.getElementsByTagName("ul")[0];
-      let closeIcon =
-        el.parentElement.parentElement.getElementsByClassName(
-          "close-m-menu"
-        )[0];
-      let showIcon =
-        el.parentElement.parentElement.getElementsByClassName("show-m-menu")[0];
-      if (val) {
-        MainList.classList.remove("hidden");
-        el.classList.add("hidden");
-        closeIcon.classList.remove("hidden");
-      } else {
-        showIcon.classList.remove("hidden");
-        MainList.classList.add("hidden");
-        el.classList.add("hidden");
-      }
-    }
-    // ------------------------------------------------------
-    let sideBar = document.getElementById("mobile-nav");
-    let menu = document.getElementById("menu");
-    let cross = document.getElementById("cross");
-    const sidebarHandler = (check) => {
-      if (check) {
-        sideBar.style.transform = "translateX(0px)";
-        menu.classList.add("hidden");
-        cross.classList.remove("hidden");
-      } else {
-        sideBar.style.transform = "translateX(-100%)";
-        menu.classList.remove("hidden");
-        cross.classList.add("hidden");
-      }
-    };
-    let list = document.getElementById("list");
-    let chevrondown = document.getElementById("chevrondown");
-    let chevronup = document.getElementById("chevronup");
-    const listHandler = (check) => {
-      if (check) {
-        list.classList.remove("hidden");
-        chevrondown.classList.remove("hidden");
-        chevronup.classList.add("hidden");
-      } else {
-        list.classList.add("hidden");
-        chevrondown.classList.add("hidden");
-        chevronup.classList.remove("hidden");
-      }
-    };
-  </script>
-
-  <!-- Code block ends -->
 
   <div class="h-screen bg-gray-100 pt-20">
     <h1 class="mb-10 text-center text-2xl font-bold">Cart Items</h1>
     <div class="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
       <div class="rounded-lg md:w-2/3">
+        
+        {% if user.is_authenticated %}
+        {% if cart_items %}    
+        {% for item in cart_items %}
         <div class="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
-          <img src="https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="product-image" class="w-full rounded-lg sm:w-40" />
+        
+          {% for image in item.product_item.image.all %}
+            <img src="{{ image.image.url }}" alt="product-image" class="w-full rounded-lg sm:w-40" />
+          {% endfor %}
           <div class="sm:ml-4 sm:flex sm:w-full sm:justify-between">
             <div class="mt-5 sm:mt-0">
-              <h2 class="text-lg font-bold text-gray-900">Nike Air Max 2019</h2>
-              <p class="mt-1 text-xs text-gray-700">36EU - 4US</p>
-            </div>
-            <div class="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-              <div class="flex items-center border-gray-100">
-                <span class="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"> - </span>
-                <input class="h-8 w-8 border bg-white text-center text-xs outline-none" type="number" value="2" min="1" />
-                <span class="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"> + </span>
-              </div>
-              <div class="flex items-center space-x-4">
-                <p class="text-sm">259.000 ₭</p>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 cursor-pointer duration-150 hover:text-red-500">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
-          <img src="https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1131&q=80" alt="product-image" class="w-full rounded-lg sm:w-40" />
-          <div class="sm:ml-4 sm:flex sm:w-full sm:justify-between">
-            <div class="mt-5 sm:mt-0">
-              <h2 class="text-lg font-bold text-gray-900">Nike Air Max 2019</h2>
-              <p class="mt-1 text-xs text-gray-700">36EU - 4US</p>
+              <h2 class="text-lg font-bold text-gray-900">{{item.product_item.product_id.name}}</h2>
+              <p class="mt-1 text-xs text-gray-700 font-bold ">Size:-{{item.product_item.size}}</p>
+              <p class="text-md font-bold">Price:-{{item.product_item.price}}₹</p>
             </div>
             <div class="mt-4 flex justify-between im sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-              <div class="flex items-center border-gray-100">
-                <span class="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"> - </span>
-                <input class="h-8 w-8 border bg-white text-center text-xs outline-none" type="number" value="2" min="1" />
-                <span class="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"> + </span>
-              </div>
+              
               <div class="flex items-center space-x-4">
-                <p class="text-sm">259.000 ₭</p>
+              <a href="{% url 'remove_from_cart' item.product_item.id %}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 cursor-pointer duration-150 hover:text-red-500">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
+                </a>
               </div>
             </div>
           </div>
         </div>
+      {% endfor %}
+      
       </div>
       <!-- Sub total -->
       <div class="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
@@ -709,10 +67,62 @@
           </div>
         </div>
         <button class="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Check out</button>
+      {% else %}
+            <p>Your cart is empty.</p>
+      {% endif %}
+      {% else %}
+       {% if cart_items %}    
+        {% for item in cart_items %}
+        <div class="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
+        
+          {% for image in item.product_item.image.all %}
+            <img src="{{ image.image.url }}" alt="product-image" class="w-full rounded-lg sm:w-40" />
+          {% endfor %}
+          <div class="sm:ml-4 sm:flex sm:w-full sm:justify-between">
+            <div class="mt-5 sm:mt-0">
+              <h2 class="text-lg font-bold text-gray-900">{{item.product_item.product_id.name}}</h2>
+              <p class="mt-1 text-xs text-gray-700 font-bold ">Size:-{{item.product_item.size}}</p>
+              <p class="text-md font-bold">Price:-{{item.product_item.price}}₹</p>
+            </div>
+            <div class="mt-4 flex justify-between im sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
+              
+              <div class="flex items-center space-x-4">
+                <a href="{% url 'remove_from_cart' item.product_item.id %}">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 cursor-pointer duration-150 hover:text-red-500">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      
+      </div>
+      <!-- Sub total -->
+      <div class="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
+        <div class="mb-2 flex justify-between">
+          <p class="text-gray-700">Subtotal</p>
+          <p class="text-gray-700">$129.99</p>
+        </div>
+        <div class="flex justify-between">
+          <p class="text-gray-700">Shipping</p>
+          <p class="text-gray-700">$4.99</p>
+        </div>
+        <hr class="my-4" />
+        <div class="flex justify-between">
+          <p class="text-lg font-bold">Total</p>
+          <div class="">
+            <p class="mb-1 text-lg font-bold">$134.98 USD</p>
+            <p class="text-sm text-gray-700">including VAT</p>
+          </div>
+        </div>
+        <button class="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Check out</button>
+      {% else %}
+            <p>Your cart is empty.</p>
+      {% endif %}
+      {% endif %}
       </div>
     </div>
   </div>
-  </div>
-</body>
-
 {% endblock %}

@@ -7,11 +7,11 @@ from django.utils.safestring import mark_safe
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('id','name',)
+    list_display = ('id','name','price')
 
 
 class ProductItemAdmin(admin.ModelAdmin):
-    list_display = ( 'id','product_id','actual_price','selling_price','discount_percent', 'stock', 'is_active', 'gender', 'size')
+    list_display = ( 'id','product_id', 'stock', 'is_active', 'size')
 
 class ImageAdmin(admin.ModelAdmin):
     list_display = ('product_id','display_image')

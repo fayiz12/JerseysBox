@@ -54,10 +54,12 @@ INSTALLED_APPS = [
     
 
     #Custom Apps
-
+    
     'users',
     'products',
     'categories',
+    'cart',
+    'wishlists',
 ]
 TAILWIND_APP_NAME = 'theme'
 
@@ -238,3 +240,5 @@ UNFOLD = {
     },
     
 }
+
+# LOGIN_URL = '/login/'
