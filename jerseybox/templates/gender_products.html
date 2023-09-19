@@ -1,283 +1,397 @@
 {%extends 'base.html'%} {% block content %} {%load static%} {%csrf_token%}
 
 
-<div class="flex flex-col w-screen min-h-screen p-10 bg-gray-100 text-gray-800">
-
-	<!-- Component Start -->
-	<h1 class="text-3xl">{% if selected_gender == 'male' %}Men's Products{% endif %}
-           {% if selected_gender == 'female' %}Women's Products{% endif %}
-           {% if selected_gender == 'kids' %}Kids' Products{% endif %}</h1>
-	<div class="flex flex-col sm:flex-row sm:items-end sm:justify-between mt-6">
-		<span class="text-sm font-semibold">1-16 of 148 Products</span>
-		
-        <div class="2xl:container 2xl:mx-auto">
-            <div class="md:py-12 lg:px-20 md:px-6 py-9 px-4">
-                <p class="text-sm dark:text-gray-400 leading-3 text-gray-600 font-normal mb-2">Home - Men - Products - Filters</p>
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="lg:text-4xl dark:text-white text-3xl lg:leading-9 leading-7 text-gray-800 font-semibold">Jerseies</h2>
-    
-                    <!-- filters Button (md and plus Screen) -->
-                    <button onclick="showFilters()" class="cursor-pointer dark:bg-white dark:text-gray-800 text-white dark:hover:bg-gray-100 sm:flex hidden hover:bg-gray-700 focus:ring focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-4 px-6 bg-gray-800 flex text-base leading-4 font-normal text-white justify-center items-center">
-                        <img class="dark:hidden"src="https://tuk-cdn.s3.amazonaws.com/can-uploader/filter1-svg1.svg"/>
-                        <img class="hidden dark:block"src="https://tuk-cdn.s3.amazonaws.com/can-uploader/filter1-svg1dark.svg"/>   
-                        Filters
-                    </button>
-                </div>
-                <p class="text-xl dark:text-gray-400 leading-5 text-gray-600 font-medium"> Products</p>
-    
-                <!-- Filters Button (Small Screen) -->
-    
-                <button onclick="showFilters()" class="cursor-pointer mt-6 block sm:hidden hover:bg-gray-700 focus:ring focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-2 w-full bg-gray-800 flex text-base leading-4 font-normal text-white dark:text-gray-800 dark:bg-white dark:hover:bg-gray-100 justify-center items-center">
-                    <img class="dark:hidden"src="https://tuk-cdn.s3.amazonaws.com/can-uploader/filter1-svg1.svg" alt="filter" />
-                    <img class="hidden dark:block"src="https://tuk-cdn.s3.amazonaws.com/can-uploader/filter1-svg1dark.svg" alt="filter" />  
-                    Filters
-                </button>
-            </div>
-    <form method="get">
-            <div id="filterSection" class="block relative md:py-10 lg:px-20 md:px-6 py-9 px-4 bg-gray-50 dark:bg-gray-800 w-full">
-                <!-- Cross button Code -->
-                <div onclick="closeFilterSection()" class="cursor-pointer absolute right-0 top-0 md:py-10 lg:px-20 md:px-6 py-9 px-4">
-                    <img class="dark:hidden" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/filter1-svg2.svg" alt="cross" />
-                    <img class="hidden dark:block" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/filter1-svg2dark.svg" alt="cross" />
-                </div>
-    
-                <!-- Colors Section -->
-                {% comment %} <div>
-                    <div class="flex space-x-2 text-gray-800 dark:text-white">
-                        <img class="dark:hidden" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/filter1-svg3.svg" alt="colors"/>
-                        <img class="hidden dark:block" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/filter1-svg3dark.svg" alt="colors"/>
-                        <p class="lg:text-2xl text-xl lg:leading-6 leading-5 font-medium">Colors</p>
-                    </div>
-                    <div class="md:flex md:space-x-6 mt-8 grid grid-cols-3 gap-y-8 flex-wrap">
-                        <div class="flex space-x-2 md:justify-center md:items-center items-center justify-start">
-                            <div class="w-4 h-4 rounded-full bg-white shadow"></div>
-                            <p class="text-base leading-4 dark:text-gray-300 text-gray-600 font-normal">White</p>
-                        </div>
-                        <div class="flex space-x-2 justify-center items-center">
-                            <div class="w-4 h-4 rounded-full bg-blue-600 shadow"></div>
-                            <p class="text-base leading-4 dark:text-gray-300 text-gray-600 font-normal">Blue</p>
-                        </div>
-                        <div class="flex space-x-2 md:justify-center md:items-center items-center justify-end">
-                            <div class="w-4 h-4 rounded-full bg-red-600 shadow"></div>
-                            <p class="text-base leading-4 dark:text-gray-300 text-gray-600 font-normal">Red</p>
-                        </div>
-                        <div class="flex space-x-2 md:justify-center md:items-center items-center justify-start">
-                            <div class="w-4 h-4 rounded-full bg-indigo-600 shadow"></div>
-                            <p class="text-base leading-4 dark:text-gray-300 text-gray-600 font-normal">Indigo</p>
-                        </div>
-                        <div class="flex space-x-2 justify-center items-center">
-                            <div class="w-4 h-4 rounded-full bg-black shadow"></div>
-                            <p class="text-base leading-4 dark:text-gray-300 text-gray-600 font-normal">Black</p>
-                        </div>
-                        <div class="flex space-x-2 md:justify-center md:items-center items-center justify-end">
-                            <div class="w-4 h-4 rounded-full bg-purple-600 shadow"></div>
-                            <p class="text-base leading-4 dark:text-gray-300 text-gray-600 font-normal">Purple</p>
-                        </div>
-                        <div class="flex space-x-2 md:justify-center md:items-center items-center justify-start">
-                            <div class="w-4 h-4 rounded-full bg-gray-600 shadow"></div>
-                            <p class="text-base leading-4 dark:text-gray-300 text-gray-600 font-normal">Grey</p>
-                        </div>
-                    </div>
-                </div> {% endcomment %}
-    
-                <hr class="bg-gray-200 lg:w-6/12 w-full md:my-10 my-8" />
-    
-                <!-- Material Section -->
-                <div>
-				
-                    <div class="flex space-x-2 text-gray-800 dark:text-white">
-                        <img class="dark:hidden" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/filter1-svg4.svg" alt="materials"/>
-                        <img class="hidden dark:block" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/filter1-svg4dark.svg" alt="materials"/>
-                        <p class="lg:text-2xl text-xl lg:leading-6 leading-5 font-medium ">Price</p>
-                    </div>
-                    <div class="md:flex md:space-x-6 mt-8 grid grid-cols-3 gap-y-8 flex-wrap">
-                        <div class="flex space-x-2 md:justify-center md:items-center items-center justify-start">
-                            <input class="w-4 h-4 mr-2" type="checkbox" id="sort" name="sort" value="price_low" {% if sort_param == 'price_low' %}checked{% endif %} />
-                            <div class="inline-block">
-                                <div class="flex space-x-6 justify-center items-center">
-                                    <label class="mr-2 text-sm leading-3 dark:text-gray-300 font-normal text-gray-600" for="Leather">Low to High</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex justify-center items-center">
-                            <input class="w-4 h-4 mr-2" type="checkbox" id="sort" name="sort" value="price_high" {% if sort_param == 'price_high' %}checked{% endif %}/>
-                            <div class="inline-block">
-                                <div class="flex space-x-6 justify-center items-center">
-                                    <label class="mr-2 text-sm leading-3 dark:text-gray-300 font-normal text-gray-600" for="Cotton">High to Low</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-				
-                </div>
-    
-                <hr class="bg-gray-200 lg:w-6/12 w-full md:my-10 my-8" />
-    
-                <!-- Size Section -->
-                <div>
-                    <div class="flex space-x-2 text-gray-800 dark:text-white">
-                        <img class="dark:hidden" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/filter1-svg5.svg" alt="size"/>
-                        <img class="hidden dark:block" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/filter1-svg5dark.svg" alt="size"/>
-                        <p class="lg:text-2xl text-xl lg:leading-6 leading-5 font-medium ">Size</p>
-                    </div>
-                    <div class="md:flex md:space-x-6 mt-8 grid grid-cols-3 gap-y-8 flex-wrap">
-                        <div class="flex md:justify-center md:items-center items-center justify-start">
-                            <input class="w-4 h-4 mr-2" type="checkbox" id="Large" name="Large" value="Large" />
-                            <div class="inline-block">
-                                <div class="flex space-x-6 justify-center items-center">
-                                    <label class="mr-2 text-sm leading-3 font-normal text-gray-600 dark:text-gray-300" for="Large">Large</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex justify-center items-center">
-                            <input class="w-4 h-4 mr-2" type="checkbox" id="Medium" name="Medium" value="Medium" />
-                            <div class="inline-block">
-                                <div class="flex space-x-6 justify-center items-center">
-                                    <label class="mr-2 text-sm leading-3 font-normal text-gray-600 dark:text-gray-300" for="Medium">Medium</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex md:justify-center md:items-center items-center justify-end">
-                            <input class="w-4 h-4 mr-2" type="checkbox" id="Small" name="Small" value="Small" />
-                            <div class="inline-block">
-                                <div class="flex space-x-6 justify-center items-center">
-                                    <label class="mr-2 text-sm leading-3 font-normal text-gray-600 dark:text-gray-300" for="Small">Small</label>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
-    
-                <hr class="bg-gray-200 lg:w-6/12 w-full md:my-10 my-8" />
-    
-                <!-- Collection Section -->
-                {% comment %} <div>
-                    <div class="flex space-x-2 text-gray-800 dark:text-white ">
-                        <img class="dark:hidden" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/filter1-svg6.svg" alt="collection"/>
-                        <img class="hidden dark:block" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/filter1-svg6dark.svg" alt="collection"/>
-                        <p class="lg:text-2xl text-xl lg:leading-6 leading-5 font-medium ">Collection</p>
-                    </div>
-                    <div class="flex mt-8 space-x-8">
-                        <div class="flex justify-center items-center">
-                            <input class="w-4 h-4 mr-2" type="checkbox" id="LS" name="LS" value="LS" />
-                            <div class="inline-block">
-                                <div class="flex space-x-6 justify-center items-center">
-                                    <label class="mr-2 text-sm leading-3 font-normal dark:text-gray-300 text-gray-600" for="LS">Luxe signature</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex justify-center items-center">
-                            <input class="w-4 h-4 mr-2" type="checkbox" id="LxL" name="LxL" value="LxL" />
-                            <div class="inline-block">
-                                <div class="flex space-x-6 justify-center items-center">
-                                    <label class="mr-2 text-sm leading-3 font-normal dark:text-gray-300 text-gray-600" for="LxL">Luxe x London</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-     {% endcomment %}
-                <!-- Apply Filter Button (Large Screen) -->
-    
-                <div class="hidden md:block absolute right-0 bottom-0 md:py-10 lg:px-20 md:px-6 py-9 px-4">
-                    <button type="submit" class="hover:bg-gray-700 dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 focus:ring focus:ring-offset-2 focus:ring-gray-800 text-base leading-4 font-medium py-4 px-10 text-white bg-gray-800">Apply Filter</button>
-                </div>
-    
-                <!-- Apply Filter Button (Table or lower Screen) -->
-    
-                <div class="block md:hidden w-full mt-10">
-                    <button type="submit" class="w-full hover:bg-gray-700 dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 focus:ring focus:ring-offset-2 focus:ring-gray-800 text-base leading-4 font-medium py-4 px-10 text-white bg-gray-800">Apply Filter</button>
-                </div>
-            </div>
-        </div>
-    
-        <style>
-            .checkbox:checked + .check-icon {
-                display: flex;
-            }
-        </style>
-    
-     </form>	   
-    
-	</div>
-	<div class="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-x-6 gap-y-12 w-full mt-6">
-		
-		
-		<!-- Product Tile Start -->
-	{% for product in gender_products %}
+<div class="bg-white">
   <div>
-    <a href="{% url 'product_detail' product.id %}" class="block rounded-lg shadow-lg bg-white">
-      {% with product.productitem.first as product_item %}
-  {% with product_item.image.first as product_image %}
-    <img src="{{ product_image.image.url }}" alt="{{ product.name }}" />
-  {% endwith %}
-{% endwith %}
-    </a>
+    <!--
+      Mobile filter dialog
 
-    <div class="flex flex-col mt-3">
-      <div class="mb-2">
-        <a href="#" class="font-medium">{{ product.name }}</a>
-		<span class="flex items-center h-8 bg-gray-200 text-gray-600 text-sm px-2 rounded">{{ product.club_id.name}}{{ product.product_id.country_id.country.name}}</span>
+      Off-canvas filters for mobile, show/hide based on off-canvas filters state.
+    -->
+    <div class="relative z-40 lg:hidden" role="dialog" aria-modal="true">
+      <!--
+        Off-canvas menu backdrop, show/hide based on off-canvas menu state.
+
+        Entering: "transition-opacity ease-linear duration-300"
+          From: "opacity-0"
+          To: "opacity-100"
+        Leaving: "transition-opacity ease-linear duration-300"
+          From: "opacity-100"
+          To: "opacity-0"
+      -->
+      <div class="fixed inset-0 bg-black bg-opacity-25"></div>
+
+      <div class="fixed inset-0 z-40 flex">
+        <!--
+          Off-canvas menu, show/hide based on off-canvas menu state.
+
+          Entering: "transition ease-in-out duration-300 transform"
+            From: "translate-x-full"
+            To: "translate-x-0"
+          Leaving: "transition ease-in-out duration-300 transform"
+            From: "translate-x-0"
+            To: "translate-x-full"
+        -->
+        <div class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
+          <div class="flex items-center justify-between px-4">
+            <h2 class="text-lg font-medium text-gray-900">Filters</h2>
+            <button type="button" class="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400">
+              <span class="sr-only">Close menu</span>
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Filters -->
+          <form class="mt-4 border-t border-gray-200">
+            <h3 class="sr-only">Categories</h3>
+            <ul role="list" class="px-2 py-3 font-medium text-gray-900">
+              <li>
+                <a href="#" class="block px-2 py-3">Totes</a>
+              </li>
+              <li>
+                <a href="#" class="block px-2 py-3">Backpacks</a>
+              </li>
+              
+            </ul>
+
+            
+            <div class="border-t border-gray-200 px-4 py-6">
+              <h3 class="-mx-2 -my-3 flow-root">
+                <!-- Expand/collapse section button -->
+                <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500" aria-controls="filter-section-mobile-1" aria-expanded="false">
+                  <span class="font-medium text-gray-900">Category</span>
+                  <span class="ml-6 flex items-center">
+                    <!-- Expand icon, show/hide based on section open state. -->
+                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                    </svg>
+                    <!-- Collapse icon, show/hide based on section open state. -->
+                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                </button>
+              </h3>
+              <!-- Filter section, show/hide based on section state. -->
+              <div class="pt-6" id="filter-section-mobile-1">
+                <div class="space-y-6">
+                  <div class="flex items-center">
+                    <input id="filter-mobile-category-0" name="category[]" value="new-arrivals" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                    <label for="filter-mobile-category-0" class="ml-3 min-w-0 flex-1 text-gray-500">Nations</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input id="filter-mobile-category-1" name="category[]" value="sale" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                    <label for="filter-mobile-category-1" class="ml-3 min-w-0 flex-1 text-gray-500">Clubs</label>
+                  </div>
+                 
+                </div>
+              </div>
+            </div>
+            <div class="border-t border-gray-200 px-4 py-6">
+              <h3 class="-mx-2 -my-3 flow-root">
+                <!-- Expand/collapse section button -->
+                <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500" aria-controls="filter-section-mobile-2" aria-expanded="false">
+                  <span class="font-medium text-gray-900">Size</span>
+                  <span class="ml-6 flex items-center">
+                    <!-- Expand icon, show/hide based on section open state. -->
+                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                    </svg>
+                    <!-- Collapse icon, show/hide based on section open state. -->
+                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                </button>
+              </h3>
+              <!-- Filter section, show/hide based on section state. -->
+              <div class="pt-6" id="filter-section-mobile-2">
+                <div class="space-y-6">
+                  <div class="flex items-center">
+                    <input id="filter-mobile-size-0" name="size[]" value="2l" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                    <label for="filter-mobile-size-0" class="ml-3 min-w-0 flex-1 text-gray-500">S</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input id="filter-mobile-size-1" name="size[]" value="6l" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                    <label for="filter-mobile-size-1" class="ml-3 min-w-0 flex-1 text-gray-500">M</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input id="filter-mobile-size-2" name="size[]" value="12l" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                    <label for="filter-mobile-size-2" class="ml-3 min-w-0 flex-1 text-gray-500">L</label>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
-      <div class="flex flex-1 items-center">
-        <span class="flex items-center h-8 bg-indigo-200 text-indigo-600 text-sm px-2 rounded">{{ product.price }}₹</span>
-		<form method="post" action="{% url 'add_to_wishlist' product.id %}">
-  {% csrf_token %}
-        <button class="flex md:ml-20 lg:ml-48 items-center justify-center  rounded-md border border-transparent bg-black px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-700"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-</svg></button>
-</form> 
+    </div>
+
+    <main class=" px-8 sm:px-6">
+      <div class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-12">
+        <h1 class="text-4xl font-bold tracking-tight text-gray-900">New Arrivals</h1>
+
+        <div class="flex items-center">
+          <div class="relative inline-block text-left">
+            <div>
+              <button type="button" class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900" id="menu-button" aria-expanded="false" aria-haspopup="true">
+                Sort
+                <svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+
+            <!--
+              Dropdown menu, show/hide based on menu state.
+
+              Entering: "transition ease-out duration-100"
+                From: "transform opacity-0 scale-95"
+                To: "transform opacity-100 scale-100"
+              Leaving: "transition ease-in duration-75"
+                From: "transform opacity-100 scale-100"
+                To: "transform opacity-0 scale-95"
+            -->
+            <div class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+              <div class="py-1" role="none">
+                <!--
+                  Active: "bg-gray-100", Not Active: ""
+
+                  Selected: "font-medium text-gray-900", Not Selected: "text-gray-500"
+                -->
+
+                <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-3">Price: Low to High</a>
+                <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-4">Price: High to Low</a>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7">
+            <span class="sr-only">View grid</span>
+            <svg class="h-5 w-5" aria-hidden="true" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 002 4.25v2.5A2.25 2.25 0 004.25 9h2.5A2.25 2.25 0 009 6.75v-2.5A2.25 2.25 0 006.75 2h-2.5zm0 9A2.25 2.25 0 002 13.25v2.5A2.25 2.25 0 004.25 18h2.5A2.25 2.25 0 009 15.75v-2.5A2.25 2.25 0 006.75 11h-2.5zm9-9A2.25 2.25 0 0011 4.25v2.5A2.25 2.25 0 0013.25 9h2.5A2.25 2.25 0 0018 6.75v-2.5A2.25 2.25 0 0015.75 2h-2.5zm0 9A2.25 2.25 0 0011 13.25v2.5A2.25 2.25 0 0013.25 18h2.5A2.25 2.25 0 0018 15.75v-2.5A2.25 2.25 0 0015.75 11h-2.5z" clip-rule="evenodd" />
+            </svg>
+          </button>
+          <button type="button" class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
+            <span class="sr-only">Filters</span>
+            <svg class="h-5 w-5" aria-hidden="true" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.973.206 7.372.601a.75.75 0 01.628.74v2.288a2.25 2.25 0 01-.659 1.59l-4.682 4.683a2.25 2.25 0 00-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 018 18.25v-5.757a2.25 2.25 0 00-.659-1.591L2.659 6.22A2.25 2.25 0 012 4.629V2.34a.75.75 0 01.628-.74z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <section aria-labelledby="products-heading" class="pb-24 pt-6">
+        <h2 id="products-heading" class="sr-only">Products</h2>
+
+        <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+          <!-- Filters -->
+          <form method="get" class="hidden lg:block">
+  <h3 class="sr-only">Categories</h3>
+  <ul role="list" class="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
+    <li>
+      <a href="#">Totes</a>
+    </li>
+    <li>
+      <a href="#">Backpacks</a>
+    </li>
+  </ul>
+
+ <div class="border-b border-gray-200 py-6">
+  <h3 class="-my-3 flow-root">
+    <!-- Expand/collapse section button -->
+    <button type="button" id="show-category-button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500" aria-controls="filter-section-1" aria-expanded="false">
+      <span class="font-medium text-gray-900">Category</span>
+      <span class="ml-6 flex items-center">
+        <!-- Expand icon, show/hide based on section open state. -->
+        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+        </svg>
+        <!-- Collapse icon, show/hide based on section open state. -->
+        <svg class="h-5 w-5 hidden" id="category-collapse-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
+        </svg>
+      </span>
+    </button>
+  </h3>
+  <!-- Filter section, show/hide based on section state. -->
+  <div class="pt-6" id="filter-section-1">
+    <div class="space-y-4">
+      <div class="flex items-center">
+        <input id="filter-category-0" name="category" value="country" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+        <label for="filter-category-0" class="ml-3 text-sm text-gray-600">Nations</label>
+      </div>
+      <div class="flex items-center">
+        <input id="filter-category-1" name="category" value="club" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+        <label for="filter-category-1" class="ml-3 text-sm text-gray-600">Clubs</label>
+      </div>
+    </div>
+  </div>
+</div>
 
 
+
+{% comment %} type based {% endcomment %}
+
+<div class="border-b border-gray-200 py-6">
+    <h3 class="-my-3 flow-root">
+      <!-- Expand/collapse section button -->
+      <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500" aria-controls="filter-section-1" aria-expanded="false">
+        <span class="font-medium text-gray-900">Type</span>
+        <span class="ml-6 flex items-center">
+          <!-- Expand icon, show/hide based on section open state. -->
+          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+          </svg>
+          <!-- Collapse icon, show/hide based on section open state. -->
+          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
+          </svg>
+        </span>
+      </button>
+    </h3>
+    <!-- Filter section, show/hide based on section state. -->
+    <div class="pt-6" id="filter-section-1">
+      <div class="space-y-4">
+        <div class="flex items-center">
+          <input  name="product_type" value="away" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+          <label class="ml-3 text-sm text-gray-600">Away</label>
+        </div>
+        <div class="flex items-center">
+          <input  name="product_type" value="home" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+          <label  class="ml-3 text-sm text-gray-600">Home</label>
+        </div>
       </div>
     </div>
   </div>
 
-{% empty %}
-  <li>No products available for this club.</li>
-{% endfor %}
-
-			<!-- Product Tile End -->
-		
-
-    
+{% comment %} year based {% endcomment %}
 
 
-
-
-	</div>
-	<div class="flex justify-center mt-10 space-x-1">
-		<button class="flex items-center justify-center h-8 w-8 rounded text-gray-400">
-			<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-			  <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-			</svg>
-		</button>
-		<button class="flex items-center justify-center h-8 px-2 rounded text-sm font-medium text-gray-400" disabled>
-			Prev
-		</button>
-		<button class="flex items-center justify-center h-8 w-8 rounded bg-indigo-200 text-sm font-medium text-indigo-600" disabled>
-			1
-		</button>
-		<button class="flex items-center justify-center h-8 w-8 rounded hover:bg-indigo-200 text-sm font-medium text-gray-600 hover:text-indigo-600">
-			2
-		</button>
-		<button class="flex items-center justify-center h-8 w-8 rounded hover:bg-indigo-200 text-sm font-medium text-gray-600 hover:text-indigo-600">
-			3
-		</button>
-		<button class="flex items-center justify-center h-8 px-2 rounded hover:bg-indigo-200 text-sm font-medium text-gray-600 hover:text-indigo-600">
-			Next
-		</button>
-		<button class="flex items-center justify-center h-8 w-8 rounded hover:bg-indigo-200 text-gray-600 hover:text-indigo-600">
-			<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-			  <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-			</svg>
-		</button>
-	</div>
-	<!-- Component End  -->
-
+<div class="border-b border-gray-200 py-6">
+  <h3 class="-my-3 flow-root">
+    <!-- Expand/collapse section button -->
+    <button type="button" id="show-filter-button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500" aria-controls="filter-section-1" aria-expanded="false">
+      <span class="font-medium text-gray-900">Year</span>
+      <span class="ml-6 flex items-center">
+        <!-- Expand icon, show/hide based on section open state. -->
+        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+        </svg>
+        <!-- Collapse icon, show/hide based on section open state. -->
+        <svg class="h-5 w-5 hidden" id="collapse-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
+        </svg>
+      </span>
+    </button>
+  </h3>
+  <!-- Filter section, show/hide based on section state. -->
+  {% for year in years %}
+  <div class="pt-6" id="filter-section-{{ forloop.counter }}">
+    <div class="space-y-4">
+      <div class="flex items-center">
+        <input  name="years" value="{{year}}" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+        <label class="ml-3 text-sm text-gray-600">{{year}}</label>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
 </div>
-<script>
+
+
+
+
+
+
+
+  <!-- Apply Filter Button (Tablet or lower Screen) -->
+  <div class="block w-full mt-10">
+    <button type="submit" class="w-full hover:bg-gray-700 dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 focus:ring focus:ring-offset-2 focus:ring-gray-800 text-base leading-4 font-medium py-4 px-10 text-white bg-gray-800">
+      Apply Filter
+    </button>
+  </div>
+</form>
+
+          <!-- Product grid -->
+          <div class="lg:col-span-3">
+            <div class="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-x-6 gap-y-12 w-full mt-6">
+
+        <!-- Product Tile Start -->
+        {% for product in page %}
+    <div>
+        <a href="{% url 'product_detail' product.id %}" class="block rounded-lg shadow-lg bg-white">
+            {% with product.productitem.first as product_item %}
+            {% with product_item.image.first as product_image %}
+            <img src="{{ product_image.image.url }}" alt="{{ product.name }}" />
+            {% endwith %}
+            {% endwith %}
+        </a>
+
+        <div class="flex flex-col mt-3">
+            <div class="mb-2">
+                <a href="#" class="font-medium">{{ product.name }}</a>
+                <span class="flex items-center h-8 bg-gray-200 text-gray-600 text-sm px-2 rounded">
+                    {{ product.club_id.name }}{{ product.country_id.country.name }}
+                </span>
+            </div>
+            <div class="flex flex-1 items-center">
+                <span class="flex items-center h-8 bg-indigo-200 text-indigo-600 text-sm px-2 rounded">
+                    {{ product.price }}₹
+                </span>
+                <form method="post" action="{% url 'add_to_wishlist' product.id %}">
+                    {% csrf_token %}
+                    <button class="flex md:ml-28 items-center justify-center rounded-md border border-transparent bg-black px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>No products available for this selection.</p>
+    {% endfor %}
+        <!-- Product Tile End -->
+
+    </div>
+
+    <!-- Pagination Buttons -->
+   <div class="flex justify-center mt-10 space-x-1">
+    <button class="flex items-center justify-center h-8 w-8 rounded text-gray-400">
+        <!-- Previous button -->
+    </button>
+    <!-- Previous page button (with URL) -->
+    <button class="flex items-center justify-center h-8 px-2 rounded text-sm font-medium text-gray-400"
+            {% if not page.has_previous %}disabled{% endif %}>
+        Prev
+    </button>
+    {% for page_num in page.paginator.page_range %}
+        <a href="?page={{ page_num }}" class="flex items-center justify-center h-8 w-8 rounded
+           {% if page_num == page.number %}bg-indigo-200 text-indigo-600{% else %}hover:bg-indigo-200 text-sm font-medium text-gray-600 hover:text-indigo-600{% endif %}">
+            {{ page_num }}
+        </a>
+    {% endfor %}
+    <!-- Next page button (with URL) -->
+    <button class="flex items-center justify-center h-8 px-2 rounded {% if not page.has_next %}disabled{% endif %}">
+        Next
+    </button>
+    <button class="flex items-center justify-center h-8 w-8 rounded text-gray-600 hover:text-indigo-600">
+        <!-- Next button -->
+    </button>
+</div>
+    <!-- Component End -->
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+{% comment %} <script>
 function showFilters() {
     var fSection = document.getElementById("filterSection");
     if (fSection.classList.contains("hidden")) {
@@ -296,5 +410,35 @@ function closeFilterSection() {
     var fSection = document.getElementById("filterSection");
     fSection.classList.add("hidden");
 }
+</script> {% endcomment %}
+
+
+
+<script>
+  // JavaScript code to toggle visibility
+  const showFilterButton = document.getElementById("show-filter-button");
+  const filterSections = document.querySelectorAll('[id^="filter-section-"]');
+  const collapseIcon = document.getElementById("collapse-icon");
+
+  showFilterButton.addEventListener("click", function () {
+    filterSections.forEach(function (section) {
+      if (section.style.display === "none" || section.style.display === "") {
+        section.style.display = "block";
+        collapseIcon.style.display = "none";
+      } else {
+        section.style.display = "none";
+        collapseIcon.style.display = "inline-block";
+      }
+    });
+  });
 </script>
+
+
+
+
+
+
+
+
+
 {% endblock %}

@@ -4,7 +4,8 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
 from cart.models import *
 from products.models import *
-
+from categories.models import *
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 class HomeView(View):
     template="product.html"
@@ -15,7 +16,7 @@ class HomeView(View):
         featured_items_with_images = []
 
         for product in featured_product_items:
-            featured_image = image.objects.filter(
+            featured_image = Image.objects.filter(
                 product_id__product_id=product, is_featured=True
             ).first()
 
@@ -39,7 +40,7 @@ class HomeView(View):
 
         for product in products:
             # Get the featured image for each product
-            featured_image = image.objects.filter(
+            featured_image = Image.objects.filter(
                 product_id__product_id=product, is_featured=True
             ).first()
 
@@ -82,7 +83,7 @@ class LeagueProductsView(View):
                 product_item = ProductItem.objects.filter(product_id=product).first()
 
                 # Retrieve related images for the current product
-                images = image.objects.filter(product_id=product_item, is_featured=True)
+                images = Image.objects.filter(product_id=product_item, is_featured=True)
 
                 # Append the product, ProductItem, and images to the list
                 all_products.append(
@@ -104,10 +105,19 @@ class LeagueProductsView(View):
 
 class GenderProductsView(View):
     template_name = "gender_products.html"
-
+    items_per_page = 4  # Define how many items you want to display per page
+    
     def get(self, request, gender):
         # Get the selected sorting parameter from the form
         sort_param = request.GET.get('sort', 'price_low')
+
+        # Get the selected product type (Home/Away)
+        selected_product_type = request.GET.get('product_type')
+
+        # Get the selected category (Country/Club)
+        selected_category = request.GET.get('category')
+        
+        selected_year=request.GET.get('years')
 
         # Determine the sorting order based on the parameter
         if sort_param == 'price_high':
@@ -115,21 +125,38 @@ class GenderProductsView(View):
         else:
             sort_order = 'price'   # Sort by price (low to high)
 
-        # Fetch Product objects for the selected gender and apply sorting
+        # Fetch Product objects for the selected gender and apply filters/sorting
         gender_products = Product.objects.filter(gender=gender, is_active=True).order_by(sort_order)
 
-        # Fetch related images for the featured Product objects
-        
+        # Apply product type filter
+        if selected_product_type:
+            gender_products = gender_products.filter(type=selected_product_type)
+
+        # Apply category filter
+        if selected_category:
+            gender_products = gender_products.filter(category=selected_category)
+
+        if selected_year:
+            gender_products = gender_products.filter(year=selected_year)
+
+        # Fetch unique years for the filter
+        years = Product.objects.values_list('year', flat=True).distinct()
+
+        # Implement pagination
+        page_number = request.GET.get('page')
+        paginator = Paginator(gender_products, self.items_per_page)
+        page = paginator.get_page(page_number)
 
         context = {
             "gender": gender,
-            "gender_products": gender_products,
-            
-            "sort_param": sort_param,  # Pass the current sorting parameter to the template
+            "page": page,  # Use the paginated queryset
+            "years": years,
+            "sort_param": sort_param,
+            "selected_product_type": selected_product_type,
+            "selected_category": selected_category,
         }
 
         return render(request, self.template_name, context)
-
 
 class ClubProducts(View):
     template="club_products.html"
@@ -144,7 +171,7 @@ class ClubProducts(View):
 
         for product in products:
             # Retrieve related images for the current product
-            product_images = image.objects.filter(
+            product_images = Image.objects.filter(
                 product_id__product_id=product, is_featured=True
             )
 
@@ -175,7 +202,7 @@ class CountryProducts(View):
 
         for product in products:
             # Retrieve related images for the current product that are featured
-            featured_images = image.objects.filter(
+            featured_images = Image.objects.filter(
                 product_id__product_id=product, is_featured=True
             )
 
@@ -208,7 +235,7 @@ class ProductDetailView(View):
 
     def get(self, request, product_id):
         product = get_object_or_404(Product, id=product_id)
-        images = image.objects.filter(product_id__product_id=product)[0:2]
+        images = Image.objects.filter(product_id__product_id=product)[0:2]
 
         context = {
             "product": product,
@@ -241,6 +268,13 @@ class ProductDetailView(View):
             request.session['cart'] = cart
 
         return redirect('cart_view')
+
+
+
+
+
+
+
 
     # def post(self, request, product_id):
     #     selected_size = request.POST.get('selected_size')

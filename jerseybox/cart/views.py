@@ -75,7 +75,7 @@ class AddToCart(View):
                 cart[pk_str] = {size_str: {'count': 1}}
             request.session['cart'] = cart
 
-        return redirect('cart_view')
+        return redirect('product_detail')
 
 class RemoveFromCart(View):
     def get(self, request, product_item_id):

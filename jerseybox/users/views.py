@@ -107,10 +107,11 @@ class ForgotPassword(View):
         except:
             messages.warning(request, "You are not registerd, Please sign up")
             return redirect("register")
-        encrypt_id = urlsafe_base64_encode(str(user.pk).encode())
+        encrypt_id = urlsafe_base64_encode(str(user.email).encode())
         reset_link = f"{request.scheme}://{request.get_host()}{reverse('reset', args=[encrypt_id])}"
+        print(reset_link)
         cache_key = f"reset_link_{encrypt_id}"
-        cache.set(cache_key, {"reset_link": reset_link}, timeout=600)
+        cache.set(cache_key, {"reset_link": reset_link}, timeout=20)
         reset_password_email(email, reset_link)
         messages.success(request, "Password reset link sent to your email.")
         return redirect("login")
@@ -127,8 +128,8 @@ class UserResetPassword(View):
 
     def post(self, request, encrypt_id):
         cache_key = f"reset_link_{encrypt_id}"
-        id = str(urlsafe_base64_decode(encrypt_id), "utf-8")
-        user = UserProfile.objects.get(pk=id)
+        email = str(urlsafe_base64_decode(encrypt_id), "utf-8")
+        user = UserProfile.objects.get(email=email)
         new_password = request.POST.get("pass1")
         user.set_password(new_password)
         user.save()

@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'tailwind',
     'theme',
     'django_countries.fields',
-    
+    'dal',
+    'dal_select2',
     
     
 

@@ -1,0 +1,20 @@
+.search-widget-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+
+.search-widget-input {
+    flex: 1;
+    border: none;
+    outline: none;
+}
+
+.search-widget-button {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
