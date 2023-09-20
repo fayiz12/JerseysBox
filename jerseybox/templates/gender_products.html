@@ -204,6 +204,10 @@
 
 
 
+
+
+
+
 {% comment %} type based {% endcomment %}
 
 <div class="border-b border-gray-200 py-6">
@@ -469,7 +473,85 @@ function closeFilterSection() {
 
 
 
+<script>
 
+const continentSelect = document.getElementById("continent-select");
+const nationSelect = document.getElementById("nation-select");
+const leagueSelect = document.getElementById("league-select");
+
+// Create an object to map continents to their nations
+const continentNations = {
+  {% for continent in continents %}
+    "{{ continent.id }}": [
+      {% for nation in continent.nations.all %}
+        {
+          "id": "{{ nation.id }}",
+          "name": "{{ nation.name }}"
+        },
+      {% endfor %}
+    ],
+  {% endfor %}
+};
+
+// Create an object to map nations to their leagues
+const nationLeagues = {
+  {% for continent in continents %}
+    {% for nation in continent.nations.all %}
+      "{{ nation.id }}": [
+        {% for league in nation.leagues.all %}
+          {
+            "id": "{{ league.id }}",
+            "name": "{{ league.name }}"
+          },
+        {% endfor %}
+      ],
+    {% endfor %}
+  {% endfor %}
+};
+
+// Function to populate the nation dropdown based on the selected continent
+function populateNationDropdown() {
+  const selectedContinent = continentSelect.value;
+  nationSelect.innerHTML = '<option value="">All Nations</option>';
+
+  if (selectedContinent in continentNations) {
+    continentNations[selectedContinent].forEach((nation) => {
+      const option = document.createElement("option");
+      option.value = nation.id;
+      option.textContent = nation.name;
+      nationSelect.appendChild(option);
+    });
+  }
+
+  // Show the nation dropdown
+  nationSelect.parentElement.style.display = "block";
+}
+
+// Function to populate the league dropdown based on the selected nation
+function populateLeagueDropdown() {
+  const selectedNation = nationSelect.value;
+  leagueSelect.innerHTML = '<option value="">All Leagues</option>';
+
+  if (selectedNation in nationLeagues) {
+    nationLeagues[selectedNation].forEach((league) => {
+      const option = document.createElement("option");
+      option.value = league.id;
+      option.textContent = league.name;
+      leagueSelect.appendChild(option);
+    });
+  }
+
+  // Show the league dropdown
+  leagueSelect.parentElement.style.display = "block";
+}
+
+// Event listener for continent selection
+continentSelect.addEventListener("change", populateNationDropdown);
+
+// Event listener for nation selection
+nationSelect.addEventListener("change", populateLeagueDropdown);
+
+</script>
 
 
 

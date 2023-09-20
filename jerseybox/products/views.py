@@ -148,7 +148,10 @@ class GenderProductsView(View):
         page_number = request.GET.get('page')
         paginator = Paginator(gender_products, self.items_per_page)
         page = paginator.get_page(page_number)
+        
 
+        # Filter data based on the selected filters
+        
         context = {
             "gender": gender,
             "page": page,  # Use the paginated queryset
@@ -156,6 +159,7 @@ class GenderProductsView(View):
             "sort_param": sort_param,
             "selected_product_type": selected_product_type,
             "selected_category": selected_category,
+            
         }
 
         return render(request, self.template_name, context)

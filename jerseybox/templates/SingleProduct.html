@@ -256,11 +256,32 @@
   const sizeForm = document.getElementById('size-form');
   const addToCartButton = document.getElementById('add-to-cart-button');
 
+  // Listen for changes in the size select dropdown
   sizeSelect.addEventListener('change', function (event) {
     event.preventDefault(); // Prevent the default form submission behavior
-    addToCartButton.value = sizeSelect.value;
-    sizeForm.submit(); // Submit the form when a size is selected
+    // No need to change the button value, as it doesn't affect form submission
+  });
+
+  // Listen for clicks on the "Add to Cart" button
+  addToCartButton.addEventListener('click', function (event) {
+    event.preventDefault(); // Prevent the default button behavior
+    
+    // Check if a size is selected (optional, you can add validation)
+    if (sizeSelect.value) {
+      // Set the selected size as a hidden input field in the form
+      const selectedSizeInput = document.createElement('input');
+      selectedSizeInput.type = 'hidden';
+      selectedSizeInput.name = 'selected_size';
+      selectedSizeInput.value = sizeSelect.value;
+      sizeForm.appendChild(selectedSizeInput);
+
+      // Submit the form
+      sizeForm.submit();
+    } else {
+      // Optionally, display an error message or handle the case where no size is selected
+    }
   });
 </script>
+
 
 {% endblock %}
