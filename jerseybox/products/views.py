@@ -118,12 +118,14 @@ class GenderProductsView(View):
         selected_category = request.GET.get('category')
         
         selected_year=request.GET.get('years')
-
-        # Determine the sorting order based on the parameter
-        if sort_param == 'price_high':
+        if sort_param == 'name':
+            sort_order = 'name'  # Sort by name (ascending)
+        elif sort_param == 'name_desc':
+            sort_order = '-name'  # Sort by name (descending)
+        elif sort_param == 'price_high':
             sort_order = '-price'  # Sort by price (high to low)
         else:
-            sort_order = 'price'   # Sort by price (low to high)
+            sort_order = 'price'   # Sort by price ( high)
 
         # Fetch Product objects for the selected gender and apply filters/sorting
         gender_products = Product.objects.filter(gender=gender, is_active=True).order_by(sort_order)
