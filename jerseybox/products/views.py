@@ -253,24 +253,31 @@ class ProductDetailView(View):
     def post(self, request, product_id):
         selected_size = request.POST.get('selected_size')
         product_item = get_object_or_404(ProductItem, product_id=product_id, size=selected_size)
-        
+        quantity = int(request.POST.get('quantity', 1))  # Get the selected quantity or default to 1
+
         # Create or update the cart item with the selected product item
         if request.user.is_authenticated:
             cart, created = Cart.objects.get_or_create(user=request.user)
             cart_item, cart_item_created = CartItem.objects.get_or_create(cart=cart, product_item=product_item)
+            
+            # If the cart item already exists, add the specified quantity to the existing quantity
             if not cart_item_created:
-                cart_item.quantity += 1
-                cart_item.save()
+                cart_item.quantity += quantity
+            else:
+                cart_item.quantity = quantity  # Set the quantity to the desired value
+                
+            cart_item.save()
         else:
             cart = request.session.get('cart', {})
             pk_str = str(product_item.pk)
             
             # Check if the key 'count' exists in the cart dictionary
             if pk_str in cart and 'count' in cart[pk_str]:
-                cart[pk_str]['count'] += 1
+                cart[pk_str]['count'] += quantity  # Add the specified quantity to the existing quantity
             else:
                 # Initialize 'count' if it doesn't exist
-                cart[pk_str] = {'count': 1}
+                cart[pk_str] = {'count': quantity}
+            
             request.session['cart'] = cart
 
         return redirect('cart_view')

@@ -49,15 +49,11 @@ class ViewCart(View):
         return cart_items
 
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views import View
-from .models import ProductItem, Cart, CartItem
-
 class AddToCart(View):
     def post(self, request, pk):
-        size = request.POST.get('selected_size')  # Get the selected size from the form
-        quantity = int(request.POST.get('quantity'))  # Get the selected quantity from the form
-        
+        size = request.POST.get('selected_size')  # Get the selected size from the POST data
+        quantity = int(request.POST.get('quantity'))  # Get the selected quantity from the POST data
+
         product_item = get_object_or_404(ProductItem, pk=pk, size=size)
 
         if product_item.stock >= quantity:
@@ -66,7 +62,7 @@ class AddToCart(View):
                 cart, created = Cart.objects.get_or_create(user=request.user)
                 cart_item, cart_item_created = CartItem.objects.get_or_create(cart=cart, product_item=product_item)
                 if not cart_item_created:
-                    cart_item.quantity = quantity  # Set the quantity to the desired value
+                    cart_item.quantity += quantity  # Add the quantity to the existing quantity
                 else:
                     cart_item.quantity = quantity
                 cart_item.save()
@@ -77,7 +73,7 @@ class AddToCart(View):
                 size_str = str(size)
                 if pk_str in cart:
                     if size_str in cart[pk_str]:
-                        cart[pk_str][size_str]['count'] = quantity  # Set the quantity to the desired value
+                        cart[pk_str][size_str]['count'] += quantity  # Add the quantity to the existing quantity
                 request.session['cart'] = cart
 
             return redirect('product_detail', pk=pk)

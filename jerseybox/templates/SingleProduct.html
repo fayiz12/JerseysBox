@@ -193,6 +193,51 @@
   </div>
 </section>
 
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const sizeSelect = document.getElementById('size-select');
+  const quantityInput = document.getElementById('quantity');
+  const sizeForm = document.getElementById('size-form');
+  const addToCartButton = document.getElementById('add-to-cart-button');
+
+  // Listen for changes in the size select dropdown
+  sizeSelect.addEventListener('change', function (event) {
+    event.preventDefault(); // Prevent the default form submission behavior
+  });
+
+  // Listen for clicks on the "Add to Cart" button
+  addToCartButton.addEventListener('click', function (event) {
+    event.preventDefault(); // Prevent the default button behavior
+
+    // Check if a size is selected (optional, you can add validation here)
+    if (sizeSelect.value) {
+      // Check if a quantity is entered
+      const quantity = parseInt(quantityInput.value);
+      if (!isNaN(quantity) && quantity > 0) {
+        // Set the selected size and quantity as hidden input fields in the form
+        const selectedSizeInput = document.createElement('input');
+        selectedSizeInput.type = 'hidden';
+        selectedSizeInput.name = 'selected_size';
+        selectedSizeInput.value = sizeSelect.value;
+        sizeForm.appendChild(selectedSizeInput);
+
+        const quantityInputClone = quantityInput.cloneNode(true);
+        sizeForm.appendChild(quantityInputClone);
+
+        // Submit the form programmatically
+        sizeForm.submit();
+      } else {
+        alert('Please enter a valid quantity.');
+      }
+    } else {
+      alert('Please select a size.');
+    }
+  });
+});
+
+
+</script>
 <script>
         const imageContainers = document.querySelectorAll('.image-container');
 
@@ -231,53 +276,7 @@
     }
   });
 </script> {% endcomment %}
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  const sizeSelect = document.getElementById('size-select');
-  const quantityInput = document.getElementById('quantity');
-  const sizeForm = document.getElementById('size-form');
-  const addToCartButton = document.getElementById('add-to-cart-button');
 
-  // Listen for changes in the size select dropdown
-  sizeSelect.addEventListener('change', function (event) {
-    event.preventDefault(); // Prevent the default form submission behavior
-  });
-
-  // Listen for clicks on the "Add to Cart" button
-  addToCartButton.addEventListener('click', function (event) {
-    event.preventDefault(); // Prevent the default button behavior
-    
-    // Check if a size is selected (optional, you can add validation here)
-    if (sizeSelect.value) {
-      // Check if a quantity is entered
-      const quantity = parseInt(quantityInput.value);
-      if (!isNaN(quantity) && quantity > 0) {
-        // Set the selected size and quantity as hidden input fields in the form
-        const selectedSizeInput = document.createElement('input');
-        selectedSizeInput.type = 'hidden';
-        selectedSizeInput.name = 'selected_size';
-        selectedSizeInput.value = sizeSelect.value;
-        sizeForm.appendChild(selectedSizeInput);
-
-        // Set the quantity as a hidden input field in the form
-        const quantityInputClone = document.createElement('input');
-        quantityInputClone.type = 'hidden';
-        quantityInputClone.name = 'quantity';
-        quantityInputClone.value = quantity;
-        sizeForm.appendChild(quantityInputClone);
-
-        // Submit the form
-        sizeForm.submit();
-      } else {
-        alert('Please enter a valid quantity.');
-      }
-    } else {
-      alert('Please select a size.');
-    }
-  });
-});
-
-</script>
 
 
 
