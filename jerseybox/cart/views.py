@@ -49,33 +49,45 @@ class ViewCart(View):
         return cart_items
 
 
-class AddToCart(View):
-    def get(self, request, pk):
-        size = request.GET.get('size')  # Get the selected size from the query parameter
-        if request.user.is_authenticated:
-            # Authenticated user - add product item to the database cart with the selected size
-            product_item = get_object_or_404(ProductItem, pk=pk, size=size)
-            cart, created = Cart.objects.get_or_create(user=request.user)
-            cart_item, cart_item_created = CartItem.objects.get_or_create(cart=cart, product_item=product_item)
-            if not cart_item_created:
-                cart_item.quantity += 1
-                cart_item.save()
-        else:
-            # Unauthenticated user - add product item to the session cart with the selected size
-            cart = request.session.get('cart', {})
-            # Convert pk and size to strings when using them as dictionary keys
-            pk_str = str(pk)
-            size_str = str(size)
-            if pk_str in cart:
-                if size_str in cart[pk_str]:
-                    cart[pk_str][size_str]['count'] += 1
-                else:
-                    cart[pk_str][size_str] = {'count': 1}
-            else:
-                cart[pk_str] = {size_str: {'count': 1}}
-            request.session['cart'] = cart
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views import View
+from .models import ProductItem, Cart, CartItem
 
-        return redirect('product_detail')
+class AddToCart(View):
+    def post(self, request, pk):
+        size = request.POST.get('selected_size')  # Get the selected size from the form
+        quantity = int(request.POST.get('quantity'))  # Get the selected quantity from the form
+        
+        product_item = get_object_or_404(ProductItem, pk=pk, size=size)
+
+        if product_item.stock >= quantity:
+            if request.user.is_authenticated:
+                # Authenticated user - add product item to the database cart with the selected size and quantity
+                cart, created = Cart.objects.get_or_create(user=request.user)
+                cart_item, cart_item_created = CartItem.objects.get_or_create(cart=cart, product_item=product_item)
+                if not cart_item_created:
+                    cart_item.quantity = quantity  # Set the quantity to the desired value
+                else:
+                    cart_item.quantity = quantity
+                cart_item.save()
+            else:
+                # Unauthenticated user - add product item to the session cart with the selected size and quantity
+                cart = request.session.get('cart', {})
+                pk_str = str(pk)
+                size_str = str(size)
+                if pk_str in cart:
+                    if size_str in cart[pk_str]:
+                        cart[pk_str][size_str]['count'] = quantity  # Set the quantity to the desired value
+                request.session['cart'] = cart
+
+            return redirect('product_detail', pk=pk)
+        else:
+            # Not enough stock - handle this case (e.g., display an error message)
+            error_message = "Not enough stock available for the selected size and quantity."
+            return render(request, 'product_detail.html', {'product_item': product_item, 'error_message': error_message})
+
+        
+
 
 class RemoveFromCart(View):
     def get(self, request, product_item_id):

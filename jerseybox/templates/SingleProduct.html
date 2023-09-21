@@ -58,37 +58,7 @@
             </div>
             </div>
             <div class="flex flex-wrap mb-4">
-              <div class="w-full sm:w-auto mb-4 sm:mb-0 sm:mr-4">
-                <span class="block text-sm font-black mb-2">Quantity</span>
-                <div
-                  class="product-detail flex h-12 w-24 px-2 items-center justify-between border-2 border-black rounded-md"
-                >
-                  <button
-                    id='decrement' class="flex w-3.5 h-3.5 px-px items-center justify-center bg-black hover:bg-indigo-500 rounded transition duration-100"
-                  >
-                    <div class="h-px mx-px w-full bg-white"></div>
-                  </button>
-                  <input
-                    class="w-10 text-center text-sm font-bold placeholder-black text-black outline-none"
-                    type="number"
-                    placeholder="1"
-                  />
-                  <button id='increment'
-                    class="relative flex w-3.5 h-3.5 px-px py-px items-center justify-center bg-black hover:bg-indigo-500 rounded transition duration-100"
-                  >
-                    <div class="relative h-full w-full py-px">
-                      <div
-                        class="absolute top-1/2 left-0 h-px w-full bg-white"
-                      ></div>
-                      <div
-                        class="inline-block max-w-max mx-auto h-full bg-white"
-                      >
-                        <div class="inline-block px-px"></div>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-              </div>
+             
               <div class="w-full sm:w-auto">
                 <span class="block text-sm font-black mb-2">Size</span>
                 <div
@@ -146,11 +116,21 @@
                   </span>
                 </div>
               </div>
+
+              <input
+  type="number"
+  class="w-full h-full px-4 text-sm font-bold appearance-none outline-none"
+  name="quantity"
+  id="quantity" 
+  value="1"
+  min="1"
+>
             </div>
             <div class="flex flex-wrap sm:flex-nowrap items-center -mx-2 mb-6">
               <div class="flex-grow-1 w-full px-2 mb-4">
   
   
+
   <a id="add-to-cart-button"
     class="group relative inline-block h-12 w-full -mb-2 bg-blueGray-900 rounded-md add-to-cart-link" 
     href="#">
@@ -165,7 +145,7 @@
     </div>
   </a>
 </div>
-
+<p>Quantity: {{ request.POST.quantity }}</p>
 
 </form>
 
@@ -252,36 +232,53 @@
   });
 </script> {% endcomment %}
 <script>
+document.addEventListener('DOMContentLoaded', function () {
   const sizeSelect = document.getElementById('size-select');
+  const quantityInput = document.getElementById('quantity');
   const sizeForm = document.getElementById('size-form');
   const addToCartButton = document.getElementById('add-to-cart-button');
 
   // Listen for changes in the size select dropdown
   sizeSelect.addEventListener('change', function (event) {
     event.preventDefault(); // Prevent the default form submission behavior
-    // No need to change the button value, as it doesn't affect form submission
   });
 
   // Listen for clicks on the "Add to Cart" button
   addToCartButton.addEventListener('click', function (event) {
     event.preventDefault(); // Prevent the default button behavior
     
-    // Check if a size is selected (optional, you can add validation)
+    // Check if a size is selected (optional, you can add validation here)
     if (sizeSelect.value) {
-      // Set the selected size as a hidden input field in the form
-      const selectedSizeInput = document.createElement('input');
-      selectedSizeInput.type = 'hidden';
-      selectedSizeInput.name = 'selected_size';
-      selectedSizeInput.value = sizeSelect.value;
-      sizeForm.appendChild(selectedSizeInput);
+      // Check if a quantity is entered
+      const quantity = parseInt(quantityInput.value);
+      if (!isNaN(quantity) && quantity > 0) {
+        // Set the selected size and quantity as hidden input fields in the form
+        const selectedSizeInput = document.createElement('input');
+        selectedSizeInput.type = 'hidden';
+        selectedSizeInput.name = 'selected_size';
+        selectedSizeInput.value = sizeSelect.value;
+        sizeForm.appendChild(selectedSizeInput);
 
-      // Submit the form
-      sizeForm.submit();
+        // Set the quantity as a hidden input field in the form
+        const quantityInputClone = document.createElement('input');
+        quantityInputClone.type = 'hidden';
+        quantityInputClone.name = 'quantity';
+        quantityInputClone.value = quantity;
+        sizeForm.appendChild(quantityInputClone);
+
+        // Submit the form
+        sizeForm.submit();
+      } else {
+        alert('Please enter a valid quantity.');
+      }
     } else {
-      // Optionally, display an error message or handle the case where no size is selected
+      alert('Please select a size.');
     }
   });
+});
+
 </script>
+
 
 
 {% endblock %}
