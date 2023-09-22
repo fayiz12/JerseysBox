@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'categories',
     'cart',
     'wishlists',
+    'order',
 ]
 TAILWIND_APP_NAME = 'theme'
 
