@@ -1,3 +1,4 @@
+from pyexpat.errors import messages
 from django.shortcuts import redirect, render,get_object_or_404
 from django.views import View
 from products.models import ProductItem
@@ -58,22 +59,43 @@ class ViewCart(View):
         cart_items = []
 
         for product_item_id, item_data in cart_data.items():
-            product_item = get_object_or_404(ProductItem, pk=product_item_id)
-            quantity = item_data['count']
-            cart_items.append({'product_item': product_item, 'quantity': quantity})
+            try:
+                product_item = ProductItem.objects.get(pk=product_item_id)
+                quantity = item_data.get('count', 1)  # Default to 1 if 'count' is missing
+                cart_item, _ = CartItem.objects.get_or_create(product_item=product_item, quantity=quantity)
+                cart_items.append(cart_item)
+            except ProductItem.DoesNotExist:
+                # Handle the case where the ProductItem is not found gracefully
+                pass
 
         return cart_items
+    
     def post(self, request):
+        if request.user.is_authenticated:
+            # Authenticated user - retrieve the cart from the database
+            cart, created = Cart.objects.get_or_create(user=request.user)
+        else:
+            return redirect('login')  # Redirect unauthenticated users to the login page
+
+        # Iterate through the request.POST data to update quantities
         for key, value in request.POST.items():
             if key.startswith('quantity_'):
                 cart_item_id = key.split('_')[1]
-                quantity = int(value)
-                cart_item = CartItem.objects.get(pk=cart_item_id)
-                cart_item.quantity = quantity
-                cart_item.save()
+                try:
+                    quantity = int(value)
+                    cart_item = CartItem.objects.get(pk=cart_item_id, cart=cart)
+                    if quantity >= 1:
+                        cart_item.quantity = quantity
+                        cart_item.save()
+                    else:
+                        # Optionally, you can remove items with quantity <= 0
+                        cart_item.delete()
+                except (CartItem.DoesNotExist, ValueError):
+                    # Handle errors here, e.g., item not found or invalid quantity
+                    pass
 
+        # messages.success(request, 'Cart updated successfully.')
         return redirect('cart_view')
-
 
 class AddToCart(View):
     def post(self, request, pk):
