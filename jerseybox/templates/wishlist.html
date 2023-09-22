@@ -68,7 +68,74 @@
           <div class="flex jusitfy-between flex-col lg:flex-row items-center mt-10 w-full space-y-4 lg:space-y-0 lg:space-x-4 xl:space-x-8">
             
             <div class="w-full">
-              <button class="focus:outline-none focus:ring-gray-800 focus:ring-offset-2 focus:ring-2 text-white w-full tracking-tight py-4 text-lg leading-4 hover:bg-black bg-gray-800 border border-gray-800 dark:hover:bg-gray-700 dark:hover:text-white">Add to cart</button>
+              <form id="wishlist-form" method="post">
+    {% csrf_token %}
+  <select
+    class="w-full h-full px-4 text-sm font-bold appearance-none outline-none"
+    name="selected_size"
+    id="size-select"
+  >
+    <option value="">Select Size</option>
+    <option value="S">Small</option>
+    <option value="M">Medium</option>
+    <option value="L">Large</option>
+  </select>
+  
+
+
+
+                  <span
+                    class="absolute top-1/2 right-0 mr-3 transform -translate-y-1/2 text-black group-hover:text-indigo-500"
+                  >
+                    <svg
+                      width="10"
+                      height="6"
+                      viewbox="0 0 10 6"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.94667 0.453308H4.79333H1.05333C0.413333 0.453308 0.0933335 1.22664 0.546667 1.67997L4 5.13331C4.55333 5.68664 5.45333 5.68664 6.00667 5.13331L7.32 3.81997L9.46 1.67997C9.90667 1.22664 9.58667 0.453308 8.94667 0.453308Z"
+                        fill="currentColor"
+                      ></path>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
+              <input
+  type="number"
+  class="w-full h-full px-4 text-sm font-bold appearance-none outline-none"
+  name="quantity"
+  id="quantity" 
+  value="1"
+  min="1"
+>
+<input type="hidden" name="product_id" value="{{ item.id }}">
+
+            </div>
+            <div class="flex flex-wrap sm:flex-nowrap items-center -mx-2 mb-6">
+              <div class="flex-grow-1 w-full px-2 mb-4">
+  
+  
+
+  <button id="add-to-cart-trigger"
+    class="group relative inline-block h-12 w-full -mb-2 bg-blueGray-900 rounded-md add-to-cart-link" 
+    href="#">
+    <div
+      class="absolute top-0 left-0 transform -translate-y-1 -translate-x-1 w-full h-full group-hover:translate-y-0 group-hover:translate-x-0 transition duration-300"
+    >
+      <div
+        class="flex h-full w-full items-center justify-center bg-green-600 border-2 border-black rounded-md"
+      >
+        <span class="text-base font-black text-black">Add to Cart</span>
+      </div>
+    </div>
+  </button>
+</div>
+
+
+</form>
             </div>
           </div>
         </div>
@@ -97,5 +164,20 @@ handleClick{{ forloop.counter }} = (flag) => {
 };
 {% endfor %}
 </script>
+<script>
+document.getElementById("add-to-cart-trigger").addEventListener("click", function () {
+    // Get the selected size and quantity (adjust as needed)
+    var selectedSize = document.getElementById("size-select").value;
+    var quantity = document.getElementById("quantity").value;
 
+    // Set the hidden input values
+    document.querySelector("input[name='selected_size']").value = selectedSize;
+    document.querySelector("input[name='quantity']").value = quantity;
+
+    // Submit the form
+    document.getElementById("wishlist-form").submit();
+});
+
+
+</script>
 {% endblock %}

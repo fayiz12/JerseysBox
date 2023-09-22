@@ -1,0 +1,150 @@
+
+{% extends 'base.html' %}{%load static%} {%csrf_token%} {% block content %}
+
+
+
+
+<div class="container mx-auto p-4">
+        <div class="bg-white rounded-lg shadow-md p-8">
+            <h2 class="text-2xl font-semibold mb-4">Checkout</h2>
+
+            <!-- Address Selection and Editing -->
+            <div class="mb-4">
+                <h3 class="text-xl font-semibold mb-2">Shipping Address</h3>
+                <!-- Existing Addresses (You can load them from your data) -->
+                <div class="space-y-4">
+                    <!-- Example existing address -->
+                    <div class="flex items-start justify-between">
+                        <label class="flex items-center">
+                            <input type="radio" name="selectedAddress" value="address1" class="mr-2">
+                            Address 1: 123 Main St, City 1, Country 1
+                        </label>
+                        <button class="text-blue-500 hover:underline focus:outline-none">Edit</button>
+                    </div>
+                    <!-- Example existing address -->
+                    <div class="flex items-start justify-between">
+                        <label class="flex items-center">
+                            <input type="radio" name="selectedAddress" value="address2" class="mr-2">
+                            Address 2: 456 Elm St, City 2, Country 2
+                        </label>
+                        <button class="text-blue-500 hover:underline focus:outline-none">Edit</button>
+                    </div>
+                    <!-- Add more existing addresses as needed -->
+                </div>
+                <button id="addAddressButton" class="mt-2 ml-auto bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none">Add New Address</button>
+            </div>
+
+            <!-- New Address Input Form (Hidden by Default) -->
+            <div id="newAddressForm" class="hidden">
+                <h3 class="text-xl font-semibold mb-2">Add New Address</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="name" class="block text-gray-600 font-semibold">Name:</label>
+                        <input type="text" id="name" name="name" class="w-full bg-gray-100 border border-gray-300 p-2 rounded-lg focus:outline-none">
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-gray-600 font-semibold">Phone Number:</label>
+                        <input type="text" id="phone" name="phone" class="w-full bg-gray-100 border border-gray-300 p-2 rounded-lg focus:outline-none">
+                    </div>
+                    <div>
+                        <label for="pincode" class="block text-gray-600 font-semibold">Pincode:</label>
+                        <input type="text" id="pincode" name="pincode" class="w-full bg-gray-100 border border-gray-300 p-2 rounded-lg focus:outline-none">
+                    </div>
+                    <div>
+                        <label for="locality" class="block text-gray-600 font-semibold">Locality:</label>
+                        <input type="text" id="locality" name="locality" class="w-full bg-gray-100 border border-gray-300 p-2 rounded-lg focus:outline-none">
+                    </div>
+                    <div>
+                        <label for="street" class="block text-gray-600 font-semibold">Street:</label>
+                        <input type="text" id="street" name="street" class="w-full bg-gray-100 border border-gray-300 p-2 rounded-lg focus:outline-none">
+                    </div>
+                    <div>
+                        <label for="district" class="block text-gray-600 font-semibold">District:</label>
+                        <input type="text" id="district" name="district" class="w-full bg-gray-100 border border-gray-300 p-2 rounded-lg focus:outline-none">
+                    </div>
+                    <div>
+                        <label for="state" class="block text-gray-600 font-semibold">State:</label>
+                        <input type="text" id="state" name="state" class="w-full bg-gray-100 border border-gray-300 p-2 rounded-lg focus:outline-none">
+                    </div>
+                </div>
+                <button id="saveAddressButton" class="mt-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none">Save Address</button>
+            </div>
+
+            <!-- Order Summary -->
+            <!-- Order Summary -->
+            <div class="mb-4">
+                <h3 class="text-xl font-semibold mb-2">Order Summary</h3>
+                <div class="border border-gray-300 p-4 rounded-lg">
+                    <!-- Product 1 -->
+                    <div class="flex mb-4">
+                        <div class="w-1/5">
+                            <!-- Product Image (replace with actual image URL) -->
+                            <img src="https://via.placeholder.com/60" alt="Product Image" class="w-full h-auto">
+                        </div>
+                        <div class="w-4/5 pl-4">
+                            <!-- Product Details -->
+                            <h4 class="text-lg font-semibold mb-2">Product 1</h4>
+                            <p>Description of Product 1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            <p class="text-gray-600 mt-2">$20.00</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 2 -->
+                    <div class="flex">
+                        <div class="w-1/5">
+                            <!-- Product Image (replace with actual image URL) -->
+                            <img src="https://via.placeholder.com/60" alt="Product Image" class="w-full h-auto">
+                        </div>
+                        <div class="w-4/5 pl-4">
+                            <!-- Product Details -->
+                            <h4 class="text-lg font-semibold mb-2">Product 2</h4>
+                            <p>Description of Product 2. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            <p class="text-gray-600 mt-2">$15.00</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Add more products as needed -->
+                </div>
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="mb-4">
+                <h3 class="text-xl font-semibold mb-2">Payment Method</h3>
+                <div class="space-y-4">
+                    <label class="flex items-center">
+                        <input type="radio" name="paymentMethod" value="creditCard" class="mr-2">
+                        Credit Card
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="paymentMethod" value="paypal" class="mr-2">
+                        PayPal
+                    </label>
+                    <!-- Add more payment options as needed -->
+                </div>
+            </div>
+
+            <!-- Place Order Button -->
+            <div>
+                <button class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 focus:outline-none">Place Order</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to toggle the display of the "Add New Address" form
+        const addAddressButton = document.getElementById("addAddressButton");
+        const newAddressForm = document.getElementById("newAddressForm");
+        const saveAddressButton = document.getElementById("saveAddressButton");
+
+        addAddressButton.addEventListener("click", () => {
+            newAddressForm.classList.remove("hidden");
+        });
+
+        saveAddressButton.addEventListener("click", () => {
+            // Implement logic to save the new address here
+            // You can gather input values and process them as needed
+            // For example, you can create a new address object and store it in an array
+            // You may also want to reset the input fields and hide the form after saving
+        });
+    </script>
+{% endblock %}

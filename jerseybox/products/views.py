@@ -313,3 +313,7 @@ class ProductDetailView(View):
     #         request.session['cart'] = cart
 
     #     return redirect('cart_view')
+
+
+def checkout(request):
+    return render(request,'checkout.html')
