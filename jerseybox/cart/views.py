@@ -31,7 +31,7 @@ class ViewCart(View):
                 # Clear the session cart after transferring items
                 request.session['cart'] = {}
 
-            cart_items = cart.cartitem_set.all().order_by('id')
+            cart_items = cart.cart.all().order_by('id')
         else:
             # Unauthenticated user - retrieve cart data from session
             cart_items = self._get_session_cart(request)
@@ -74,28 +74,50 @@ class ViewCart(View):
         if request.user.is_authenticated:
             # Authenticated user - retrieve the cart from the database
             cart, created = Cart.objects.get_or_create(user=request.user)
+
+            # Iterate through the request.POST data to update quantities
+            for key, value in request.POST.items():
+                if key.startswith('quantity_'):
+                    cart_item_id = key.split('_')[1]
+                    try:
+                        quantity = int(value)
+                        if quantity >= 1:
+                            cart_item = CartItem.objects.get(pk=cart_item_id, cart=cart)
+                            cart_item.quantity = quantity
+                            cart_item.save()
+                        else:
+                            # Optionally, you can remove items with quantity <= 0
+                            cart_item = CartItem.objects.get(pk=cart_item_id, cart=cart)
+                            cart_item.delete()
+                    except (CartItem.DoesNotExist, ValueError):
+                        # Handle errors here, e.g., item not found or invalid quantity
+                        pass
         else:
-            return redirect('login')  # Redirect unauthenticated users to the login page
+            # Unauthenticated user - retrieve cart data from session
+            cart_data = request.session.get('cart', {})
 
-        # Iterate through the request.POST data to update quantities
-        for key, value in request.POST.items():
-            if key.startswith('quantity_'):
-                cart_item_id = key.split('_')[1]
-                try:
-                    quantity = int(value)
-                    cart_item = CartItem.objects.get(pk=cart_item_id, cart=cart)
-                    if quantity >= 1:
-                        cart_item.quantity = quantity
-                        cart_item.save()
-                    else:
-                        # Optionally, you can remove items with quantity <= 0
-                        cart_item.delete()
-                except (CartItem.DoesNotExist, ValueError):
-                    # Handle errors here, e.g., item not found or invalid quantity
-                    pass
+            # Iterate through the request.POST data to update quantities in the session
+            for key, value in request.POST.items():
+                if key.startswith('quantity_'):
+                    cart_item_id = key.split('_')[1]
+                    try:
+                        quantity = int(value)
+                        if quantity >= 1:
+                            # Update the session data directly
+                            cart_data[cart_item_id]['count'] = quantity
+                        else:
+                            # Optionally, you can remove items with quantity <= 0
+                            del cart_data[cart_item_id]
+                    except (KeyError, ValueError):
+                        # Handle errors here, e.g., item not found or invalid quantity
+                        pass
+            
+            # Save the updated session cart data
+            request.session['cart'] = cart_data
 
-        # messages.success(request, 'Cart updated successfully.')
+        # Redirect to the cart view
         return redirect('cart_view')
+
 
 class AddToCart(View):
     def post(self, request, pk):
@@ -139,7 +161,7 @@ class RemoveFromCart(View):
             # Authenticated user - remove the item from the database cart
             product_item = get_object_or_404(ProductItem, id=product_item_id)
             cart, created = Cart.objects.get_or_create(user=request.user)
-            cart_item = cart.cartitem_set.filter(product_item=product_item).first()
+            cart_item = cart.cartitem.filter(product_item=product_item).first()
             if cart_item:
                 if cart_item.quantity > 1:
                     cart_item.quantity -= 1

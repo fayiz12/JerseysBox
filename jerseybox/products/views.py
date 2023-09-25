@@ -315,5 +315,14 @@ class ProductDetailView(View):
     #     return redirect('cart_view')
 
 
-def checkout(request):
-    return render(request,'checkout.html')
+class CheckOut(View):
+    def get(self, request):
+        user = request.user
+        try:
+            cart = Cart.objects.get(user=user)
+            cart_items = CartItem.objects.all()  # Retrieve related CartItem objects
+        except Cart.DoesNotExist:
+            cart = None
+            cart_items = []
+
+        return render(request, "checkout.html", {"cart": cart, "cart_items": cart_items})

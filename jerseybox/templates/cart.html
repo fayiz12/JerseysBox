@@ -19,7 +19,7 @@
     <div class="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
       <div class="rounded-lg md:w-2/3">
         
-        {% if user.is_authenticated %}
+        
         {% if cart_items %}    
         
         
@@ -92,54 +92,7 @@
       {% else %}
             <p>Your cart is empty.</p>
       {% endif %}
-      {% else %}
-       {% if cart_items %}
-    {% for item_total in item_totals %}
-        <div class="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
-            {% for image in item_total.product_item.image.all %}
-                <img src="{{ image.image.url }}" alt="product-image" class="w-full rounded-lg sm:w-40" />
-            {% endfor %}
-            <div class="sm:ml-4 sm:flex sm:w-full sm:justify-between">
-                <div class="mt-5 sm:mt-0">
-                    <h2 class="text-lg font-bold text-gray-900">{{item_total.product_item.product_id.name}}</h2>
-                    <p class="mt-1 text-xs text-gray-700 font-bold">Size: {{item_total.product_item.size}}</p>
-                    <p class="text-md font-bold">Price: {{item_total.total}}₹</p>
-                    <form method="post">
-                        {% csrf_token %}
-                        <table>
-                            <tbody>
-                                {% for cart_item in cart_items %}
-                                    {% if cart_item.product_item == item_total.product_item %}
-                                        <tr>
-                                            <div class='flex text-sm'>
-                                                <p class='bold'>Quantity:-</p>
-                                                <input type="number" name="quantity_{{ cart_item.id }}" value="{{ cart_item.quantity }}" min="1">
-                                            </div>
-                                        </tr>
-                                    {% endif %}
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        <button type="submit" class='text-red-600 bg-black mt-4'>Update Cart</button>
-                    </form>
-                </div>
-                <div class="mt-4 flex justify-between im sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-                    <div class="flex items-center space-x-4">
-                        <a href="{% url 'remove_from_cart' item_total.product_item.id %}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 cursor-pointer duration-150 hover:text-red-500">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endfor %}
-{% else %}
-    <p>Your cart is empty.</p>
-{% endif %}
-
-      {% endif %}
+      
       </div>
     </div>
   </div>

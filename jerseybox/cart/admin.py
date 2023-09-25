@@ -9,7 +9,7 @@ class CartAdmin(admin.ModelAdmin):
 
 
 class CartItemAdmin(admin.ModelAdmin):
-    list_display = ('id', 'cart',)
+    list_display = ('id', 'cart','quantity')
 
 
 admin.site.register(Cart, CartAdmin)

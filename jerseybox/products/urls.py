@@ -10,6 +10,6 @@ urlpatterns=[
     path('products/<str:gender>/',views.GenderProductsView.as_view(), name='gender_products'),
     path('clubs/<uuid:club_id>/products/', views.ClubProducts.as_view(), name='club_products'),
     path('country/<uuid:country_id>/', views.CountryProducts.as_view(), name='country_products'),
-    path('check',views.checkout, name='country_products'),
+    path('check',views.CheckOut.as_view(), name='checkout'),
     
 ]

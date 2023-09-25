@@ -4,147 +4,132 @@
 
 
 
-<div class="container mx-auto p-4">
-        <div class="bg-white rounded-lg shadow-md p-8">
-            <h2 class="text-2xl font-semibold mb-4">Checkout</h2>
 
-            <!-- Address Selection and Editing -->
-            <div class="mb-4">
-                <h3 class="text-xl font-semibold mb-2">Shipping Address</h3>
-                <!-- Existing Addresses (You can load them from your data) -->
-                <div class="space-y-4">
-                    <!-- Example existing address -->
-                    <div class="flex items-start justify-between">
-                        <label class="flex items-center">
-                            <input type="radio" name="selectedAddress" value="address1" class="mr-2">
-                            Address 1: 123 Main St, City 1, Country 1
-                        </label>
-                        <button class="text-blue-500 hover:underline focus:outline-none">Edit</button>
+  
+    <div class="h-screen grid grid-cols-3">
+        <div class="lg:col-span-2 col-span-3 bg-indigo-50 space-y-8 px-12">
+            <div class="mt-8 p-4 relative flex flex-col sm:flex-row sm:items-center bg-white shadow rounded-md">
+                <div class="flex flex-row items-center border-b sm:border-b-0 w-full sm:w-auto pb-4 sm:pb-0">
+                    <div class="text-yellow-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 sm:w-5 h-6 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
                     </div>
-                    <!-- Example existing address -->
-                    <div class="flex items-start justify-between">
-                        <label class="flex items-center">
-                            <input type="radio" name="selectedAddress" value="address2" class="mr-2">
-                            Address 2: 456 Elm St, City 2, Country 2
-                        </label>
-                        <button class="text-blue-500 hover:underline focus:outline-none">Edit</button>
-                    </div>
-                    <!-- Add more existing addresses as needed -->
+                    <div class="text-sm font-medium ml-3">Checkout</div>
                 </div>
-                <button id="addAddressButton" class="mt-2 ml-auto bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none">Add New Address</button>
-            </div>
-
-            <!-- New Address Input Form (Hidden by Default) -->
-            <div id="newAddressForm" class="hidden">
-                <h3 class="text-xl font-semibold mb-2">Add New Address</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="name" class="block text-gray-600 font-semibold">Name:</label>
-                        <input type="text" id="name" name="name" class="w-full bg-gray-100 border border-gray-300 p-2 rounded-lg focus:outline-none">
-                    </div>
-                    <div>
-                        <label for="phone" class="block text-gray-600 font-semibold">Phone Number:</label>
-                        <input type="text" id="phone" name="phone" class="w-full bg-gray-100 border border-gray-300 p-2 rounded-lg focus:outline-none">
-                    </div>
-                    <div>
-                        <label for="pincode" class="block text-gray-600 font-semibold">Pincode:</label>
-                        <input type="text" id="pincode" name="pincode" class="w-full bg-gray-100 border border-gray-300 p-2 rounded-lg focus:outline-none">
-                    </div>
-                    <div>
-                        <label for="locality" class="block text-gray-600 font-semibold">Locality:</label>
-                        <input type="text" id="locality" name="locality" class="w-full bg-gray-100 border border-gray-300 p-2 rounded-lg focus:outline-none">
-                    </div>
-                    <div>
-                        <label for="street" class="block text-gray-600 font-semibold">Street:</label>
-                        <input type="text" id="street" name="street" class="w-full bg-gray-100 border border-gray-300 p-2 rounded-lg focus:outline-none">
-                    </div>
-                    <div>
-                        <label for="district" class="block text-gray-600 font-semibold">District:</label>
-                        <input type="text" id="district" name="district" class="w-full bg-gray-100 border border-gray-300 p-2 rounded-lg focus:outline-none">
-                    </div>
-                    <div>
-                        <label for="state" class="block text-gray-600 font-semibold">State:</label>
-                        <input type="text" id="state" name="state" class="w-full bg-gray-100 border border-gray-300 p-2 rounded-lg focus:outline-none">
-                    </div>
-                </div>
-                <button id="saveAddressButton" class="mt-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none">Save Address</button>
-            </div>
-
-            <!-- Order Summary -->
-            <!-- Order Summary -->
-            <div class="mb-4">
-                <h3 class="text-xl font-semibold mb-2">Order Summary</h3>
-                <div class="border border-gray-300 p-4 rounded-lg">
-                    <!-- Product 1 -->
-                    <div class="flex mb-4">
-                        <div class="w-1/5">
-                            <!-- Product Image (replace with actual image URL) -->
-                            <img src="https://via.placeholder.com/60" alt="Product Image" class="w-full h-auto">
-                        </div>
-                        <div class="w-4/5 pl-4">
-                            <!-- Product Details -->
-                            <h4 class="text-lg font-semibold mb-2">Product 1</h4>
-                            <p>Description of Product 1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                            <p class="text-gray-600 mt-2">$20.00</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Product 2 -->
-                    <div class="flex">
-                        <div class="w-1/5">
-                            <!-- Product Image (replace with actual image URL) -->
-                            <img src="https://via.placeholder.com/60" alt="Product Image" class="w-full h-auto">
-                        </div>
-                        <div class="w-4/5 pl-4">
-                            <!-- Product Details -->
-                            <h4 class="text-lg font-semibold mb-2">Product 2</h4>
-                            <p>Description of Product 2. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                            <p class="text-gray-600 mt-2">$15.00</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Add more products as needed -->
+                <div class="text-sm tracking-wide text-gray-500 mt-4 sm:mt-0 sm:ml-4">Complete your shipping and payment details below.</div>
+                <div class="absolute sm:relative sm:top-auto sm:right-auto ml-auto right-4 top-4 text-gray-400 hover:text-gray-800 cursor-pointer">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </div>
             </div>
-
-            <!-- Payment Methods -->
-            <div class="mb-4">
-                <h3 class="text-xl font-semibold mb-2">Payment Method</h3>
-                <div class="space-y-4">
-                    <label class="flex items-center">
-                        <input type="radio" name="paymentMethod" value="creditCard" class="mr-2">
-                        Credit Card
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio" name="paymentMethod" value="paypal" class="mr-2">
-                        PayPal
-                    </label>
-                    <!-- Add more payment options as needed -->
+            <div class="rounded-md">
+                <form id="payment-form" method="POST" action="">
+                    <section>
+                        <h2 class="uppercase tracking-wide text-lg font-semibold text-gray-700 my-2">Shipping & Billing Information</h2>
+                        <fieldset class="mb-3 bg-white shadow-lg rounded text-gray-600">
+                            <label class="flex border-b border-gray-200 h-12 py-3 items-center">
+                                <span class="text-right px-2">Name</span>
+                                <input name="name" class="focus:outline-none px-3" placeholder="Try Odinsson" required="">
+                            </label>
+                            <label class="flex border-b border-gray-200 h-12 py-3 items-center">
+                                <span class="text-right px-2">Email</span>
+                                <input name="email" type="email" class="focus:outline-none px-3" placeholder="try@example.com" required="">
+                            </label>
+                            <label class="flex border-b border-gray-200 h-12 py-3 items-center">
+                                <span class="text-right px-2">Address</span>
+                                <input name="address" class="focus:outline-none px-3" placeholder="10 Street XYZ 654">
+                            </label>
+                            <label class="flex border-b border-gray-200 h-12 py-3 items-center">
+                                <span class="text-right px-2">City</span>
+                                <input name="city" class="focus:outline-none px-3" placeholder="San Francisco">
+                            </label>
+                            <label class="inline-flex w-2/4 border-gray-200 py-3">
+                                <span class="text-right px-2">State</span>
+                                <input name="state" class="focus:outline-none px-3" placeholder="CA">
+                            </label>
+                            <label class="xl:w-1/4 xl:inline-flex py-3 items-center flex xl:border-none border-t border-gray-200 py-3">
+                                <span class="text-right px-2 xl:px-0 xl:text-none">ZIP</span>
+                                <input name="postal_code" class="focus:outline-none px-3" placeholder="98603">
+                            </label>
+                            <label class="flex border-t border-gray-200 h-12 py-3 items-center select relative">
+                                <span class="text-right px-2">Country</span>
+                                <div id="country" class="focus:outline-none px-3 w-full flex items-center">
+                                    <select name="country" class="border-none bg-transparent flex-1 cursor-pointer appearance-none focus:outline-none">
+                                        <option value="AU">Australia</option>
+                                        <option value="BE">Belgium</option>
+                                        <option value="BR">Brazil</option>
+                                        <option value="CA">Canada</option>
+                                        <option value="CN">China</option>
+                                        <option value="DK">Denmark</option>
+                                        <option value="FI">Finland</option>
+                                        <option value="FR">France</option>
+                                        <option value="DE">Germany</option>
+                                        <option value="HK">Hong Kong</option>
+                                        <option value="IE">Ireland</option>
+                                        <option value="IT">Italy</option>
+                                        <option value="JP">Japan</option>
+                                        <option value="LU">Luxembourg</option>
+                                        <option value="MX">Mexico</option>
+                                        <option value="NL">Netherlands</option>
+                                        <option value="PL">Poland</option>
+                                        <option value="PT">Portugal</option>
+                                        <option value="SG">Singapore</option>
+                                        <option value="ES">Spain</option>
+                                        <option value="TN">Tunisia</option>
+                                        <option value="GB">United Kingdom</option>
+                                        <option value="US" selected="selected">United States</option>
+                                    </select>
+                                </div>
+                            </label>
+                        </fieldset>
+                    </section>
+                </form>
+            </div>
+            
+            <button class="submit-button px-4 py-3 rounded-full bg-gray-800 text-white focus:ring focus:outline-none w-full text-xl font-semibold transition-colors">
+                Pay 
+            </button>
+        </div>
+        <div class="col-span-1 bg-white lg:block hidden">
+            <h1 class="py-6 border-b-2 text-xl text-gray-600 px-8">Order Summary</h1>
+            <ul class="py-6 border-b space-y-6 px-8">
+                {% for cart_item in cart_items %}
+                <li class="grid grid-cols-6 gap-2 border-b-1">
+                    <div class="col-span-1 self-center">
+                    {% if cart_item.product_item.image.all %}
+                        <img src="{{cart_item.product_item.image.all.0.image.url}}" alt="Product" class="rounded w-full">
+                    {% endif %}
+                    </div>
+                    <div class="flex flex-col col-span-3 pt-2">
+                        <span class="text-gray-600 text-md font-semi-bold">{{cart_item.product_item.product_id.name}}</span>
+                        <span class="text-gray-400 text-sm inline-block pt-2">Quantity:-{{cart_item.quantity}}</span>
+                        <span class="text-gray-400 text-sm inline-block pt-2">Size:-{{cart_item.product_item.size}}</span>
+                    </div>
+                    <div class="col-span-2 pt-3">
+                        <div class="flex items-center space-x-2 text-sm justify-between">
+                            <span class="text-gray-400">{{cart_item.quantity}}x {{cart_item.product_item.product_id.price}}</span>
+                            <span class="text-pink-400 font-semibold inline-block">{{cart_item.total}}</span>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+                
+            </ul>
+            <div class="px-8 border-b">
+                <div class="flex justify-between py-4 text-gray-600">
+                    <span>Subtotal</span>
+                    <span class="font-semibold text-pink-500">{{cart.total}}</span>
+                </div>
+                <div class="flex justify-between py-4 text-gray-600">
+                    <span>Shipping</span>
+                    <span class="font-semibold text-pink-500">Free</span>
                 </div>
             </div>
-
-            <!-- Place Order Button -->
-            <div>
-                <button class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 focus:outline-none">Place Order</button>
+            <div class="font-semibold text-xl px-8 flex justify-between py-8 text-gray-600">
+                <span>Total</span>
+                <span>{{cart.total}}</span>
             </div>
         </div>
     </div>
 
-    <script>
-        // JavaScript to toggle the display of the "Add New Address" form
-        const addAddressButton = document.getElementById("addAddressButton");
-        const newAddressForm = document.getElementById("newAddressForm");
-        const saveAddressButton = document.getElementById("saveAddressButton");
-
-        addAddressButton.addEventListener("click", () => {
-            newAddressForm.classList.remove("hidden");
-        });
-
-        saveAddressButton.addEventListener("click", () => {
-            // Implement logic to save the new address here
-            // You can gather input values and process them as needed
-            // For example, you can create a new address object and store it in an array
-            // You may also want to reset the input fields and hide the form after saving
-        });
-    </script>
 {% endblock %}

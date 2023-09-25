@@ -1,0 +1,52 @@
+
+{%extends 'base.html'%} {% block content %} {%load static%} {%csrf_token%}
+
+
+
+<form method="GET" action="">
+    <select name="continent">
+        <option value="">Select Continent</option>
+        {% for continent in continents %}
+            <option value="{{ continent.name }}" {% if continent.name == selected_continent %}selected{% endif %}>
+                {{ continent.name }}
+            </option>
+        {% endfor %}
+    </select>
+    
+    <select name="nation">
+        <option value="">Select Nation</option>
+        {% for nation in nations %}
+            <option value="{{ nation.name }}" {% if nation.name == selected_nation %}selected{% endif %}>
+                {{ nation.name }}
+            </option>
+        {% endfor %}
+    </select>
+    
+    <select name="league">
+        <option value="">Select League</option>
+        {% for league in leagues %}
+            <option value="{{ league.name }}" {% if league.name == selected_league %}selected{% endif %}>
+                {{ league.name }}
+            </option>
+        {% endfor %}
+    </select>
+    
+    <select name="club">
+        <option value="">Select Club</option>
+        {% for club in clubs %}
+            <option value="{{ club.name }}" {% if club.name == selected_club %}selected{% endif %}>
+                {{ club.name }}
+            </option>
+        {% endfor %}
+    </select>
+    
+    <input type="submit" value="Apply Filters">
+</form>
+
+{% for product in products %}
+    <!-- Display filtered products here -->
+    {{ product.product_id.name }} - {{ product.get_size_display() }}<br>
+{% endfor %}
+
+
+{% endblock %}
