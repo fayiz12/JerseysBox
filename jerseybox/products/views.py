@@ -5,7 +5,12 @@ from django.views import View
 from cart.models import *
 from products.models import *
 from categories.models import *
+from order.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.urls import reverse_lazy
+from django.views.generic.edit import FormView
+from order.forms import AddressForm
+from django.views.generic.edit import UpdateView
 
 class HomeView(View):
     template="product.html"
@@ -319,10 +324,45 @@ class CheckOut(View):
     def get(self, request):
         user = request.user
         try:
+            # Retrieve the user's cart
             cart = Cart.objects.get(user=user)
-            cart_items = CartItem.objects.all()  # Retrieve related CartItem objects
+
+            # Retrieve related CartItem objects for the user's cart
+            cart_items = CartItem.objects.filter(cart=cart)
+
+            # Retrieve addresses associated with the user's cart
+            addresses = Address.objects.filter(user=user)
+
         except Cart.DoesNotExist:
             cart = None
             cart_items = []
+            addresses = Address.objects.none()  # No addresses if the cart doesn't exist
 
-        return render(request, "checkout.html", {"cart": cart, "cart_items": cart_items})
+        return render(request, "checkout.html", {"cart": cart, "cart_items": cart_items, "addresses": addresses})
+    
+
+class AddAddressView(FormView):
+    template_name = 'add_address.html'  # Create this template
+    form_class = AddressForm
+    success_url = reverse_lazy('checkout')  # Redirect to the checkout page after adding an address
+
+    def form_valid(self, form):
+        user = self.request.user
+        # Create a new address and associate it with the current user
+        address = form.save(commit=False)
+        address.user = user
+        address.save()
+        return super().form_valid(form)
+    
+
+
+class UpdateAddressView(UpdateView):
+    model = Address
+    form_class = AddressForm
+    template_name = 'update_address.html'  # Create this template
+    success_url = reverse_lazy('checkout')  # Redirect to the checkout page after updating an address
+
+    def get_object(self, queryset=None):
+        # Retrieve the address based on the UUID provided in the URL
+        address_id = self.kwargs['address_id']
+        return get_object_or_404(Address, id=address_id, user=self.request.user)

@@ -11,7 +11,7 @@ class Address(models.Model):
     city = models.CharField(max_length=100)
     postal_code = models.CharField(max_length=20)
     state = models.CharField(max_length=100)
-    country = CountryField(unique=True,null=True)
+    country = CountryField(null=True)
     
 
 class Order(models.Model):

@@ -11,5 +11,7 @@ urlpatterns=[
     path('clubs/<uuid:club_id>/products/', views.ClubProducts.as_view(), name='club_products'),
     path('country/<uuid:country_id>/', views.CountryProducts.as_view(), name='country_products'),
     path('check',views.CheckOut.as_view(), name='checkout'),
-    
+    path('checkout/add_address/', views.AddAddressView.as_view(), name='add_address'),
+    path('checkout/update_address/<uuid:address_id>/', views.UpdateAddressView.as_view(), name='update_address'),
 ]
+    

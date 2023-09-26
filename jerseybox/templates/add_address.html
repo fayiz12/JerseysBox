@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-lg p-6">
+    <h1 class="text-2xl font-semibold mb-4">Add New Address</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="mb-4">
+            <label for="{{ form.street_address.id_for_label }}" class="block text-gray-700 font-semibold">Street Address:</label>
+            {{ form.street_address }}
+        </div>
+
+        <div class="mb-4">
+            <label for="{{ form.city.id_for_label }}" class="block text-gray-700 font-semibold">City:</label>
+            {{ form.city }}
+        </div>
+
+        <div class="mb-4">
+            <label for="{{ form.postal_code.id_for_label }}" class="block text-gray-700 font-semibold">Postal Code:</label>
+            {{ form.postal_code }}
+        </div>
+
+        <div class="mb-4">
+            <label for="{{ form.state.id_for_label }}" class="block text-gray-700 font-semibold">State:</label>
+            {{ form.state }}
+        </div>
+
+        <div class="mb-4">
+            <label for="{{ form.country.id_for_label }}" class="block text-gray-700 font-semibold">Country:</label>
+            {{ form.country }}
+        </div>
+
+        <div class="mt-6">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline-blue active:bg-blue-700">Add Address</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
