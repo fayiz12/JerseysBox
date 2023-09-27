@@ -342,13 +342,12 @@ class CheckOut(View):
     
 
 class AddAddressView(FormView):
-    template_name = 'add_address.html'  # Create this template
-    form_class = AddressForm
-    success_url = reverse_lazy('checkout')  # Redirect to the checkout page after adding an address
+    template_name = 'add_address.html'
+    form_class = AddressForm  # Use the custom form
+    success_url = reverse_lazy('checkout')
 
     def form_valid(self, form):
         user = self.request.user
-        # Create a new address and associate it with the current user
         address = form.save(commit=False)
         address.user = user
         address.save()
@@ -358,11 +357,10 @@ class AddAddressView(FormView):
 
 class UpdateAddressView(UpdateView):
     model = Address
-    form_class = AddressForm
-    template_name = 'update_address.html'  # Create this template
-    success_url = reverse_lazy('checkout')  # Redirect to the checkout page after updating an address
+    form_class = AddressForm  # Use the custom form
+    template_name = 'update_address.html'
+    success_url = reverse_lazy('checkout')
 
     def get_object(self, queryset=None):
-        # Retrieve the address based on the UUID provided in the URL
         address_id = self.kwargs['address_id']
         return get_object_or_404(Address, id=address_id, user=self.request.user)

@@ -10,7 +10,7 @@ class AddressAdmin(admin.ModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ( 'id','user', 'order_date', 'status', 'total_price','shipping_address','shipping_method')
+    list_display = ( 'id','user', 'created_at', 'status', 'total_price','shipping_address')
 
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ('id','order','quantity','price','status')

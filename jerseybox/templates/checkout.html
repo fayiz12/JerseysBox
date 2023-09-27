@@ -34,7 +34,7 @@
                     <div class="flex items-start justify-between">
                         <label class="flex items-center">
                             <input type="radio" name="selectedAddress" value="address1" class="mr-2">
-                            Address 1: {{ address.street_address }}, {{ address.city }}, {{ address.postal_code }},{{ address.state }},{{ address.country }}
+                            Address 1: {{ address.name}},{{address.phone_number}},{{ address.street_address }}, {{ address.city }}, {{ address.postal_code }},{{ address.state }},{{ address.country }}
                         </label>
                         <a href="{% url 'update_address' address.id %}"><button class="text-blue-500 hover:underline focus:outline-none">Edit</button></a>
                     </div>
@@ -49,7 +49,7 @@
             </div>
             
             <button class="submit-button px-4 py-3 rounded-full bg-gray-800 text-white focus:ring focus:outline-none w-full text-xl font-semibold transition-colors">
-                Pay 
+                Place Order
             </button>
         </div>
         <div class="col-span-1 bg-white lg:block hidden">

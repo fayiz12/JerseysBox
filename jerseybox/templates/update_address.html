@@ -8,6 +8,16 @@
         {{ form.non_field_errors }}
 
         <div class="mb-4">
+            <label for="{{ form.street_address.id_for_label }}" class="block text-gray-700 font-semibold">Name</label>
+            {{ form.name }}
+        </div>
+
+        <div class="mb-4">
+            <label for="{{ form.city.id_for_label }}" class="block text-gray-700 font-semibold">Phonne Number:</label>
+            {{ form.phone_number }}
+        </div>
+
+        <div class="mb-4">
             <label for="{{ form.street_address.id_for_label }}" class="block text-gray-700 font-semibold">Street Address:</label>
             {{ form.street_address }}
         </div>
