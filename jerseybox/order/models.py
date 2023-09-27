@@ -17,7 +17,7 @@ class Address(models.Model):
     
 
 class Order(models.Model):
-    choices=[('standard', 'Standard'), ('express', 'Express')]
+    choices=[('COD', 'Cash On Delivery'), ('Razor Pay', 'Razor Pay')]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True,null=True)
@@ -26,6 +26,7 @@ class Order(models.Model):
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     # payment = models.ForeignKey('Payment', on_delete=models.SET_NULL, null=True, blank=True)
     shipping_address = models.ForeignKey('Address', on_delete=models.SET_NULL, null=True, blank=True)
+    payment_mode=models.CharField(max_length=100,choices=choices,default='Cash On Delivery')
     
     # Add any other fields relevant to your order model  
 

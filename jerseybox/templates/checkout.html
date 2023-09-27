@@ -20,11 +20,14 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </div>
             </div>
+
+            <form id="order-form" method="POST" action="">
+    {% csrf_token %}
             <div class="rounded-md">
                 {% comment %} <form id="payment-form" method="POST" action=""> {% endcomment %}
                     {% csrf_token %}
                     
-                    <div class="mb-4">
+                 <div class="mb-4">
                 <h3 class="text-xl font-semibold mb-2">Shipping Address</h3>
                 <!-- Existing Addresses (You can load them from your data) -->
                 <div class="space-y-4">
@@ -41,17 +44,25 @@
                     {% endfor %}
                 </div>
                 <a href="{% url 'add_address' %}"><button id="addAddressButton" class="mt-2 ml-auto bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none">Add New Address</button>
+            <button type=submit class="submit-button px-4 py-3 rounded-full bg-gray-800 text-white focus:ring focus:outline-none w-full text-xl font-semibold transition-colors">
+                Delivery here
+            </button>
             </div>
-
+            
+            </form>
 <!-- New Address Input Form (Hidden by Default) -->
             
                 {% comment %} </form> {% endcomment %}
             </div>
-            
-            <button class="submit-button px-4 py-3 rounded-full bg-gray-800 text-white focus:ring focus:outline-none w-full text-xl font-semibold transition-colors">
+        
+            <button id="rzp-button" class="submit-button px-4 py-3 rounded-full bg-gray-800 text-white focus:ring focus:outline-none w-full text-xl font-semibold transition-colors">
                 Place Order
             </button>
+
+            
+            {% comment %} <button >Pay Now</button> {% endcomment %}
         </div>
+        
         <div class="col-span-1 bg-white lg:block hidden">
             <h1 class="py-6 border-b-2 text-xl text-gray-600 px-8">Order Summary</h1>
             <ul class="py-6 border-b space-y-6 px-8">
@@ -110,4 +121,33 @@
             // You may also want to reset the input fields and hide the form after saving
         });
     </script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <!-- payment.html -->
+
+<script>
+    var options = {
+        key: '{{ payment.key }}', // Your Razorpay API Key
+        amount: {{ payment.amount }}, // Amount in paisa
+        currency: 'INR',
+        name: 'Your Company Name',
+        description: 'Order Payment',
+        order_id: '{{ payment.id }}', // Order ID from the view
+        handler: function(response) {
+            // Handle the callback (success or failure)
+            if (response.razorpay_payment_id) {
+                // Payment successful
+                window.location.href = '/payment/success/' + response.razorpay_payment_id;
+            } else {
+                // Payment failed
+                window.location.href = '/payment/failed/';
+            }
+        }
+    };
+    var rzp = new Razorpay(options);
+    document.getElementById('rzp-button').addEventListener('click', function(e) {
+        rzp.open();
+        e.preventDefault();
+    });
+</script>
+
 {% endblock %}

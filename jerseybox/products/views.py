@@ -324,13 +324,8 @@ class CheckOut(View):
     def get(self, request):
         user = request.user
         try:
-            # Retrieve the user's cart
             cart = Cart.objects.get(user=user)
-
-            # Retrieve related CartItem objects for the user's cart
             cart_items = CartItem.objects.filter(cart=cart)
-
-            # Retrieve addresses associated with the user's cart
             addresses = Address.objects.filter(user=user)
 
         except Cart.DoesNotExist:
@@ -364,3 +359,12 @@ class UpdateAddressView(UpdateView):
     def get_object(self, queryset=None):
         address_id = self.kwargs['address_id']
         return get_object_or_404(Address, id=address_id, user=self.request.user)
+    
+
+
+
+
+class PlaceOrderView(View):
+    def post(self, request):
+        selected_address_id = request.POST.get('selectedAddress')
+        return redirect('order_confirmation')
