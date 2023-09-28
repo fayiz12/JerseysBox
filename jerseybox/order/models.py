@@ -17,7 +17,8 @@ class Address(models.Model):
     
 
 class Order(models.Model):
-    choices=[('COD', 'Cash On Delivery'), ('Razor Pay', 'Razor Pay')]
+    choices = [('COD', 'Cash On Delivery'), ('Razor Pay', 'Razor Pay')]
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True,null=True)

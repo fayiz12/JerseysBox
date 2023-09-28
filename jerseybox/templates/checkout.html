@@ -21,7 +21,7 @@
                 </div>
             </div>
 
-            <form id="order-form" method="POST" action="">
+            <form method="POST" id="payment-form">
     {% csrf_token %}
             <div class="rounded-md">
                 {% comment %} <form id="payment-form" method="POST" action=""> {% endcomment %}
@@ -37,15 +37,28 @@
                     <div class="flex items-start justify-between">
                         <label class="flex items-center">
                             <input type="radio" name="selectedAddress" value="address1" class="mr-2">
-                            Address 1: {{ address.name}},{{address.phone_number}},{{ address.street_address }}, {{ address.city }}, {{ address.postal_code }},{{ address.state }},{{ address.country }}
+                             {{ address.name}},{{address.phone_number}},{{ address.street_address }}, {{ address.city }}, {{ address.postal_code }},{{ address.state }},{{ address.country }}
                         </label>
                         <a href="{% url 'update_address' address.id %}"><button class="text-blue-500 hover:underline focus:outline-none">Edit</button></a>
                     </div>
                     {% endfor %}
+                    <a href="{% url 'add_address' %}"><button id="addAddressButton" class="mt-2 ml-auto bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none">Add New Address</button>
+                    <fieldset class='text-lg pt-20'>
+                        <h3 class="text-xl font-semibold mb-2">Payment Method</h3>
+                        <input type="radio" name="payment_method" value="cash_on_delivery" id="cash_on_delivery" checked>
+                        <label for="cash_on_delivery">Cash on Delivery</label>
+                        <input type="radio" name="payment_method" value="razorpay" id="razorpay">
+                        <label for="razorpay">Razorpay</label>
+    
+                            
+                    </fieldset>
                 </div>
-                <a href="{% url 'add_address' %}"><button id="addAddressButton" class="mt-2 ml-auto bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none">Add New Address</button>
-            <button type=submit class="submit-button px-4 py-3 rounded-full bg-gray-800 text-white focus:ring focus:outline-none w-full text-xl font-semibold transition-colors">
-                Delivery here
+                
+            <button id="cod-button1" type='submit' class=" submit-button px-4 py-3 rounded-full bg-gray-800 text-white focus:ring focus:outline-none w-full text-xl font-semibold transition-colors">
+                Place Order 1
+            </button>
+            <button id="rzp-button1" type='submit' class="hidden submit-button px-4 py-3 rounded-full bg-gray-800 text-white focus:ring focus:outline-none w-full text-xl font-semibold transition-colors">
+                Place Order 2
             </button>
             </div>
             
@@ -55,9 +68,25 @@
                 {% comment %} </form> {% endcomment %}
             </div>
         
-            <button id="rzp-button" class="submit-button px-4 py-3 rounded-full bg-gray-800 text-white focus:ring focus:outline-none w-full text-xl font-semibold transition-colors">
-                Place Order
-            </button>
+
+<!-- checkout/checkout.html -->
+{% comment %} <form method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend>Select Address</legend>
+        {% for address in addresses %}
+            <label>
+                <input type="checkbox" name="selected_address" value="{{ address.id }}">
+                {{ address.street_address }}, {{ address.city }}, {{ address.state }} {{ address.postal_code }}
+            </label><br>
+        {% endfor %}
+    </fieldset>
+    <fieldset>
+        <legend>Payment Method</legend>
+        {{ order_form.as_p }}
+    </fieldset>
+    <input type="submit" value="Place Order">
+</form> {% endcomment %}
 
             
             {% comment %} <button >Pay Now</button> {% endcomment %}
@@ -104,50 +133,66 @@
             </div>
         </div>
     </div>
-    <script>
-        // JavaScript to toggle the display of the "Add New Address" form
-        const addAddressButton = document.getElementById("addAddressButton");
-        const newAddressForm = document.getElementById("newAddressForm");
-        const saveAddressButton = document.getElementById("saveAddressButton");
-
-        addAddressButton.addEventListener("click", () => {
-            newAddressForm.classList.remove("hidden");
-        });
-
-        saveAddressButton.addEventListener("click", () => {
-            // Implement logic to save the new address here
-            // You can gather input values and process them as needed
-            // For example, you can create a new address object and store it in an array
-            // You may also want to reset the input fields and hide the form after saving
-        });
-    </script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <!-- payment.html -->
 
 <script>
-    var options = {
-        key: '{{ payment.key }}', // Your Razorpay API Key
-        amount: {{ payment.amount }}, // Amount in paisa
-        currency: 'INR',
-        name: 'Your Company Name',
-        description: 'Order Payment',
-        order_id: '{{ payment.id }}', // Order ID from the view
-        handler: function(response) {
-            // Handle the callback (success or failure)
-            if (response.razorpay_payment_id) {
-                // Payment successful
-                window.location.href = '/payment/success/' + response.razorpay_payment_id;
-            } else {
-                // Payment failed
-                window.location.href = '/payment/failed/';
-            }
-        }
-    };
-    var rzp = new Razorpay(options);
-    document.getElementById('rzp-button').addEventListener('click', function(e) {
-        rzp.open();
-        e.preventDefault();
-    });
+    
+    const paymentForm = document.getElementById("payment-form");
+const paymentMethodRadio = document.getElementsByName("payment_method");
+const razorpayButton = document.getElementById("rzp-button1");
+const codButton = document.getElementById("cod-button1");
+const razor = document.getElementById("razorpay");
+const cod = document.getElementById("cash_on_delivery");
+
+cod.addEventListener("change", () => {
+    razorpayButton.classList.add("hidden");
+    codButton.classList.remove("hidden");
+});
+
+razor.addEventListener("change", () => {
+    codButton.classList.add("hidden");
+    razorpayButton.classList.remove("hidden");
+});
+</script>
+
+
+
+
+
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+var options = {
+    "key": "rzp_test_44So9Mr9PHVm6s", // Enter the Key ID generated from the Dashboard
+    "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+    "name": "JerseyBox",
+    "description": "purchases",
+    "image": "{% static 'logo.png' %}",
+    "order_id": "order_IluGWxBm9U8zJ8", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "handler": function (response){
+        alert(response.razorpay_payment_id);
+        alert(response.razorpay_order_id);
+        alert(response.razorpay_signature)
+    },
+    
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+var rzp1 = new Razorpay(options);
+rzp1.on('payment.failed', function (response){
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+});
+document.getElementById('rzp-button1').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
 </script>
 
 {% endblock %}
