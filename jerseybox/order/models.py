@@ -14,10 +14,13 @@ class Address(models.Model):
     postal_code = models.CharField(max_length=20)
     state = models.CharField(max_length=100)
     country = CountryField(null=True)
+
+    def __str__(self):
+        return f" {self.name}  {self.street_address}"
     
 
 class Order(models.Model):
-    choices = [('COD', 'Cash On Delivery'), ('Razor Pay', 'Razor Pay')]
+    # choices = [('COD', 'Cash On Delivery'), ('Razor Pay', 'Razor Pay')]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
@@ -27,7 +30,8 @@ class Order(models.Model):
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     # payment = models.ForeignKey('Payment', on_delete=models.SET_NULL, null=True, blank=True)
     shipping_address = models.ForeignKey('Address', on_delete=models.SET_NULL, null=True, blank=True)
-    payment_mode=models.CharField(max_length=100,choices=choices,default='Cash On Delivery')
+    payment_mode=models.CharField(max_length=100,null=True)
+    coupon_discount=models.IntegerField(default=0)
     
     # Add any other fields relevant to your order model  
 
@@ -53,3 +57,16 @@ class OrderItem(models.Model):
 
 
 
+class Review(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    rating = models.IntegerField()
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True,null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='reviews')
+
+class ReviewImage(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    image = models.ImageField(upload_to='review_images/', null=True, blank=True)
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='review_images')

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}{%load static%} {%csrf_token%} {% block content %}
+
+
+
+
+
+
+<div class="bg-white center rounded-lg shadow-md p-8 max-w-md w-full">
+    <div class="text-green-600 text-4xl mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <span class="align-middle">Order Confirmed</span>
+    </div>
+    <p class="text-gray-600 mb-4">Thank you for your order. Your order has been confirmed and will be processed shortly.</p>
+    <p class="text-gray-600 mb-4">Order ID: <span class="font-bold">{{order.id}}123456</span></p>
+    <p class="text-gray-600 mb-4">Estimated Delivery Date: <span class="font-bold">October 10, 2023</span></p>
+    <a href="#" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300">Continue Shopping</a>
+</div>
+
+{% endblock %}

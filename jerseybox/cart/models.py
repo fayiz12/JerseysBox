@@ -8,12 +8,15 @@ class Cart(models.Model):
     user = models.OneToOneField(UserProfile, on_delete=models.CASCADE,null=True,blank=True)
     completed = models.BooleanField(default=False)
     session_id = models.CharField(max_length=100, null=True, blank=True)
-    total = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # Add this field
+    coupon_discount = models.IntegerField( default=0)
+    final_price= models.IntegerField( default=0)
+    total = models.IntegerField(  default=0)  # Add this field
     
     def update_total(self):
         cart_items = self.cart.all()
         total = sum(cart_item.total for cart_item in cart_items)
         self.total = total
+        self.final_price=total
         self.save()
 
     def __str__(self):

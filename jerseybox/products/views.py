@@ -1,4 +1,5 @@
 
+from venv import logger
 from django.http import HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
@@ -13,6 +14,7 @@ from order.forms import AddressForm
 from django.views.generic.edit import UpdateView
 import razorpay
 from django.conf import settings
+from coupon.models import  *
 
 class HomeView(View):
     template="product.html"
@@ -326,96 +328,63 @@ class CheckoutView(View):
     def get(self, request):
         user = request.user
         try:
+            current_user=UserProfile.objects.get(pk=user.pk)
             cart = Cart.objects.get(user=user)
             cart_items = CartItem.objects.filter(cart=cart)
-
+            coupons=Coupon.objects.all()
             addresses = Address.objects.filter(user=user)
-
-        except Cart.DoesNotExist:
-            cart = None
-            cart_items = []
-            addresses = Address.objects.none()  
-
+            client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY,settings.RAZORPAY_API_SECRET))
+            payment_order = client.order.create(dict(amount = request.user.cart.final_price*100, currency = "INR", payment_capture = 1))
+            payment_order_id = payment_order['id']
+           
+        except:
+         
+            return redirect(request.META.get('HTTP_REFERER'))
         context={"cart": cart,
+                "current_user":current_user,
                 "cart_items": cart_items,
-                "addresses": addresses}
+                'addresses':addresses, 
+                'cart':cart, 
+                'cart_items':cart_items,
+                'payment_api_key':settings.RAZORPAY_API_KEY,
+                'order_id':payment_order_id}
+        
         return render(request, "checkout.html", context)
     
-        def post(self, request):
-            user = request.user
+    
+    def post(self, request):
+        print('dfghj,')
+        user = request.user
+        selected_address_id = request.POST.get('selectedAddress')
+        selected_payment_method = request.POST.get('payment_method')
+        print(selected_payment_method,'strsrs')
 
-            # Get the selected address and payment method from the POST data
-            selected_address_id = request.POST.get('selectedAddress')
-            selected_payment_method = request.POST.get('payment_method')
+        cart = get_object_or_404(Cart, user=user)
+        cart_items = CartItem.objects.filter(cart=cart)
+        selected_address = Address.objects.get(id=selected_address_id)
 
-            try:
-                cart = Cart.objects.get(user=user)
-                cart_items = CartItem.objects.filter(cart=cart)
+        
+        if selected_address and selected_payment_method and cart and cart_items:
 
-            except Cart.DoesNotExist:
-                cart = None
-                cart_items = []
+            # Create the order
+            order = Order.objects.create(
+                user=user,
+                total_price=cart.final_price,
+                coupon_discount=cart.coupon_discount,
+                shipping_address=selected_address,
+                payment_mode=selected_payment_method,
+            )
 
-            if selected_address_id and selected_payment_method and cart and cart_items:
-                selected_address = Address.objects.get(id=selected_address_id)
+            
+            # Clear the cart by deleting the cart items
+            cart.delete()
+            cart_items.delete()
 
-                # Create the order
-                order = Order.objects.create(
-                    user=user,
-                    total_price=cart.total,  # Set the total price from the cart
-                    shipping_address=selected_address,
-                    payment_mode=selected_payment_method,
-                )
+            return render(request, 'order_confirmed.html')
 
-                # Handle the payment method
-                if selected_payment_method == 'Razorpay':
-                    # Initialize the Razorpay client with your API key
-                    client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
-
-                    # Create a Razorpay order
-                    order_amount = int(cart.total * 100)  # Amount in paise
-                    order_currency = 'INR'  # Change to your currency
-                    order_receipt = str(order.id)  # Unique order ID
-                    razorpay_order = client.order.create(
-                        amount=order_amount,
-                        currency=order_currency,
-                        receipt=order_receipt,
-                    )
-
-                    # Redirect to the Razorpay payment gateway
-                    return render(request, 'razorpay_payment.html', {'order': razorpay_order})
-
-                # For Cash On Delivery, set the order status to 'Processing'
-                order.status = 'Processing'
-                order.save()
-
-                # Mark the cart as completed
-                cart.completed = True
-                cart.save()
-
-                # Create order items based on the cart items
-                for cart_item in cart_items:
-                    OrderItem.objects.create(
-                        order=order,
-                        product=cart_item.product_item,
-                        quantity=cart_item.quantity,
-                        price=cart_item.product_item.product_id.price,
-                        status='Processing',
-                    )
-
-                # Clear the cart by deleting the cart items
-                cart_items.delete()
-
-                return redirect('order_confirmation')  # Create this view
-
-            # If any of the required data is missing, re-render the page
-            context = {
-                'cart': cart,
-                'cart_items': cart_items,
-                'addresses': Address.objects.filter(user=user),
-            }
-
-            return render(request, 'checkout.html', context)
+        # If any of the required data is missing, re-render the page
+       
+        return redirect("checkout")    
     
     
     
@@ -443,3 +412,29 @@ class UpdateAddressView(UpdateView):
     def get_object(self, queryset=None):
         address_id = self.kwargs['address_id']
         return get_object_or_404(Address, id=address_id, user=self.request.user)
+    
+
+class ApplyCouponView(View):
+    def post(self, request):
+        # Check if a coupon with the provided code exists
+        try:
+            coupon = request.POST.get('coupon_code')
+            print(coupon,'rdydejyey6')
+        except Coupon.DoesNotExist:
+            pass 
+        
+        cart = request.user.cart
+        if coupon := Coupon.objects.filter(code=coupon).first():
+            if cart.total > coupon.discount_value:
+                cart.coupon_discount = coupon.discount_value
+                cart.final_price = cart.total - coupon.discount_value
+                cart.save()
+            else: 
+                cart.coupon_discount = 0
+                cart.final_price = cart.total
+                cart.save() 
+        else:
+            cart.coupon_discount = 0
+            cart.final_price = cart.total
+            cart.save()
+        return redirect(request.META.get('HTTP_REFERER'))

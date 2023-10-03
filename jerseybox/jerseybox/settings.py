@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'wishlists',
     'order',
     'payment',
+    'coupon',
 ]
 TAILWIND_APP_NAME = 'theme'
 
@@ -250,5 +251,5 @@ UNFOLD = {
 # key_id :rzp_test_44So9Mr9PHVm6s
 # key_secret: CWVNkyRT1kGnJJAEJ9szTj5u
 
-RAZORPAY_API_KEY = 'rzp_test_44So9Mr9PHVm6s'
-RAZORPAY_API_SECRET = 'CWVNkyRT1kGnJJAEJ9szTj5u'
+RAZORPAY_API_KEY = 'rzp_test_DVyPyTYnbu9GxV'
+RAZORPAY_API_SECRET = 'SI6gwZGiTasYn3C33Y4hvUEG'
