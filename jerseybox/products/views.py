@@ -21,12 +21,12 @@ class HomeView(View):
     def get(self, request):
         
         max_to_display = 4
-        featured_product_items = Product.objects.filter(is_featured=True)
+        featured_product_items = Product.objects.filter(is_featured=True)[:4]
         featured_items_with_images = []
 
         for product in featured_product_items:
             featured_image = Image.objects.filter(
-                product_id__product_id=product, is_featured=True
+                product=product
             ).first()
 
 
@@ -50,7 +50,7 @@ class HomeView(View):
         for product in products:
             # Get the featured image for each product
             featured_image = Image.objects.filter(
-                product_id__product_id=product, is_featured=True
+                product=product, is_featured=True
             ).first()
 
             if featured_image:
@@ -70,46 +70,66 @@ class HomeView(View):
             context,
         )
     
+
+
     
 class LeagueProductsView(View):
-    template="product_list.html"
+    template_name = "product_list.html"  # Corrected the template attribute name
+    items_per_page = 10  # Adjust the number of items per page as needed
+
     def get(self, request, league_id):
+
+        sort_param = request.GET.get('sort', 'price_low')
+        selected_product_type = request.GET.get('product_type')
+        selected_gender = request.GET.get('gender')
+        selected_year = request.GET.get('years')
+        
+        if sort_param == 'name':
+            sort_order = 'name' 
+        elif sort_param == 'name_desc':
+            sort_order = '-name' 
+        elif sort_param == 'price_high':
+            sort_order = '-price'  
+        else:
+            sort_order = 'price'
+
         league = get_object_or_404(League, id=league_id)
-
-        # Get all the clubs in the league
         clubs = Club.objects.filter(league=league)
+        club_ids = clubs.values_list('id', flat=True)  # Get club IDs
+        
+        # Fix variable name: club_products instead of league_products
+        club_products = Product.objects.filter(club_id__in=club_ids).order_by(sort_order)
+        
+        if selected_product_type:
+            club_products = club_products.filter(type=selected_product_type)
 
-        # Create an empty list to store product details
-        all_products = []
+        # Fix variable name: club_products instead of gender_products
+        if selected_gender:
+            club_products = club_products.filter(gender=selected_gender)
 
-        for club in clubs:
-           
-            # Retrieve products associated with the current club
-            products = Product.objects.filter(club_id=club, is_active=True)
+        if selected_year:
+            club_products = club_products.filter(year=selected_year)
 
-            for product in products:
-                # Retrieve the related ProductItem for the current product
-                product_item = ProductItem.objects.filter(product_id=product).first()
+        # Fetch unique years for the filter
+        years = club_products.values_list('year', flat=True).distinct()
 
-                # Retrieve related images for the current product
-                images = Image.objects.filter(product_id=product_item, is_featured=True)
+        # Implement pagination
+        page_number = request.GET.get('page')
+        paginator = Paginator(club_products, self.items_per_page)
+        page = paginator.get_page(page_number)
 
-                # Append the product, ProductItem, and images to the list
-                all_products.append(
-                    {
-                        "product": product,
-                        "product_item": product_item,
-                        "images": images,
-                    }
-                )
 
         context = {
+            "years": years,
+            "page":page,
             "league": league,
             "clubs": clubs,
-            "all_products": all_products,
+
         }
 
-        return render(request,self.template, context)
+        return render(request,self.template_name, context)
+    
+
 
 
 class GenderProductsView(View):
@@ -157,7 +177,6 @@ class GenderProductsView(View):
         page_number = request.GET.get('page')
         paginator = Paginator(gender_products, self.items_per_page)
         page = paginator.get_page(page_number)
-        
 
         # Filter data based on the selected filters
         
@@ -175,27 +194,48 @@ class GenderProductsView(View):
 
 class ClubProducts(View):
     template="club_products.html"
+    items_per_page = 4
     def get(self, request, club_id):
+        sort_param = request.GET.get('sort', 'price_low')
+        selected_gender = request.GET.get('gender')
+        # Get the selected product type (Home/Away)
+        selected_product_type = request.GET.get('product_type') 
+        selected_year=request.GET.get('years')
+        if sort_param == 'name':
+            sort_order = 'name'  # Sort by name (ascending)
+        elif sort_param == 'name_desc':
+            sort_order = '-name'  # Sort by name (descending)
+        elif sort_param == 'price_high':
+            sort_order = '-price'  # Sort by price (high to low)
+        else:
+            sort_order = 'price' 
+            
+
         club = get_object_or_404(Club, id=club_id)
+        products = Product.objects.filter(club_id=club, is_active=True).order_by(sort_order)
 
-        # Get all the products for the club
-        products = Product.objects.filter(club_id=club, is_active=True)
+        if selected_gender:
+            products = products.filter(gender=selected_gender)
 
-        # Create a dictionary to store products and their images
-        products_with_images = {}
+    
+        if selected_product_type:
+            products = products.filter(type=selected_product_type)
+            
 
-        for product in products:
-            # Retrieve related images for the current product
-            product_images = Image.objects.filter(
-                product_id__product_id=product, is_featured=True
-            )
+        if selected_year:
+            products = products.filter(year=selected_year)
 
-            # Add the product and its images to the dictionary
-            products_with_images[product] = product_images
+        years = Product.objects.values_list('year', flat=True).distinct()
 
+        # Implement pagination
+        page_number = request.GET.get('page')
+        paginator = Paginator(products, self.items_per_page)
+        page = paginator.get_page(page_number)
         context = {
             "club": club,
-            "products_with_images": products_with_images,
+            'years':years,
+            "page": page,
+            "products_with_images": products,
             "product_items": ProductItem.objects.filter(
                 product_id__in=products, is_active=True
             ),
@@ -206,38 +246,48 @@ class ClubProducts(View):
 
 class CountryProducts(View):
     template="country_products.html"
+    items_per_page=10
     def get(self, request, country_id):
+        sort_param = request.GET.get('sort', 'price_low')
+        selected_gender = request.GET.get('gender')
+        # Get the selected product type (Home/Away)
+        selected_product_type = request.GET.get('product_type') 
+        selected_year=request.GET.get('years')
+        if sort_param == 'name':
+            sort_order = 'name'  # Sort by name (ascending)
+        elif sort_param == 'name_desc':
+            sort_order = '-name'  # Sort by name (descending)
+        elif sort_param == 'price_high':
+            sort_order = '-price'  # Sort by price (high to low)
+        else:
+            sort_order = 'price' 
         country = get_object_or_404(CountryModel, id=country_id)
+        products = Product.objects.filter(country_id=country, is_active=True).order_by(sort_order)
+        
 
-        # Get all the products for the country
-        products = Product.objects.filter(country_id=country, is_active=True)
+        if selected_gender:
+            products = products.filter(gender=selected_gender)
 
-        # Create a list to store product information including images and selling prices
-        products_info = []
+    
+        if selected_product_type:
+            products = products.filter(type=selected_product_type)
+            
 
-        for product in products:
-            # Retrieve related images for the current product that are featured
-            featured_images = Image.objects.filter(
-                product_id__product_id=product, is_featured=True
-            )
+        if selected_year:
+            products = products.filter(year=selected_year)
 
-            # Get the associated ProductItem for this product (if it exists)
-            product_item = ProductItem.objects.filter(
-                product_id=product, is_active=True
-            ).first()
+        years = Product.objects.values_list('year', flat=True).distinct()
 
-            # Add the product information to the list
-            products_info.append(
-                {
-                    "product": product,
-                    "images": featured_images,
-                    "product_item": product_item,
-                }
-            )
+        # Implement pagination
+        page_number = request.GET.get('page')
+        paginator = Paginator(products, self.items_per_page)
+        page = paginator.get_page(page_number)
 
         context = {
+            "page":page,
+            "years":years,
             "country": country,
-            "products_info": products_info,
+            "products": products,
         }
 
         return render(request, self.template, context)
@@ -250,7 +300,7 @@ class ProductDetailView(View):
 
     def get(self, request, product_id):
         product = get_object_or_404(Product, id=product_id)
-        images = Image.objects.filter(product_id__product_id=product)[0:2]
+        images = Image.objects.filter(product_id=product)[0:2]
 
         context = {
             "product": product,
@@ -289,7 +339,7 @@ class ProductDetailView(View):
             
             request.session['cart'] = cart
 
-        return redirect('cart_view')
+        return redirect(request.META.get('HTTP_REFERER'))
 
 
 
@@ -332,7 +382,7 @@ class CheckoutView(View):
             cart = Cart.objects.get(user=user)
             cart_items = CartItem.objects.filter(cart=cart)
             coupons=Coupon.objects.all()
-            addresses = Address.objects.filter(user=user)
+            addresses = Address.objects.filter(user=user)[:2]
             client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY,settings.RAZORPAY_API_SECRET))
             payment_order = client.order.create(dict(amount = request.user.cart.final_price*100, currency = "INR", payment_capture = 1))
             payment_order_id = payment_order['id']

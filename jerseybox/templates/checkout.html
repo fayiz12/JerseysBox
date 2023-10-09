@@ -3,17 +3,23 @@
 
 
 
-<div class="h-screen grid grid-cols-3">
+<div class="h-screen grid grid-cols-3 bg-gray-100">
     <div class="lg:col-span-2 col-span-3 mt-11 space-y-8 px-12">
 
-        <p>login {{current_user.email}}</p>
+        
+        <div class="mb-4 bg-gray-100">
+                    <h3 class="text-xl text-gray-600 font-semibold mb-2"> <p class="bg-blue-500 mb-4  text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded">1.LOGIN</p></h3>
+                    <!-- Existing Addresses (You can load them from your data) -->
+                    <strong>{{current_user.username}}</strong><p><span></span>{{current_user.email}}</p>
+                    
+        </div>
 
-        <div class="rounded-md">
+        <div class="rounded-md ">
             {% comment %} <form id="payment-form" method="POST" action=""> {% endcomment %}
 
 
-                <div class="mb-4">
-                    <h3 class="text-xl font-semibold mb-2">Shipping Address</h3>
+                <div class="mb-4 mt-20 ">
+                    <h3 class="text-xl text-gray-600 font-semibold mb-4"> <p class="bg-blue-500  text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded ">2.Delivery Address</p></h3>
                     <!-- Existing Addresses (You can load them from your data) -->
                     <form method="post" action="{% url 'checkout' %}" id="payment-form">
                         {% csrf_token %}
@@ -23,20 +29,28 @@
 
                             {% for address in addresses %}
 
-                            <div class="flex items-start justify-between">
-                                <label class="flex items-center">
-                                    <input type="radio" name="selectedAddress" value="{{address.id}}" class="mr-2">
-                                    {{ address.name}},{{address.phone_number}},{{ address.street_address }}, {{
-                                    address.city }}, {{ address.postal_code }},{{ address.state }},{{ address.country }}
+                            <div class=" items-start justify-between bg-gray-100">
+                                <input type="radio" name="selectedAddress" value="{{address.id}}" class="mr-2">
+                                <label class="items-center">
+                                    
+                                <strong>{{ address.name}} {{address.phone_number}}</strong>
                                 </label>
-                                <a href="{% url 'update_address' address.id %}">Edit</a>
+                                <p> {{ address.street_address }},{{address.city }}, {{ address.postal_code }},{{ address.state }},{{ address.country }}
+                                </p>
+                               
                             </div>
-
+                           
                             {% endfor %}
+                            <div class="my-4">
+                                <p>
+                                <a href="{% url 'add_address' %}" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 border border-gray-700 rounded">
+                                    Add
+                                </a></p>
+                               </div>
 
 
-                            <fieldset class='text-lg pt-20'>
-                                <h3 class="text-xl font-semibold mb-2">Payment Method</h3>
+                            <fieldset class='text-lg pt-20 bg-gray-100'>
+                                <h3 class="text-xl font-semibold text-gray-600 mb-10"> <p class="bg-blue-500  text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded">4.Payment Method</p></h3>
                                 <input type="radio" name="payment_method" value="cash_on_delivery" id="cash_on_delivery"
                                     checked>
                                 <label for="cash_on_delivery">Cash on Delivery</label>
@@ -47,17 +61,20 @@
                             </fieldset>
                         </div>
 
-                        <input id="cod-button1" type='submit' value="Proceed To Pay"
+                        <div class="mt-10">
+                            <input id="cod-button1" type='submit' value="Proceed To Pay"
                             class=" submit-button px-4 py-3 rounded-full bg-gray-800 text-white focus:ring focus:outline-none w-full text-xl font-semibold transition-colors">
 
 
                         <input id="rzp-button1" type='submit' value="Proceed To Pay"
                             class="hidden submit-button px-4 py-3 rounded-full bg-gray-800 text-white focus:ring focus:outline-none w-full text-xl font-semibold transition-colors">
+                        </div>
+                        
 
 
-
+                    </form>
                 </div>
-            </form>
+            
 
         </div>
 
@@ -67,26 +84,7 @@
 
     <div class="col-span-1 bg-white lg:block hidden">
 
-
-        <form method="POST" action="{% url 'apply_coupon' %}">
-            {% csrf_token %}
-            <div class="flex items-center w-full h-13 pl-3 bg-white border rounded-full">
-                <input type="text" name="coupon_code" id="couponCode" placeholder="Apply coupon"
-                    class="w-full bg-gray-100 outline-none appearance-none focus:outline-none active:outline-none" />
-                <button type="submit"
-                    class="text-sm flex items-center px-3 py-1 text-white bg-gray-800 rounded-full outline-none md:px-4 hover:bg-gray-700 focus:outline-none active:outline-none">
-                    <svg aria-hidden="true" data-prefix="fas" data-icon="gift" class="w-8"
-                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                        <path fill="currentColor"
-                            d="M32 448c0 17.7 14.3 32 32 32h160V320H32v128zm256 32h160c17.7 0 32-14.3 32-32V320H288v160zm192-320h-42.1c6.2-12.1 10.1-25.5 10.1-40 0-48.5-39.5-88-88-88-41.6 0-68.5 21.3-103 68.3-34.5-47-61.4-68.3-103-68.3-48.5 0-88 39.5-88 88 0 14.5 3.8 27.9 10.1 40H32c-17.7 0-32 14.3-32 32v80c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16v-80c0-17.7-14.3-32-32-32zm-326.1 0c-22.1 0-40-17.9-40-40s17.9-40 40-40c19.9 0 34.6 3.3 86.1 80h-86.1zm206.1 0h-86.1c51.4-76.5 65.7-80 86.1-80 22.1 0 40 17.9 40 40s-17.9 40-40 40z" />
-                    </svg>
-                    <span class="font-medium">Apply coupon</span>
-                </button>
-            </div>
-        </form>
-
-
-        <h1 class="py-6 border-b-2 text-xl text-gray-600 px-8">Order Summary</h1>
+        <h1 class="py-6 border-b-2 text-xl font-semibold text-gray-600 px-8"> <p class="bg-blue-500  text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded">3.Order Summary</p></h1>
 
         <ul class="py-6 border-b space-y-6 px-8">
             {% for cart_item in cart_items %}
@@ -112,7 +110,23 @@
             {% endfor %}
 
         </ul>
-        <div class="px-8 border-b">
+        <div class="px-8 border-b my-4">
+            <form method="POST" action="{% url 'apply_coupon' %}">
+                {% csrf_token %}
+                <div class="flex items-center w-full h-13 pl-3 bg-white border rounded-full">
+                    <input type="text" name="coupon_code" id="couponCode" placeholder="Apply coupon"
+                        class="w-full bg-gray-100 outline-none appearance-none focus:outline-none active:outline-none" />
+                    <button type="submit"
+                        class="text-sm flex items-center px-3 py-1 text-white bg-gray-800 rounded-full outline-none md:px-4 hover:bg-gray-700 focus:outline-none active:outline-none">
+                        <svg aria-hidden="true" data-prefix="fas" data-icon="gift" class="w-8"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="currentColor"
+                                d="M32 448c0 17.7 14.3 32 32 32h160V320H32v128zm256 32h160c17.7 0 32-14.3 32-32V320H288v160zm192-320h-42.1c6.2-12.1 10.1-25.5 10.1-40 0-48.5-39.5-88-88-88-41.6 0-68.5 21.3-103 68.3-34.5-47-61.4-68.3-103-68.3-48.5 0-88 39.5-88 88 0 14.5 3.8 27.9 10.1 40H32c-17.7 0-32 14.3-32 32v80c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16v-80c0-17.7-14.3-32-32-32zm-326.1 0c-22.1 0-40-17.9-40-40s17.9-40 40-40c19.9 0 34.6 3.3 86.1 80h-86.1zm206.1 0h-86.1c51.4-76.5 65.7-80 86.1-80 22.1 0 40 17.9 40 40s-17.9 40-40 40z" />
+                        </svg>
+                        <span class="font-medium">Apply coupon</span>
+                    </button>
+                </div>
+            </form>
 
             <div class="flex justify-between py-4 text-gray-600">
 

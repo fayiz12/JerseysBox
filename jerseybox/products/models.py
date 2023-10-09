@@ -81,7 +81,7 @@ class ProductItem(models.Model):
 
 class Image(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    product_id = models.ForeignKey(ProductItem, on_delete=models.CASCADE, related_name='image')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='image')
     image = models.ImageField()
     is_active = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)

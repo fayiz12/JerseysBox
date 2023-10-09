@@ -25,7 +25,7 @@
         
         {% for item_total in item_totals %}
     <div class="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
-        {% for image in item_total.product_item.image.all %}
+        {% for image in item_total.product_item.product_id.image.all %}
             <img src="{{ image.image.url }}" alt="product-image" class="w-full rounded-lg sm:w-40" />
         {% endfor %}
         <div class="sm:ml-4 sm:flex sm:w-full sm:justify-between">
@@ -65,7 +65,7 @@
             </div>
         </div>
     </div>
-{% endfor %}
+    {% endfor %}
       
       
       </div>

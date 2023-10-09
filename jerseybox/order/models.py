@@ -28,6 +28,7 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=100, default='Pending')
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
+
     # payment = models.ForeignKey('Payment', on_delete=models.SET_NULL, null=True, blank=True)
     shipping_address = models.ForeignKey('Address', on_delete=models.SET_NULL, null=True, blank=True)
     payment_mode=models.CharField(max_length=100,null=True)
@@ -48,6 +49,7 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
     product = models.ForeignKey(ProductItem, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
+    
     price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=100, choices=status_choices, default='processing')
 

@@ -16,7 +16,7 @@ class ProductItemAdmin(admin.ModelAdmin):
     list_display = ( 'id','product_id', 'stock', 'is_active', 'size')
 
 class ImageAdmin(admin.ModelAdmin):
-    list_display = ('product_id','display_image')
+    list_display = ('product','display_image')
 
 
     def display_image(self, obj):

@@ -331,11 +331,11 @@
         {% for product in page %}
     <div>
         <a href="{% url 'product_detail' product.id %}" class="block rounded-lg shadow-lg bg-white">
-            {% with product.productitem.first as product_item %}
-            {% with product_item.image.first as product_image %}
+            
+            {% with product.image.first as product_image %}
             <img src="{{ product_image.image.url }}" alt="{{ product.name }}" />
             {% endwith %}
-            {% endwith %}
+            
         </a>
 
         <div class="flex flex-col mt-3">

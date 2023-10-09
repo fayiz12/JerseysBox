@@ -161,13 +161,9 @@ class RemoveFromCart(View):
             # Authenticated user - remove the item from the database cart
             product_item = get_object_or_404(ProductItem, id=product_item_id)
             cart, created = Cart.objects.get_or_create(user=request.user)
-            cart_item = cart.cartitem.filter(product_item=product_item).first()
+            cart_item = CartItem.objects.filter(product_item=product_item).first()
             if cart_item:
-                if cart_item.quantity > 1:
-                    cart_item.quantity -= 1
-                    cart_item.save()
-                else:
-                    cart_item.delete()
+                cart_item.delete()
         else:
             # Unauthenticated user - remove the item from the session cart
             cart = request.session.get('cart', {})
