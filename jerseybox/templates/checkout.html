@@ -3,12 +3,12 @@
 
 
 
-<div class="h-screen grid grid-cols-3 bg-gray-100">
+<div class=" grid grid-cols-3 bg-gray-100">
     <div class="lg:col-span-2 col-span-3 mt-11 space-y-8 px-12">
 
         
         <div class="mb-4 bg-gray-100">
-                    <h3 class="text-xl text-gray-600 font-semibold mb-2"> <p class="bg-blue-500 mb-4  text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded">1.LOGIN</p></h3>
+                    <h3 class="text-xl text-gray-600 font-semibold mb-2"> <p class="bg-gray-700 mb-4  text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded">1.LOGIN</p></h3>
                     <!-- Existing Addresses (You can load them from your data) -->
                     <strong>{{current_user.username}}</strong><p><span></span>{{current_user.email}}</p>
                     
@@ -19,7 +19,7 @@
 
 
                 <div class="mb-4 mt-20 ">
-                    <h3 class="text-xl text-gray-600 font-semibold mb-4"> <p class="bg-blue-500  text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded ">2.Delivery Address</p></h3>
+                    <h3 class="text-xl text-gray-600 font-semibold mb-4"> <p class="bg-gray-700  text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded ">2.Delivery Address</p></h3>
                     <!-- Existing Addresses (You can load them from your data) -->
                     <form method="post" action="{% url 'checkout' %}" id="payment-form">
                         {% csrf_token %}
@@ -50,7 +50,7 @@
 
 
                             <fieldset class='text-lg pt-20 bg-gray-100'>
-                                <h3 class="text-xl font-semibold text-gray-600 mb-10"> <p class="bg-blue-500  text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded">4.Payment Method</p></h3>
+                                <h3 class="text-xl font-semibold text-gray-600 mb-10"> <p class="bg-gray-700  text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded">4.Payment Method</p></h3>
                                 <input type="radio" name="payment_method" value="cash_on_delivery" id="cash_on_delivery"
                                     checked>
                                 <label for="cash_on_delivery">Cash on Delivery</label>
@@ -84,14 +84,14 @@
 
     <div class="col-span-1 bg-white lg:block hidden">
 
-        <h1 class="py-6 border-b-2 text-xl font-semibold text-gray-600 px-8"> <p class="bg-blue-500  text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded">3.Order Summary</p></h1>
+        <h1 class="py-6 border-b-2 text-xl font-semibold text-gray-600 px-8"> <p class="bg-gray-700  text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded">3.Order Summary</p></h1>
 
         <ul class="py-6 border-b space-y-6 px-8">
             {% for cart_item in cart_items %}
             <li class="grid grid-cols-6 gap-2 border-b-1">
                 <div class="col-span-1 self-center">
-                    {% if cart_item.product_item.image.all %}
-                    <img src="{{cart_item.product_item.image.all.0.image.url}}" alt="Product" class="rounded w-full">
+                    {% if cart_item.product_item.product_id.image.all %}
+                    <img src="{{cart_item.product_item.product_id.image.all.0.image.url}}" alt="Product" class="rounded w-full">
                     {% endif %}
                 </div>
                 <div class="flex flex-col col-span-3 pt-2">
