@@ -125,7 +125,16 @@
                         </svg>
                         <span class="font-medium">Apply coupon</span>
                     </button>
+                    
                 </div>
+                <div class='text-red-500'>
+                {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}</div>
             </form>
 
             <div class="flex justify-between py-4 text-gray-600">

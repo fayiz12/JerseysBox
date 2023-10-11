@@ -10,7 +10,7 @@ class AddressAdmin(admin.ModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ( 'id','user', 'created_at', 'status', 'total_price','shipping_address','updated_at','payment_mode')
+    list_display = ( 'id','user', 'created_at', 'status', 'total_price','shipping_address','updated_at','payment_mode','sub_total')
     ordering = ('-updated_at',)
 
 class OrderItemAdmin(admin.ModelAdmin):

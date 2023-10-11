@@ -1,0 +1,63 @@
+{% extends 'base.html' %}{%load static%} {%csrf_token%} {% block content %}
+
+
+<div class="container mx-auto p-8">
+    <div class="bg-white rounded-lg shadow-lg p-8">
+        <div class="flex justify-between items-center">
+            <h1 class="text-2xl font-semibold">Invoice</h1>
+            <p class="text-gray-600">#{{ invoice_data.order.id }}</p>
+        </div>
+        <div class="mt-4">
+            <div>
+                <h2 class="text-lg font-semibold">Bill From</h2>
+                <p>{{ invoice_data.user.username }}</p>
+                <p>Jersey Box</p>
+                <!-- Add other bill from details as needed -->
+            </div>
+            <div>
+                <h2 class="text-lg font-semibold">Bill To</h2>
+                <p>{{ invoice_data.address }}</p>
+                <!-- Add other bill to details as needed -->
+            </div>
+        </div>
+        <table class="w-full mt-4">
+            <thead>
+                <tr>
+                    <th class="text-left">Item</th>
+                 
+                    <th class="text-right">Quantity</th>
+                    <th class="text-right">Price</th>
+                    
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in invoice_data.order.order_items.all %}
+                    <tr>
+                        <td>{{ order.product.product_id.name }}</td>
+                
+                        <td class="text-right">{{ order.quantity }}</td>
+                        <td class="text-right">${{ order.total }}</td>
+                        
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                
+                <tr>
+                    <td colspan="4" class="text-right">Subtotal</td>
+                    <td class="text-right">${{ invoice_data.order.sub_total }}</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="text-right">Coupon Discount</td>
+                    <td class="text-right">${{ invoice_data.order.coupon_discount }}</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="text-right">Total</td>
+                    <td class="text-right">${{ invoice_data.order.total_price }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -12,7 +12,8 @@ urlpatterns=[
     path('country/<uuid:country_id>/', views.CountryProducts.as_view(), name='country_products'),
     path('check',views.CheckoutView.as_view(), name='checkout'),
     path('checkout/add_address/', views.AddAddressView.as_view(), name='add_address'),
-    path('checkout/update_address/<uuid:address_id>/', views.UpdateAddressView.as_view(), name='update_address'),
+    # path('checkout/update_address/<uuid:address_id>/', views.UpdateAddressView.as_view(), name='update_address'),
     path('apply-coupon/', views.ApplyCouponView.as_view(), name='apply_coupon'),
+    # path('invoice',views.invoice.as_view(),name='invoice')
 ]
     

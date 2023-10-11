@@ -47,8 +47,8 @@ class ViewCart(View):
 
         # Apply shipping charge if the total is below $1000
         shipping_charge = 0
-        if cart_total < 1000:
-            shipping_charge = 50  # You can adjust the shipping charge as needed
+       
+        shipping_charge = 0  # You can adjust the shipping charge as needed
 
         total_cost = cart_total + shipping_charge
 

@@ -15,6 +15,11 @@ from django.views.generic.edit import UpdateView
 import razorpay
 from django.conf import settings
 from coupon.models import  *
+from django.contrib import messages
+from django.utils import timezone
+from datetime import date
+from django.template.loader import render_to_string
+from xhtml2pdf import pisa
 
 class HomeView(View):
     template="product.html"
@@ -420,21 +425,62 @@ class CheckoutView(View):
             order = Order.objects.create(
                 user=user,
                 total_price=cart.final_price,
+                sub_total=cart.total,
                 coupon_discount=cart.coupon_discount,
                 shipping_address=selected_address,
                 payment_mode=selected_payment_method,
             )
 
             
-            # Clear the cart by deleting the cart items
-            cart.delete()
-            cart_items.delete()
+    
+            
+            for cart_item in cart_items:
+                OrderItem.objects.create(
+                    order=order,
+                    product=cart_item.product_item,
+                    quantity=cart_item.quantity,
+                    price=cart_item.product_item.product_id.price,  
+                    status='processing',
+                    # item_data={
+                        
+                    #     'quantity': cart_item.quantity,
+                    #     'price_at_order': cart_item.product_item.product_id.price,
+                    # }
+                )
+            
+            # order_data = {
+            #     'total_price': order.total_price,
+            #     'sub_total': order.sub_total,
+            # }
+           
 
-            return render(request, 'order_confirmed.html')
+            data = {
+            "orders": order,
+            "user": user,
+            "address": selected_address,
+            # "order_data":order_data,
+            
+            }
+            
 
-        # If any of the required data is missing, re-render the page
+            # Render a template that includes the invoice HTML and download button
+            return render(request, 'order_confirmed.html', {'data': data})
+
+            
+
        
-        return redirect("checkout")    
+class UserInvoice(View):
+  def get(self, request, pk):
+    template_name = 'invoice_template.html'
+    order = request.user.orders.get(id=pk)
+    context = {'order':order}
+    html_content = render_to_string(template_name, context)
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="invoice.pdf.pdf"'
+    pisa_status = pisa.CreatePDF(html_content, dest=response,encoding='utf-8')
+    if pisa_status:
+      return response
+    return None
     
     
     
@@ -453,38 +499,67 @@ class AddAddressView(FormView):
     
 
 
-class UpdateAddressView(UpdateView):
-    model = Address
-    form_class = AddressForm  # Use the custom form
-    template_name = 'update_address.html'
-    success_url = reverse_lazy('checkout')
+# class UpdateAddressView(UpdateView):
+#     model = Address
+#     form_class = AddressForm  # Use the custom form
+#     template_name = 'update_address.html'
+#     success_url = reverse_lazy('checkout')
 
-    def get_object(self, queryset=None):
-        address_id = self.kwargs['address_id']
-        return get_object_or_404(Address, id=address_id, user=self.request.user)
+#     def get_object(self, queryset=None):
+#         address_id = self.kwargs['address_id']
+#         return get_object_or_404(Address, id=address_id, user=self.request.user)
     
 
 class ApplyCouponView(View):
     def post(self, request):
-        # Check if a coupon with the provided code exists
-        try:
-            coupon = request.POST.get('coupon_code')
-            print(coupon,'rdydejyey6')
-        except Coupon.DoesNotExist:
-            pass 
-        
+        coupon_code = request.POST.get('coupon_code')
         cart = request.user.cart
-        if coupon := Coupon.objects.filter(code=coupon).first():
+        cart.coupon_discount=0
+
+        try:
+            # Check if a coupon with the provided code exists
+            coupon = Coupon.objects.get(code=coupon_code)
+        except Coupon.DoesNotExist:
+            messages.error(request, 'Invalid coupon code.')  # Invalid coupon message
+            return redirect(request.META.get('HTTP_REFERER'))
+
+        # Check if the coupon has expired
+        if coupon.expiry_date and coupon.expiry_date < timezone.now().date():
+            messages.error(request, 'Coupon has expired.')  # Coupon expired message
+        else:
+            # Check if the cart total meets the coupon requirements
             if cart.total > coupon.discount_value:
                 cart.coupon_discount = coupon.discount_value
                 cart.final_price = cart.total - coupon.discount_value
-                cart.save()
-            else: 
-                cart.coupon_discount = 0
-                cart.final_price = cart.total
-                cart.save() 
-        else:
-            cart.coupon_discount = 0
-            cart.final_price = cart.total
-            cart.save()
+                messages.error(request,'coupon Applied ')
+            else:
+                messages.warning(request, 'Coupon applied, but it does not meet the cart total requirement.')
+
+        cart.save()
         return redirect(request.META.get('HTTP_REFERER'))
+    
+    # def post(self, request):
+    #     # Check if a coupon with the provided code exists
+    #     try:
+    #         coupon = request.POST.get('coupon_code')
+    #         print(coupon,'rdydejyey6')
+    #     except Coupon.DoesNotExist:
+    #         pass 
+        
+    #     cart = request.user.cart
+    #     if coupon := Coupon.objects.filter(code=coupon).first():
+    #         if cart.total > coupon.discount_value:
+    #             cart.coupon_discount = coupon.discount_value
+    #             cart.final_price = cart.total - coupon.discount_value
+    #             cart.save()
+    #         else: 
+    #             cart.coupon_discount = 0
+    #             cart.final_price = cart.total
+    #             cart.save() 
+    #     else:
+    #         cart.coupon_discount = 0
+    #         cart.final_price = cart.total
+    #         cart.save()
+    #     return redirect(request.META.get('HTTP_REFERER'))
+
+
