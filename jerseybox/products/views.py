@@ -538,6 +538,17 @@ class ApplyCouponView(View):
         cart.save()
         return redirect(request.META.get('HTTP_REFERER'))
     
+
+class OrderHistoryView(View):
+    
+    def get(self,request):
+        template='order_history.html'
+        orders=Order.objects.filter(user=request.user)
+            
+        context={
+            'orders':orders,
+        }
+        return render(request,template,context)
     # def post(self, request):
     #     # Check if a coupon with the provided code exists
     #     try:

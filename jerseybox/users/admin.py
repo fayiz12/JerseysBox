@@ -18,3 +18,5 @@ class UserAdmin(ModelAdmin):
 
 
 admin.site.register(UserProfile,UserAdmin)
+
+

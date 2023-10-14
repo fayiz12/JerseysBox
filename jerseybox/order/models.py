@@ -23,7 +23,7 @@ class Order(models.Model):
     # choices = [('COD', 'Cash On Delivery'), ('Razor Pay', 'Razor Pay')]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE,related_name='order')
     created_at = models.DateTimeField(auto_now_add=True,null=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=100, default='Pending')
