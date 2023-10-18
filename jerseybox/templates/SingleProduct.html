@@ -117,12 +117,12 @@
                 </div>
               </div>
 
-              <input
+              <input class='border h-10 mt-8 ml-4' 
   type="number"
   class="w-full h-full px-4 text-sm font-bold appearance-none outline-none"
   name="quantity"
   id="quantity" 
-  value="1"
+  placeholder='quantity'
   min="1"
 >
             </div>
@@ -193,7 +193,7 @@
      
 
          <div class="py-12 px-4 md:px-6 2xl:px-0 2xl:container 2xl:mx-auto flex justify-center items-center">
-            <!--- more free and premium Tailwind CSS components at https://tailwinduikit.com/ --->
+            
              <div class="flex flex-col justify-start items-start w-full space-y-8">
                  <div class="flex justify-start items-start">
                      <p class="text-3xl lg:text-4xl font-semibold leading-7 lg:leading-9 text-gray-800 dark:text-white ">Reviews</p>
@@ -302,9 +302,30 @@
 
     </div>
   </div>
+  
 </section>
 
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  {% for message in messages %}
+    <script>
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      })
+      {% if message.tags == 'error' %}
+        Toast.fire({ icon:'error', title:'{{ message }}'})
+      {% elif message.tags == 'success' %}
+        Toast.fire({icon:'success', title:'{{ message }}'})
+      {% endif %}
+    </script>
+  {% endfor %}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   const sizeSelect = document.getElementById('size-select');

@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('users.urls')),
@@ -28,6 +29,7 @@ urlpatterns = [
     path('',include('wishlists.urls')),
     path('',include('order.urls')),
     path('',include('payment.urls')),
+    path('',include('dashboard.urls')),
 ]
 
 if settings.DEBUG:

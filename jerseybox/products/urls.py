@@ -16,5 +16,6 @@ urlpatterns=[
     path('apply-coupon/', views.ApplyCouponView.as_view(), name='apply_coupon'),
     # path('invoice',views.invoice.as_view(),name='invoice')
     path('order_history',views.OrderHistoryView.as_view(),name='order_history'),
+    path('chart/',views.chart,name='chart'),
 ]
     

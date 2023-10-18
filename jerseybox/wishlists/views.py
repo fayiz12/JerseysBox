@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.contrib import messages
 from django.views import View
 from products.models import * 
 from django.shortcuts import redirect, render, get_object_or_404
@@ -34,7 +35,8 @@ class AddToWishlistView(View):
             # This view is only accessible to authenticated users.
             product = get_object_or_404(Product, pk=product_id)
             wishlist, created = WishlistModel.objects.get_or_create(user=request.user)
-            wishlist.product.add(product)  # Assuming you have a 'products' field for the wishlist
+            wishlist.product.add(product)
+            messages.success(request, "Added to wishlist")  # Assuming you have a 'products' field for the wishlist
             return redirect('wishlist_view')
         else:
             # Handle the case when the user is not authenticated, e.g., redirect to a login page.
@@ -48,6 +50,7 @@ class RemoveFromWishlistView(View):
             product = get_object_or_404(Product, pk=product_id)
             wishlist = WishlistModel.objects.get(user=request.user)
             wishlist.product.remove(product)
+            messages.success(request, "Item removed")
               # Remove the product from the wishlist
             return redirect('wishlist_view')
         else:

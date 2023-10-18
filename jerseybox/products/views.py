@@ -327,9 +327,14 @@ class ProductDetailView(View):
             # If the cart item already exists, add the specified quantity to the existing quantity
             if not cart_item_created:
                 cart_item.quantity += quantity
+                 # Add this line to check the message tag
+                messages.success(request, "Added to cart")
+
             else:
                 cart_item.quantity = quantity  # Set the quantity to the desired value
-                
+                 # Add this line to check the message tag
+                messages.success(request, "Added to cart")
+
             cart_item.save()
         else:
             cart = request.session.get('cart', {})
@@ -574,3 +579,5 @@ class OrderHistoryView(View):
     #     return redirect(request.META.get('HTTP_REFERER'))
 
 
+def chart(request):
+    return render(request,'admin/index.html')

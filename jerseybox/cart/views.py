@@ -1,4 +1,4 @@
-from pyexpat.errors import messages
+from django.contrib import messages
 from django.shortcuts import redirect, render,get_object_or_404
 from django.views import View
 from products.models import ProductItem
@@ -119,40 +119,6 @@ class ViewCart(View):
         return redirect('cart_view')
 
 
-class AddToCart(View):
-    def post(self, request, pk):
-        size = request.POST.get('selected_size')  # Get the selected size from the POST data
-        quantity = int(request.POST.get('quantity'))  # Get the selected quantity from the POST data
-
-        product_item = get_object_or_404(ProductItem, pk=pk, size=size)
-
-        if product_item.stock >= quantity:
-            if request.user.is_authenticated:
-                # Authenticated user - add product item to the database cart with the selected size and quantity
-                cart, created = Cart.objects.get_or_create(user=request.user)
-                cart_item, cart_item_created = CartItem.objects.get_or_create(cart=cart, product_item=product_item)
-                if not cart_item_created:
-                    cart_item.quantity += quantity  # Add the quantity to the existing quantity
-                else:
-                    cart_item.quantity = quantity
-                cart_item.save()
-            else:
-                # Unauthenticated user - add product item to the session cart with the selected size and quantity
-                cart = request.session.get('cart', {})
-                pk_str = str(pk)
-                size_str = str(size)
-                if pk_str in cart:
-                    if size_str in cart[pk_str]:
-                        cart[pk_str][size_str]['count'] += quantity  # Add the quantity to the existing quantity
-                request.session['cart'] = cart
-
-            return redirect('product_detail', pk=pk)
-        else:
-            # Not enough stock - handle this case (e.g., display an error message)
-            error_message = "Not enough stock available for the selected size and quantity."
-            return render(request, 'product_detail.html', {'product_item': product_item, 'error_message': error_message})
-
-        
 
 
 class RemoveFromCart(View):
@@ -163,6 +129,7 @@ class RemoveFromCart(View):
             cart, created = Cart.objects.get_or_create(user=request.user)
             cart_item = CartItem.objects.filter(product_item=product_item).first()
             if cart_item:
+                messages.success(request, "removed from cart")
                 cart_item.delete()
         else:
             # Unauthenticated user - remove the item from the session cart

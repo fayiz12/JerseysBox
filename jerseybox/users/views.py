@@ -41,6 +41,7 @@ class SignupView(View):
 
         otp = str(random.randint(100000, 999999))
         send_otp_email(email, name, otp)
+        messages.success(request, "OTP send to mail ")
         key = hashlib.sha256(email.encode()).hexdigest()
         cache.set(
             key,
@@ -89,6 +90,7 @@ class ResendOTP(View):
             otp = str(random.randint(100000, 999999))
             print(otp)
             send_otp_email(email, name, otp)
+            messages.success(request, "OTP resend ")
             signup_data["otp"] = otp
             existing_timeout = signup_data.get("timeout", None)
             cache.set(key, signup_data, timeout=existing_timeout)
@@ -113,6 +115,7 @@ class ForgotPassword(View):
         cache_key = f"reset_link_{encrypt_id}"
         cache.set(cache_key, {"reset_link": reset_link}, timeout=20)
         reset_password_email(email, reset_link)
+       
         messages.success(request, "Password reset link sent to your email.")
         return redirect("login")
 
@@ -149,8 +152,12 @@ class LoginView(View):
         user = authenticate(request, username=name, password=pass1)
         if user is not None:
             auth_login(request, user)
+            messages.success(request, "logged in")
+
             return redirect("home")
         else:
+            messages.error(request, "login failed ")
+
             return redirect("login")
 
     def get(self, request):
@@ -160,6 +167,7 @@ class LoginView(View):
 class UserSignout(View):
     def get(self, request):
         logout(request)
+        messages.success(request, "Logged out Successfully ")
         return redirect("login")
 
 
