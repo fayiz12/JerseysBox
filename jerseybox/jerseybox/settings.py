@@ -33,7 +33,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    
     'unfold',
     "unfold.contrib.filters",  # optional, if special filters are needed
     "unfold.contrib.forms",  # optional, if special form elements are needed
@@ -54,6 +53,7 @@ INSTALLED_APPS = [
     'dal_select2',
     'chartjs',
     
+    
 
     #Custom Apps
     
@@ -66,10 +66,12 @@ INSTALLED_APPS = [
     'payment',
     'coupon',
     'dashboard',
+    'debug_toolbar',
 ]
 TAILWIND_APP_NAME = 'theme'
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -145,6 +147,10 @@ USE_I18N = True
 
 USE_TZ = True
 
+INTERNAL_IPS = [
+  
+    '127.0.0.1',
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/

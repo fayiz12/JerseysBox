@@ -1,63 +1,61 @@
-{% extends 'base.html' %}{%load static%} {%csrf_token%} {% block content %}
-
-
-<div class="container mx-auto p-8">
-    <div class="bg-white rounded-lg shadow-lg p-8">
-        <div class="flex justify-between items-center">
-            <h1 class="text-2xl font-semibold">Invoice</h1>
-            <p class="text-gray-600">#{{ invoice_data.order.id }}</p>
-        </div>
-        <div class="mt-4">
-            <div>
-                <h2 class="text-lg font-semibold">Bill From</h2>
-                <p>{{ invoice_data.user.username }}</p>
-                <p>Jersey Box</p>
-                <!-- Add other bill from details as needed -->
-            </div>
-            <div>
-                <h2 class="text-lg font-semibold">Bill To</h2>
-                <p>{{ invoice_data.address }}</p>
-                <!-- Add other bill to details as needed -->
-            </div>
-        </div>
-        <table class="w-full mt-4">
-            <thead>
-                <tr>
-                    <th class="text-left">Item</th>
-                 
-                    <th class="text-right">Quantity</th>
-                    <th class="text-right">Price</th>
-                    
-                    
-                </tr>
-            </thead>
-            <tbody>
-                {% for order in invoice_data.order.order_items.all %}
-                    <tr>
-                        <td>{{ order.product.product_id.name }}</td>
-                
-                        <td class="text-right">{{ order.quantity }}</td>
-                        <td class="text-right">${{ order.total }}</td>
-                        
-                    </tr>
-                {% endfor %}
-            </tbody>
-            <tfoot>
-                
-                <tr>
-                    <td colspan="4" class="text-right">Subtotal</td>
-                    <td class="text-right">${{ invoice_data.order.sub_total }}</td>
-                </tr>
-                <tr>
-                    <td colspan="4" class="text-right">Coupon Discount</td>
-                    <td class="text-right">${{ invoice_data.order.coupon_discount }}</td>
-                </tr>
-                <tr>
-                    <td colspan="4" class="text-right">Total</td>
-                    <td class="text-right">${{ invoice_data.order.total_price }}</td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<div style="font-size: xx-large;text-align: center;font-weight: bold;margin-bottom: 2rem;">INVOICE</div>
+<table style="width: 100%;margin-bottom: 2rem;">
+  <tr>
+    <td style="width: 30%;font-size: x-large;font-weight: 500;">From Address</td>
+    <td style="width: 30%;font-size: x-large;font-weight: 500;">Deliver Address</td>
+    <td style="width: 40%;font-size: x-large;font-weight: 500;">Order Details</td>
+  </tr>
+  <tr>
+    <td style="font-size: large;">Jersey Box<br>jerseybox2@gmail.com <br> Kozhikode, Kerala</td>
+    <td style="font-size: large;">{{order.shipping_address.street_address}}<br>{{order.shipping_address.city}}<br>{{order.shipping_address.postal_code}}</td>
+    <td style="font-size: large;">order id : {{ order.id }} <br> date : {{ order.created_at }} <br> payment mode : {{ order.payment_mode }}</td>
+  </tr>
+</table>
+<div style="font-size: x-large; font-weight: bold;">Order Details</div>
+  <table style="border: 1px solid gray;padding: 4px;font-size: larger;margin-bottom: 1rem;">
+    <tr style="background-color: lightgray;">
+      <th>Product</th>
+      <th>Count</th>
+      <th>Unit Price</th>
+      <th>Amount</th>
+    </tr>
+    {% for item in order.order_items.all %}
+    <tr>
+      <td>{{item.product.product_id.name}}</td>
+      <td>{{item.quantity}}</td>
+      <td>{{item.product.product_id.price}}</td>
+      <td>{{item.price}}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <table style="font-size: x-large;">
+    <tr>
+      <td></td>
+      <td></td>
+      <td>Total Amount</td>
+      <td>Rs. {{order.sub_total}}/-</td>
+    </tr>
+      <tr>
+      <td></td>
+      <td></td>
+      <td>Coupon Discount</td>
+      <td>Rs. {{order.coupon_discount}}/-</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td style="font-weight: 500;">Final Amount</td>
+      <td style="font-weight: 500;">Rs. {{order.total_price}}/-</td>
+    </tr>
+  </table>
 </div>
-{% endblock %}
+</body>
+</html>

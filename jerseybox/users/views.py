@@ -170,7 +170,10 @@ class UserSignout(View):
         messages.success(request, "Logged out Successfully ")
         return redirect("login")
 
-
+class UserProfileView(View):
+    def get(self,request):
+        user=request.user
+        return render(request,'user_profile.html',{'user':user})
 
 
 

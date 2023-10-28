@@ -20,6 +20,13 @@ from django.utils import timezone
 from datetime import date
 from django.template.loader import render_to_string
 from xhtml2pdf import pisa
+from payment.models import *
+from decimal import Decimal
+
+
+
+
+
 
 class HomeView(View):
     template="product.html"
@@ -413,11 +420,15 @@ class CheckoutView(View):
     
     
     def post(self, request):
+        client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
+
         print('dfghj,')
         user = request.user
         selected_address_id = request.POST.get('selectedAddress')
         selected_payment_method = request.POST.get('payment_method')
+        payment_order_id=request.POST.get('order_id')
         print(selected_payment_method,'strsrs')
+        print(payment_order_id,'sd')
 
         cart = get_object_or_404(Cart, user=user)
         cart_items = CartItem.objects.filter(cart=cart)
@@ -452,12 +463,35 @@ class CheckoutView(View):
                     #     'price_at_order': cart_item.product_item.product_id.price,
                     # }
                 )
-            
+            if selected_payment_method == 'razorpay':
+                # Assuming you have already captured payment details from the Razorpay callback
+                # payment_id = request.POST.get('razorpay_payment_id')
+                payment_order=client.order.fetch(payment_order_id)
+                print(payment_order)
+                # payment_status = request.POST.get('razorpay_status')
+
+                # # Save payment details to the Payment model
+                Payment.objects.create(
+                    user=user,
+                    transaction_id=payment_order['id'],
+                    amount=Decimal(str(payment_order['amount'])) / 100 ,
+                    status=payment_order['status'],
+                )
+            elif selected_payment_method == 'cash_on_delivery':
+                # Create a payment record for cash on delivery
+                Payment.objects.create(
+                    user=user,
+                    transaction_id='COD',  # You can use any identifier for cash on delivery
+                    amount=order.total_price,
+                    status='pending',  # Status can be pending for COD orders
+                )
             # order_data = {
             #     'total_price': order.total_price,
             #     'sub_total': order.sub_total,
             # }
            
+            
+            
 
             data = {
             "orders": order,
@@ -477,7 +511,7 @@ class CheckoutView(View):
 class UserInvoice(View):
   def get(self, request, pk):
     template_name = 'invoice_template.html'
-    order = request.user.orders.get(id=pk)
+    order = request.user.order.get(id=pk)
     context = {'order':order}
     html_content = render_to_string(template_name, context)
     response = HttpResponse(content_type='application/pdf')
@@ -486,7 +520,8 @@ class UserInvoice(View):
     if pisa_status:
       return response
     return None
-    
+
+
     
     
 
@@ -577,6 +612,18 @@ class OrderHistoryView(View):
     #         cart.final_price = cart.total
     #         cart.save()
     #     return redirect(request.META.get('HTTP_REFERER'))
+
+
+class TrackView(View):
+    
+    def get(self,request,pk):
+        template='track.html'
+        orders=Order.objects.get(id=pk)
+            
+        context={
+            'orders':orders,
+        }
+        return render(request,template,context)
 
 
 def chart(request):

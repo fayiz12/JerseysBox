@@ -6,7 +6,7 @@ from django_countries.fields import CountryField
 
 class Address(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE,related_name='address')
     name = models.CharField(max_length=100,null=True)  # Add a field for recipient's name
     phone_number = models.CharField(max_length=20,null=True)
     street_address = models.CharField(max_length=255)
@@ -21,12 +21,18 @@ class Address(models.Model):
 
 class Order(models.Model):
     # choices = [('COD', 'Cash On Delivery'), ('Razor Pay', 'Razor Pay')]
+    STATUS_CHOICES = (
+        ('Placed', 'Placed'),
+        ('Packed', 'Packed'),
+        ('Shipped', 'Shipped'),
+        ('Delivered', 'Delivered'),
+    )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE,related_name='order')
     created_at = models.DateTimeField(auto_now_add=True,null=True)
     updated_at = models.DateTimeField(auto_now=True)
-    status = models.CharField(max_length=100, default='Pending')
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES,default='Placed')
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     sub_total=models.DecimalField(max_digits=10, decimal_places=2,null=True)
     order_data = models.JSONField(null=True, blank=True)

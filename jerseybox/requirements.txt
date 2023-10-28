@@ -36,3 +36,4 @@ typing_extensions==4.7.1
 urllib3==2.0.4
 zipp==3.16.2
 xhtml2pdf
+django-admin-tools-stats==0.9.3

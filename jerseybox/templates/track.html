@@ -1,0 +1,89 @@
+{% extends 'base.html' %}{%load static%} {%csrf_token%} {% block content %}
+
+
+
+
+
+
+<div class="py-14 px-4 md:px-6 2xl:px-20 2xl:container 2xl:mx-auto">
+    <div class="flex justify-start item-start space-y-2 flex-col">
+
+    </div> 
+    <div class="mt-10 flex flex-col xl:flex-row jusitfy-center items-stretch w-full xl:space-x-8 space-y-4 md:space-y-6 xl:space-y-0">
+        <div class="flex flex-col justify-start items-start w-full space-y-4 md:space-y-6 xl:space-y-8">
+            <div class="flex flex-col justify-start items-start dark:bg-gray-800 bg-gray-50 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full">
+                <p class="text-lg md:text-xl dark:text-white font-semibold leading-6 xl:leading-5 text-gray-800">Order Details</p>
+
+                {% for order in orders.order_items.all %}
+                <div class="mt-4 md:mt-6 flex flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full">
+                    <div class="pb-4 md:pb-8 w-full md:w-40">
+                        {% if order.product.product_id.image.all %}
+                            <img class="w-full hidden md:block" src="{{ order.product.product_id.image.first.image.url }}" alt="dress" />
+                        {% endif %}
+                    </div>
+                    <div class="border-b border-gray-200 md:flex-row flex-col flex justify-between items-start w-full pb-8 space-y-4 md:space-y-0">
+                        <div class="w-full flex flex-col justify-start items-start space-y-8">
+                            <h3 class="text-xl dark:text-white xl:text-2xl font-semibold leading-6 text-gray-800">{{order.product.product_id.name}}</h3>
+                            <div class="flex justify-start items-start flex-col space-y-2">
+
+                                <p class="text-sm dark:text-white leading-none text-gray-800"><span class="dark:text-gray-400 text-gray-300">Size: </span> {{order.product.size}}</p>
+
+                            </div>
+                        </div>
+                        <div class="flex justify-between space-x-8 items-start w-full">
+
+                            <p class="text-base dark:text-white xl:text-lg leading-6 text-gray-800">x {{order.quantity}}</p>
+                            <p class="text-base dark:text-white xl:text-lg font-semibold leading-6 text-gray-800">{{order.price}}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="flex justify-center md:flex-row flex-col items-stretch w-full space-y-4 md:space-y-0 md:space-x-6 xl:space-x-8">
+                <div class="flex flex-col px-4 py-6 md:p-6 xl:p-8 w-full dark:bg-gray-800 bg-gray-50  space-y-6">
+                    <h3 class="text-xl dark:text-white font-semibold leading-5 text-gray-800">Track</h3>
+                    <div class="flex justify-center items-center w-full space-y-4 flex-col border-gray-200 border-b pb-4">
+                        <section class="step-wizard m-0">
+    <ul class="step-wizard-list w-100 border shadow">
+      <li class="step-wizard-item">
+        <span class="progress-count  text-white ">1</span>
+        <span class="progress-label  text-white ">Order Confirmed</span>
+        
+      </li>
+      <li class="step-wizard-item text-white {% if orders.status == 'Placed' %}current-item{% endif %}">
+        <span class="progress-count  text-white ">2</span>
+        <span class="progress-label text-white ">Packing Soon</span>
+        
+      </li>
+      <li class="step-wizard-item  text-white {% if orders.status == 'Packed' %}current-item{% endif %}">
+        <span class="progress-count text-white ">3</span>
+        <span class="progress-label text-white ">Shipping Soon</span>
+        
+      </li>
+      <li class="step-wizard-item  text-white {% if orders.status == 'Shipped' %}current-item{% endif %}">
+        <span class="progress-count text-white ">4</span>
+        <span class="progress-label text-white ">Out for Delivery</span>
+        
+      </li>
+      <!-- <li class="step-wizard-item">
+        <span class="progress-count"></span>
+        <span class="progress-label">Return</span>
+        <span>date</span>
+      </li> -->
+    </ul>
+  </section>
+                       
+                    </div>
+                   
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+       
+         
+    </div>
+</div>
+
+
+{% endblock %}

@@ -25,6 +25,8 @@
                         {% csrf_token %}
                         <div class="space-y-4">
                             <!-- Example existing address -->
+                        <input type="text" name="order_id" id="order_id" placeholder="Apply coupon" value="{{order_id}}"
+                        class="w-full hidden bg-gray-100 outline-none appearance-none focus:outline-none active:outline-none" />
 
 
                             {% for address in addresses %}
@@ -149,7 +151,7 @@
             <div class="flex justify-between py-4 text-gray-600">
 
                 <span>Coupon Discount</span>
-                <span class="font-semibold text-pink-500">{{cart.coupon_discount}}</span>
+                <span class="font-semibold text-pink-500">-{{cart.coupon_discount}}</span>
             </div>
         </div>
         <div class="font-semibold text-xl px-8 flex justify-between py-8 text-gray-600">
@@ -190,8 +192,6 @@
 <script>
     var options = {
         "key": "{{ payment_api_key }}",
-        //    "amount": "{{ cart.final_price }}00",
-        //    "currency": "INR",
         "name": "Jersey Box",
         "description": "Test Transaction",
         "image": "https://example.com/your_logo",

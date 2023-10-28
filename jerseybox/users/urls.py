@@ -11,4 +11,5 @@ urlpatterns=[
     path('forgot_password/', views.ForgotPassword.as_view(), name='forgot'),
     path('rreset_password/<str:encrypt_id>/',views.UserResetPassword.as_view(),name='reset'),
     path('signout/',views.UserSignout.as_view(),name='signout'),
+    path('user_profile',views.UserProfileView.as_view(),name='userprofile'),
 ]
