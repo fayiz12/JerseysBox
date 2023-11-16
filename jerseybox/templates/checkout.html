@@ -7,52 +7,72 @@
     <div class="lg:col-span-2 col-span-3 mt-11 space-y-8 px-12">
 
         
-        <div class="mb-4 bg-gray-100">
+        {% comment %} <div class="mb-4 bg-gray-100">
                     <h3 class="text-xl text-gray-600 font-semibold mb-2"> <p class="bg-gray-700 mb-4  text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded">1.LOGIN</p></h3>
                     <!-- Existing Addresses (You can load them from your data) -->
                     <strong>{{current_user.username}}</strong><p><span></span>{{current_user.email}}</p>
                     
-        </div>
+        </div> {% endcomment %}
 
         <div class="rounded-md ">
             {% comment %} <form id="payment-form" method="POST" action=""> {% endcomment %}
 
 
-                <div class="mb-4 mt-20 ">
-                    <h3 class="text-xl text-gray-600 font-semibold mb-4"> <p class="bg-gray-700  text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded ">2.Delivery Address</p></h3>
+                <div class="mb-4 mt-4 ">
+                    <h3 class="text-xl text-gray-600 font-semibold mb-4"> <p class="bg-gray-700  text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded ">Delivery Address </p></h3>
                     <!-- Existing Addresses (You can load them from your data) -->
                     <form method="post" action="{% url 'checkout' %}" id="payment-form">
                         {% csrf_token %}
-                        <div class="space-y-4">
+                        <div class="space-y-4 ">
                             <!-- Example existing address -->
                         <input type="text" name="order_id" id="order_id" placeholder="Apply coupon" value="{{order_id}}"
                         class="w-full hidden bg-gray-100 outline-none appearance-none focus:outline-none active:outline-none" />
 
 
-                            {% for address in addresses %}
+                            
+                            
+                            <div  class="bg-white max-w-screen w-full rounded-md"> <!--Modal Content -->
+             <div class="p-3 flex items-center justify-between border-b border-b-gray-300"> <!--Modal Header -->
+                <h3 class="font-semibold text-xl">Addresses</h3>
+                
+            </div>
+            <div class="p-3 border-b border-b-gray-300"> <!--Modal Body -->
+                        {% for address in addresses %}
 
                             <div class=" items-start justify-between bg-gray-100">
-                                <input type="radio" name="selectedAddress" value="{{address.id}}" class="mr-2">
+                                <input type="radio" name="selectedAddress" value="{{address.id}}" class="mr-2" {% if forloop.first %}checked{% endif %}>
                                 <label class="items-center">
                                     
                                 <strong>{{ address.name}} {{address.phone_number}}</strong>
                                 </label>
                                 <p> {{ address.street_address }},{{address.city }}, {{ address.postal_code }},{{ address.state }},{{ address.country }}
                                 </p>
-                               
+
                             </div>
                            
-                            {% endfor %}
-                            <div class="my-4">
+                        {% endfor %}
+            </div>
+            <div class="mt-4 mx-2">
                                 <p>
                                 <a href="{% url 'add_address' %}" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 border border-gray-700 rounded">
                                     Add
                                 </a></p>
                                </div>
 
+            <div class="p-3 flex items-center justify-start"> <!--Modal Footer -->
+                
 
-                            <fieldset class='text-lg pt-20 bg-gray-100'>
-                                <h3 class="text-xl font-semibold text-gray-600 mb-10"> <p class="bg-gray-700  text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded">4.Payment Method</p></h3>
+            </div>
+        </div>
+
+
+
+
+
+                           
+
+                            <fieldset class='text-lg pt-10 bg-gray-100'>
+                                <h3 class="text-xl font-semibold text-gray-600 mb-10"> <p class="bg-gray-700  text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded">Payment Method</p></h3>
                                 <input type="radio" name="payment_method" value="cash_on_delivery" id="cash_on_delivery"
                                     checked>
                                 <label for="cash_on_delivery">Cash on Delivery</label>
@@ -86,7 +106,7 @@
 
     <div class="col-span-1 bg-white lg:block hidden">
 
-        <h1 class="py-6 border-b-2 text-xl font-semibold text-gray-600 px-8"> <p class="bg-gray-700  text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded">3.Order Summary</p></h1>
+        <h1 class="py-6 border-b-2 text-xl font-semibold text-gray-600 px-8 mt-8"> <p class="bg-gray-700  text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-500 rounded">Order Summary</p></h1>
 
         <ul class="py-6 border-b space-y-6 px-8">
             {% for cart_item in cart_items %}
@@ -160,6 +180,15 @@
         </div>
 
     </div>
+
+
+    
+     
+   
+
+
+
+
 </div>
 
 
@@ -221,5 +250,65 @@
         e.preventDefault();
     }
 </script>
+<script>
+    const x = document.getElementsByTagName('BODY')[0] // Select body tag because of disable scroll when modal is active
+    const modal = document.getElementById('modal') // modal
+    const modalBtn = document.getElementById('modal-button') // launch modal button
+    const modalClose = document.getElementsByClassName('modal-close') // close modal button
+
+    // Open modal
+    modalBtn.onclick = function () {
+            modal.style.display = "flex"; // Show modal
+            x.style.overflow = "hidden"; //Disable scroll on body
+    }
+
+    // Select and trigger all close buttons
+    for (var i = 0; i < modalClose.length; i++) {
+        modalClose[i].addEventListener('click', function () {
+            modal.style.display = "none"; // Hide modal
+            x.style.overflow = "auto"; // Active scroll on body
+        })
+    }
+
+    // Close modal when click away from modal
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none"; // Hide modal
+            x.style.overflow = "auto"; // Active scroll on body
+        }
+    }
+
+</script>
+<script>
+// JavaScript to handle address selection
+document.addEventListener("DOMContentLoaded", function () {
+    const initialAddressDiv = document.getElementById("initialAddress");
+    const selectAddressButtons = document.querySelectorAll(".select-address-button");
+
+    selectAddressButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+            const selectedAddressId = button.getAttribute("data-address-id");
+            const selectedAddress = findAddressById(selectedAddressId); // Replace with your logic to find the address by ID
+            if (selectedAddress) {
+                // Update the content of the initially displayed address
+                initialAddressDiv.innerHTML = `
+                    <input type="radio" name="selectedAddress" value="${selectedAddress.id}" class="mr-2">
+                    <label class="items-center">
+                        <strong>${selectedAddress.name} ${selectedAddress.phone_number}</strong>
+                    </label>
+                    <p>${selectedAddress.street_address}, ${selectedAddress.city}, ${selectedAddress.postal_code}, ${selectedAddress.state}, ${selectedAddress.country}</p>
+                `;
+            }
+        });
+    });
+
+    // Replace this function with your logic to find an address by ID from the addresses array
+    function findAddressById(id) {
+        // Implement your logic to find the address in the addresses array
+    }
+});
+
+</script>
+
 
 {% endblock %}

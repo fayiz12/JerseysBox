@@ -26,7 +26,9 @@
                 <p class="text-xs  font-semibold leading-6 text-gray-800"><span class='font-bold underline'>Total_price</span></br>{{order.total_price}}</p>
                 <p class=" text-xs font-semibold leading-6 text-gray-800"><span class='font-bold underline'>Payment_method</span></br>{{order.payment_mode}}</p>
                 <p class=" text-xs font-semibold leading-6 text-gray-800"><span class='font-bold underline'>Status</span></br>{{order.status}}</p>
-                <a href="{% url 'invoice' order.id %}" class=" dark:text-blue-500 text-xs font-semibold leading-6 text-blue-500"> invoice </a>
+                <a href="{% url 'invoice' order.id %}" > <button class="py-2.5 px-6 rounded-lg text-sm font-medium bg-blue-600 text-white">invoice</button></a>
+                <a href="{% url 'order_cancel' order.id %}" ><button class="py-2.5 px-6 rounded-lg text-sm font-medium bg-red-600 text-white">Cancel</button></a>
+
 
             </div>
         </div>

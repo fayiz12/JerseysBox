@@ -14,8 +14,8 @@
 </style>
 
 
-  <div class=" bg-gray-100 pt-20">
-    <h1 class="mb-10 text-center text-2xl font-bold">Cart Items</h1>
+  <div class=" bg-white pt-20">
+    <h1 class="mb-10 text-center text-2xl font-bold">Cart Items </h1>
     <div class="mx-auto  justify-center px-6 md:flex md:space-x-6 xl:px-0">
       <div class="rounded-lg md:w-2/3">
         
@@ -51,7 +51,7 @@
                 {% endfor %}
         </tbody>
     </table>
-    <button type="submit" class='text-red-600 bg-black mt-4'>Update Cart</button>
+    <button type="submit" class=' rounded-md py-1.5 font-medium text-blue-50 hover:bg-blue-600 bg-blue-500 border mt-4 p-1'>Update Cart</button>
 </form>
             </div>
             <div class="mt-4 flex justify-between im sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
@@ -90,7 +90,10 @@
         </div>
         <a href={% url 'checkout' %}><button class="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Check out</button></a>
       {% else %}
-            <p>Your cart is empty.</p>
+      <div class='flex flex-col max-w-screen-lg h-96 bg-white items-center'>
+            <img src="{% static 'noitem.webp' %}" alt="noitem" class="h-48 w-60 mr-2">
+            <p class='font-bold mt-8'> Missing Cart items? </p>
+      </div>
       {% endif %}
       
       </div>

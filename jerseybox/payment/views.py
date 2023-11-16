@@ -38,3 +38,5 @@ class PaymentView(View):
         except razorpay.errors.SignatureVerificationError:
             # Payment verification failed
             return redirect('payment_failed')
+
+

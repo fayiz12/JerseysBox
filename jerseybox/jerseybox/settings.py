@@ -67,6 +67,8 @@ INSTALLED_APPS = [
     'coupon',
     'dashboard',
     'debug_toolbar',
+    
+    
 ]
 TAILWIND_APP_NAME = 'theme'
 
@@ -79,6 +81,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'jerseybox.urls'
@@ -94,6 +97,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'order.context_processors.custom_admin_context',
             ],
         },
     },

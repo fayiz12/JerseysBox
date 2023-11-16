@@ -7,20 +7,20 @@ from django_countries.fields import CountryField
 class Address(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE,related_name='address')
-    name = models.CharField(max_length=100,null=True)  # Add a field for recipient's name
+    name = models.CharField(max_length=100,null=True)
     phone_number = models.CharField(max_length=20,null=True)
     street_address = models.CharField(max_length=255)
     city = models.CharField(max_length=100)
     postal_code = models.CharField(max_length=20)
     state = models.CharField(max_length=100)
     country = CountryField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True,null=True)
 
     def __str__(self):
         return f" {self.name}  {self.street_address}"
     
 
 class Order(models.Model):
-    # choices = [('COD', 'Cash On Delivery'), ('Razor Pay', 'Razor Pay')]
     STATUS_CHOICES = (
         ('Placed', 'Placed'),
         ('Packed', 'Packed'),

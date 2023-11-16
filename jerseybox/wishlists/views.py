@@ -35,9 +35,12 @@ class AddToWishlistView(View):
             # This view is only accessible to authenticated users.
             product = get_object_or_404(Product, pk=product_id)
             wishlist, created = WishlistModel.objects.get_or_create(user=request.user)
-            wishlist.product.add(product)
-            messages.success(request, "Added to wishlist")  # Assuming you have a 'products' field for the wishlist
-            return redirect('wishlist_view')
+            if product in wishlist.product.all():
+                messages.error(request, "already in wishlist.")
+            else:
+                wishlist.product.add(product)
+                messages.success(request, "Added to wishlist") # Assuming you have a 'products' field for the wishlist
+            return redirect(request.META.get('HTTP_REFERER'))
         else:
             # Handle the case when the user is not authenticated, e.g., redirect to a login page.
             return redirect('login')  # Redirect to your login page.

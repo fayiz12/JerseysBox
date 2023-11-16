@@ -19,8 +19,7 @@ class Cart(models.Model):
         self.final_price=total
         self.save()
 
-    def __str__(self):
-        return f"Cart for {self.user.username}"
+
     
 
 class CartItem(models.Model):

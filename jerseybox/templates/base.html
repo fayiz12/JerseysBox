@@ -204,10 +204,17 @@
                 height: 24px;
             }
         </style>
+        <style>
+        
+.checked {
+  color: gold;
+}
+
+        </style>
         
   </head>
   <body>
-      <nav class="flex justify-between bg-gray-800 text-white w-screen">
+      <nav class="sticky top-0 flex justify-between bg-gray-800 text-white w-screen ">
       <div class="px-5 xl:px-12 py-6 flex w-full items-center">
         <a class="text-3xl font-bold font-heading" href="{% url 'home'  %}">
          <img src="{% static 'logo.png' %}" alt="Logo" class="h-12  mr-2">
@@ -270,6 +277,111 @@
           </svg>
       </a>
     </nav>
+
+
+
+
+
+<!-- Breadcrumb -->
+<nav class="flex px-5 py-3 text-gray-700 border border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
+  <ol class="inline-flex items-center space-x-1 md:space-x-3">
+
+  <div id="breadcrumbs"></div>
+  </ol>
+</nav>
+
+<script>
+function updateBreadcrumbs() {
+    // Get the current URL and split it into segments
+    const url = window.location.pathname;
+    const segments = url.split('/').filter(segment => segment);
+
+    // Create a container for the breadcrumbs
+    const breadcrumbsContainer = document.getElementById('breadcrumbs');
+
+    // Clear the existing breadcrumbs
+    breadcrumbsContainer.innerHTML = '';
+
+    // Create a Home link
+    const homeLink = document.createElement('a');
+    homeLink.textContent = 'Home >';
+    homeLink.href = '/';
+    breadcrumbsContainer.appendChild(homeLink);
+
+    // Initialize a variable to keep track of the last segment
+    let currentPath = '';
+
+    // Iterate through the URL segments and create breadcrumb links
+    for (const segment of segments) {
+        // Skip the base URL segment
+        if (segment === '') {
+            continue;
+        }
+
+        currentPath += `/${segment}`;
+        
+        const breadcrumbLink = document.createElement('a');
+        breadcrumbLink.textContent = segment;
+        
+        // Ensure leading slash and add a trailing slash for URL consistency
+        breadcrumbLink.href = currentPath + '/';
+        
+        breadcrumbsContainer.appendChild(breadcrumbLink);
+
+        // Add a separator (e.g., ' > ') between breadcrumbs
+        if (segment !== segments[segments.length - 1]) {
+            const separator = document.createTextNode(' > ');
+            breadcrumbsContainer.appendChild(separator);
+        }
+    }
+}
+
+// Call the updateBreadcrumbs function when the page loads
+window.addEventListener('load', updateBreadcrumbs);
+
+{% comment %} function updateBreadcrumbs() {
+    // Get the current URL and split it into segments
+    const url = window.location.pathname;
+    const segments = url.split('/').filter(segment => segment);
+
+    // Create a container for the breadcrumbs
+    const breadcrumbsContainer = document.getElementById('breadcrumbs');
+
+    // Clear the existing breadcrumbs
+    breadcrumbsContainer.innerHTML = '';
+
+    // Create a Home link
+    const homeLink = document.createElement('a');
+    homeLink.textContent = 'Home/';
+    homeLink.href = '/';
+    breadcrumbsContainer.appendChild(homeLink);
+
+    // Iterate through the URL segments and create breadcrumb links
+    let currentPath = '';
+    for (const segment of segments) {
+        currentPath += '' + segment + '/';
+
+        const breadcrumbLink = document.createElement('a');
+        breadcrumbLink.textContent = segment;
+        breadcrumbLink.href = currentPath;
+        breadcrumbsContainer.appendChild(breadcrumbLink);
+
+        // Add a separator (e.g., ' > ') between breadcrumbs
+        if (segment !== segments[segments.length - 1]) {
+            const separator = document.createTextNode(' > ');
+            breadcrumbsContainer.appendChild(separator);
+        }
+    }
+}
+
+// Call the updateBreadcrumbs function when the page loads
+window.addEventListener('load', updateBreadcrumbs);
+ {% endcomment %}
+
+
+</script>
+
+    
 
     {% block content %} {% endblock %}
     <div class="bg-gray-900 pt-5">
@@ -501,7 +613,7 @@
     <script>
       const Toast = Swal.mixin({
         toast: true,
-        position: 'top',
+        position: 'bottom',
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true,

@@ -22,7 +22,7 @@
         <div class="relative">
         
           {% with image=item.image.first %}
-          <img class="" src="{{ image.image.url }}" alt="image" />
+          <img class="w-60 h-60" src="{{ image.image.url }}" alt="image" />
           {% endwith %}
     
         <form method="post" action="{% url 'remove_from_wishlist' item.id %}">
@@ -74,7 +74,10 @@
       </div>
       {% endfor %}
          {% else %}
-            <p>Your wishlist is empty.</p>
+       <div class='flex flex-col max-w-screen-lg w-screen bg-white items-center'>
+            <img src="{% static 'noitem.webp' %}" alt="noitem" class="h-48 w-60 mr-2">
+            <p class='font-bold mt-8'>  No items </p>
+      </div>
         {% endif %}
     </div>
    

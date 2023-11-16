@@ -22,6 +22,7 @@ from django.template.loader import render_to_string
 from xhtml2pdf import pisa
 from payment.models import *
 from decimal import Decimal
+from products.breadcrumbs import *
 
 
 
@@ -31,7 +32,10 @@ from decimal import Decimal
 class HomeView(View):
     template="product.html"
     def get(self, request):
-        
+        url = request.path
+
+        # Generate the breadcrumbs for the current URL
+        breadcrumbs = get_breadcrumbs(url)
         max_to_display = 4
         featured_product_items = Product.objects.filter(is_featured=True)[:4]
         featured_items_with_images = []
@@ -75,6 +79,7 @@ class HomeView(View):
                 "featured_items_with_images": featured_items_with_images,
                 "products": products,
                 "product_images": product_images,
+                "breadcrumbs": breadcrumbs
             }
         return render(
             request,
@@ -86,11 +91,12 @@ class HomeView(View):
 
     
 class LeagueProductsView(View):
+    
     template_name = "product_list.html"  # Corrected the template attribute name
     items_per_page = 10  # Adjust the number of items per page as needed
 
     def get(self, request, league_id):
-
+        breadcrumbs = [{"title": "league_products", "url": "/"}]
         sort_param = request.GET.get('sort', 'price_low')
         selected_product_type = request.GET.get('product_type')
         selected_gender = request.GET.get('gender')
@@ -136,6 +142,7 @@ class LeagueProductsView(View):
             "page":page,
             "league": league,
             "clubs": clubs,
+            "breadcrumbs": breadcrumbs,
 
         }
 
@@ -311,12 +318,15 @@ class ProductDetailView(View):
     template_name = "SingleProduct.html"
 
     def get(self, request, product_id):
+        breadcrumbs = [{"title": "league_products", "url": "/"}]
         product = get_object_or_404(Product, id=product_id)
         images = Image.objects.filter(product_id=product)[0:2]
+        
 
         context = {
             "product": product,
             "images": images,
+            "breadcrumbs": breadcrumbs,
         }
 
         return render(request, self.template_name, context)
@@ -333,26 +343,39 @@ class ProductDetailView(View):
             
             # If the cart item already exists, add the specified quantity to the existing quantity
             if not cart_item_created:
-                cart_item.quantity += quantity
+                if quantity<5:
+                    cart_item.quantity += quantity
                  # Add this line to check the message tag
-                messages.success(request, "Added to cart")
+                    messages.success(request, "Added to cart")
+                else:
+                    messages.error(request,'choose quantity less than 5')
 
             else:
-                cart_item.quantity = quantity  # Set the quantity to the desired value
+                if quantity<5:
+
+                    cart_item.quantity = quantity  # Set the quantity to the desired value
                  # Add this line to check the message tag
-                messages.success(request, "Added to cart")
+                    messages.success(request, "Added to cart")
+                else:
+                    messages.error(request,'choose quantity less than 5')
 
             cart_item.save()
         else:
             cart = request.session.get('cart', {})
-            pk_str = str(product_item.pk)
+            pk_str = str(product_item.id)
             
             # Check if the key 'count' exists in the cart dictionary
             if pk_str in cart and 'count' in cart[pk_str]:
-                cart[pk_str]['count'] += quantity  # Add the specified quantity to the existing quantity
+                if quantity<5:
+                    cart[pk_str]['count'] += quantity
+                else:
+                    messages.error(request,'choose quantity less than 5') # Add the specified quantity to the existing quantity
             else:
                 # Initialize 'count' if it doesn't exist
-                cart[pk_str] = {'count': quantity}
+                if quantity<5:
+                    cart[pk_str] = {'count': quantity}
+                else:
+                    messages.error(request,'choose quantity less than 5')
             
             request.session['cart'] = cart
 
@@ -393,13 +416,15 @@ class ProductDetailView(View):
 
 class CheckoutView(View):
     def get(self, request):
+        if not request.user.is_authenticated:
+            return redirect('login')
         user = request.user
         try:
             current_user=UserProfile.objects.get(pk=user.pk)
             cart = Cart.objects.get(user=user)
             cart_items = CartItem.objects.filter(cart=cart)
             coupons=Coupon.objects.all()
-            addresses = Address.objects.filter(user=user)[:2]
+            addresses = Address.objects.filter(user=user).order_by('-created_at')[:4]
             client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY,settings.RAZORPAY_API_SECRET))
             payment_order = client.order.create(dict(amount = request.user.cart.final_price*100, currency = "INR", payment_capture = 1))
             payment_order_id = payment_order['id']
@@ -489,7 +514,9 @@ class CheckoutView(View):
             #     'total_price': order.total_price,
             #     'sub_total': order.sub_total,
             # }
-           
+            cart.coupon_discount = 0
+            cart.save()
+            cart_items.delete()
             
             
 
@@ -507,27 +534,30 @@ class CheckoutView(View):
 
             
 
-       
-class UserInvoice(View):
-  def get(self, request, pk):
-    template_name = 'invoice_template.html'
-    order = request.user.order.get(id=pk)
-    context = {'order':order}
-    html_content = render_to_string(template_name, context)
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="invoice.pdf.pdf"'
-    pisa_status = pisa.CreatePDF(html_content, dest=response,encoding='utf-8')
-    if pisa_status:
-      return response
-    return None
 
+
+class UserInvoice(View):
+    def get(self, request, pk):
+        if not request.user.is_authenticated:
+            return redirect('login')
+
+        template_name = 'invoice_template.html'
+        order = request.user.order.get(id=pk)
+        context = {'order': order}
+        html_content = render_to_string(template_name, context)
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="invoice.pdf.pdf"'
+        pisa_status = pisa.CreatePDF(html_content, dest=response, encoding='utf-8')
+        if pisa_status:
+            return response
+        return None
 
     
     
 
 class AddAddressView(FormView):
     template_name = 'add_address.html'
-    form_class = AddressForm  # Use the custom form
+    form_class = AddressForm  
     success_url = reverse_lazy('checkout')
 
     def form_valid(self, form):
@@ -552,6 +582,8 @@ class AddAddressView(FormView):
 
 class ApplyCouponView(View):
     def post(self, request):
+        if not request.user.is_authenticated:
+            return redirect('login')
         coupon_code = request.POST.get('coupon_code')
         cart = request.user.cart
         cart.coupon_discount=0
@@ -571,7 +603,7 @@ class ApplyCouponView(View):
             if cart.total > coupon.discount_value:
                 cart.coupon_discount = coupon.discount_value
                 cart.final_price = cart.total - coupon.discount_value
-                messages.error(request,'coupon Applied ')
+                messages.success(request,'coupon Applied ')
             else:
                 messages.warning(request, 'Coupon applied, but it does not meet the cart total requirement.')
 
@@ -582,6 +614,8 @@ class ApplyCouponView(View):
 class OrderHistoryView(View):
     
     def get(self,request):
+        if not request.user.is_authenticated:
+            return redirect('login')
         template='order_history.html'
         orders=Order.objects.filter(user=request.user)
             
@@ -626,5 +660,4 @@ class TrackView(View):
         return render(request,template,context)
 
 
-def chart(request):
-    return render(request,'admin/index.html')
+

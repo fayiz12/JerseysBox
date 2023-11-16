@@ -113,7 +113,7 @@ class ForgotPassword(View):
         reset_link = f"{request.scheme}://{request.get_host()}{reverse('reset', args=[encrypt_id])}"
         print(reset_link)
         cache_key = f"reset_link_{encrypt_id}"
-        cache.set(cache_key, {"reset_link": reset_link}, timeout=20)
+        cache.set(cache_key, {"reset_link": reset_link}, timeout=200)
         reset_password_email(email, reset_link)
        
         messages.success(request, "Password reset link sent to your email.")
@@ -161,7 +161,10 @@ class LoginView(View):
             return redirect("login")
 
     def get(self, request):
-        return render(request, "login.html")
+        if not request.user.is_authenticated:
+            return render(request, "login.html")
+        else:
+            return redirect('home')
 
 
 class UserSignout(View):
@@ -172,10 +175,14 @@ class UserSignout(View):
 
 class UserProfileView(View):
     def get(self,request):
+        if not request.user.is_authenticated:
+            return redirect('login')
         user=request.user
         return render(request,'user_profile.html',{'user':user})
 
 
 
-
+class Custom404View(View):
+    def get(self, request, exception=None):
+        return render(request, '404.html', status=404)
 

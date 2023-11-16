@@ -25,14 +25,14 @@
       <th>Product</th>
       <th>Count</th>
       <th>Unit Price</th>
-      <th>Amount</th>
+      
     </tr>
     {% for item in order.order_items.all %}
     <tr>
       <td>{{item.product.product_id.name}}</td>
       <td>{{item.quantity}}</td>
       <td>{{item.product.product_id.price}}</td>
-      <td>{{item.price}}</td>
+      
     </tr>
     {% endfor %}
   </table>

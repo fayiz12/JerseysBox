@@ -62,7 +62,11 @@ class ViewCart(View):
             try:
                 product_item = ProductItem.objects.get(pk=product_item_id)
                 quantity = item_data.get('count', 1)  # Default to 1 if 'count' is missing
-                cart_item, _ = CartItem.objects.get_or_create(product_item=product_item, quantity=quantity)
+                
+                # Create a temporary cart object for unauthenticated users
+                temp_cart, _ = Cart.objects.get_or_create(session_id=request.session.session_key)
+                
+                cart_item, _ = CartItem.objects.get_or_create(cart=temp_cart, product_item=product_item, quantity=quantity)
                 cart_items.append(cart_item)
             except ProductItem.DoesNotExist:
                 # Handle the case where the ProductItem is not found gracefully
@@ -82,9 +86,13 @@ class ViewCart(View):
                     try:
                         quantity = int(value)
                         if quantity >= 1:
-                            cart_item = CartItem.objects.get(pk=cart_item_id, cart=cart)
-                            cart_item.quantity = quantity
-                            cart_item.save()
+                            if quantity<5:
+                                cart_item = CartItem.objects.get(pk=cart_item_id, cart=cart)
+                                cart_item.quantity = quantity
+                                cart_item.save()
+                                
+                            else:
+                                messages.error(request, "invalid quantity")
                         else:
                             # Optionally, you can remove items with quantity <= 0
                             cart_item = CartItem.objects.get(pk=cart_item_id, cart=cart)
@@ -96,24 +104,38 @@ class ViewCart(View):
             # Unauthenticated user - retrieve cart data from session
             cart_data = request.session.get('cart', {})
 
+            print("Before Update - cart_data:", cart_data)
+            
             # Iterate through the request.POST data to update quantities in the session
             for key, value in request.POST.items():
                 if key.startswith('quantity_'):
-                    cart_item_id = key.split('_')[1]
+                    cart_item_id = key[len('quantity_'):]
+                    cart_item = CartItem.objects.get(id=cart_item_id)
+                    pk_str = str(cart_item.product_item.id)
+                   
+                  
+                    print("dsf",cart_item)
+
                     try:
                         quantity = int(value)
-                        if quantity >= 1:
-                            # Update the session data directly
-                            cart_data[cart_item_id]['count'] = quantity
+
+                        # Check if cart_item_id exists in cart_data
+                        if pk_str in cart_data:
+                            if quantity >= 1 and quantity < 5:
+                                # Update the session data directly
+                                cart_data[pk_str]['count'] = quantity
+                                print(f"Updated quantity for {pk_str} to {quantity}")
+                            else:
+                                messages.error(request, "Invalid quantity")
                         else:
-                            # Optionally, you can remove items with quantity <= 0
-                            del cart_data[cart_item_id]
+                            print(f"Item with ID {cart_item_id} not found in cart_data.")
                     except (KeyError, ValueError):
                         # Handle errors here, e.g., item not found or invalid quantity
                         pass
-            
+
             # Save the updated session cart data
             request.session['cart'] = cart_data
+            print("After Update - cart_data:", cart_data)
 
         # Redirect to the cart view
         return redirect('cart_view')
@@ -137,7 +159,7 @@ class RemoveFromCart(View):
             pk_str = str(product_item_id)
             if pk_str in cart:
                 if cart[pk_str]['count'] > 1:
-                    cart[pk_str]['count'] -= 1
+                    del cart[pk_str]
                 else:
                     del cart[pk_str]
             request.session['cart'] = cart

@@ -1,4 +1,17 @@
-{%extends 'base.html'%} {%block content%} {%load static%} {%csrf_token%}
+{%extends 'base.html'%}
+{% block breadcrumbs %}
+        {% for breadcrumb in breadcrumbs %}
+            <li class="breadcrumb-item">
+                <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
+            </li>
+            {% if not forloop.last %}
+                <li class="breadcrumb-separator">/</li>
+            {% endif %}
+        {% endfor %}
+
+{% endblock %}
+
+{%block content%} {%load static%} {%csrf_token%}
 <!-- Main navigation container -->
 
 
@@ -84,7 +97,7 @@
      {% for item in featured_items_with_images %}
   {% if item.product.id %}
     <a href="{% url 'product_detail' item.product.id %}" class="group">
-      <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
+      <div class="aspect-h-1 aspect-w-1 w-full shadow-xl overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
         <img src="{{ item.image_url }}" alt="{{ item.product_item.product_id.name }} Image">
         
       </div>
@@ -112,7 +125,7 @@
     
     {% for league in leagues %}
       <a href="{% url 'league_products' league.id %}" class="group ml-8">
-        <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
+        <div class="aspect-h-1 aspect-w-1 w-full shadow-2xl overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
           <img src="{{ league.thumbnail.url }}" alt="{{ league.name }}" class="h-full w-full object-cover object-center group-hover:opacity-75">
         </div>
         <h3 class="mt-4 text-sm text-gray-700 ">{{ league.name }}</h3>
@@ -157,7 +170,7 @@
     
     {% for product, image_url in product_images.items %}
       <a href="{% url 'country_products' country_id=product.country_id.id  %}" class="group">
-        <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
+        <div class="shadow-xl aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
           <img src="{{ image_url }}" alt="{{ product.name }}" class="h-full w-full object-cover object-center group-hover:opacity-75">
         </div>
         <h3 class="mt-4 text-sm text-gray-700 ">{{ product.name }}</h3>
