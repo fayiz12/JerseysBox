@@ -462,7 +462,6 @@ class CheckoutView(View):
         
         if selected_address and selected_payment_method and cart and cart_items:
 
-            # Create the order
             order = Order.objects.create(
                 user=user,
                 total_price=cart.final_price,
@@ -472,9 +471,6 @@ class CheckoutView(View):
                 payment_mode=selected_payment_method,
             )
 
-            
-    
-            
             for cart_item in cart_items:
                 OrderItem.objects.create(
                     order=order,
@@ -482,20 +478,10 @@ class CheckoutView(View):
                     quantity=cart_item.quantity,
                     price=cart_item.product_item.product_id.price,  
                     status='processing',
-                    # item_data={
-                        
-                    #     'quantity': cart_item.quantity,
-                    #     'price_at_order': cart_item.product_item.product_id.price,
-                    # }
                 )
             if selected_payment_method == 'razorpay':
-                # Assuming you have already captured payment details from the Razorpay callback
-                # payment_id = request.POST.get('razorpay_payment_id')
                 payment_order=client.order.fetch(payment_order_id)
                 print(payment_order)
-                # payment_status = request.POST.get('razorpay_status')
-
-                # # Save payment details to the Payment model
                 Payment.objects.create(
                     user=user,
                     transaction_id=payment_order['id'],
@@ -503,17 +489,14 @@ class CheckoutView(View):
                     status=payment_order['status'],
                 )
             elif selected_payment_method == 'cash_on_delivery':
-                # Create a payment record for cash on delivery
+
                 Payment.objects.create(
                     user=user,
-                    transaction_id='COD',  # You can use any identifier for cash on delivery
+                    transaction_id='COD', 
                     amount=order.total_price,
-                    status='pending',  # Status can be pending for COD orders
+                    status='pending',
                 )
-            # order_data = {
-            #     'total_price': order.total_price,
-            #     'sub_total': order.sub_total,
-            # }
+
             cart.coupon_discount = 0
             cart.save()
             cart_items.delete()
@@ -524,12 +507,9 @@ class CheckoutView(View):
             "orders": order,
             "user": user,
             "address": selected_address,
-            # "order_data":order_data,
+
             
             }
-            
-
-            # Render a template that includes the invoice HTML and download button
             return render(request, 'order_confirmed.html', {'data': data})
 
             

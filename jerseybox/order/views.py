@@ -75,7 +75,6 @@ class SubmitReviewView(View):
         if not user_has_ordered_product:
             messages.error(request, 'You must order this product to leave a review.')
         else:
-            # Check if the user has already reviewed the product
             existing_review = Review.objects.filter(user=user, product=product).exists()
             if existing_review:
                 messages.error(request, 'You can only add one review per product.')

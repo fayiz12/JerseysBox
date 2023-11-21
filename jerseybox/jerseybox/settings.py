@@ -12,7 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=xky85-504kx((a43xrrv6qj6d3$j(7yi=m&d#oz5au@dcmfvy'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -188,7 +191,7 @@ EMAIL_HOST='smtp.gmail.com'
 EMAIL_USE_TLS=True
 EMAIL_PORT=587
 EMAIL_HOST_USER='jerseybox2@gmail.com'
-EMAIL_HOST_PASSWORD='erhmijnahulswpws'
+EMAIL_HOST_PASSWORD= os.environ.get("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL='jerseybox2@gmail.com'
 
 
@@ -274,5 +277,5 @@ JAZZMIN_SETTINGS = {
 # key_id :rzp_test_44So9Mr9PHVm6s
 # key_secret: CWVNkyRT1kGnJJAEJ9szTj5u
 
-RAZORPAY_API_KEY = 'rzp_test_DVyPyTYnbu9GxV'
-RAZORPAY_API_SECRET = 'SI6gwZGiTasYn3C33Y4hvUEG'
+RAZORPAY_API_KEY = os.environ.get("RAZORPAY_API_KEY")
+RAZORPAY_API_SECRET = os.environ.get("RAZORPAY_API_SECRET")
