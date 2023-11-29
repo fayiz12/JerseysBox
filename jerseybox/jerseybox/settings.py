@@ -274,8 +274,10 @@ JAZZMIN_SETTINGS = {
 # LOGIN_URL = '/login/'
 
 
-# key_id :rzp_test_44So9Mr9PHVm6s
-# key_secret: CWVNkyRT1kGnJJAEJ9szTj5u
+
 
 RAZORPAY_API_KEY = os.environ.get("RAZORPAY_API_KEY")
 RAZORPAY_API_SECRET = os.environ.get("RAZORPAY_API_SECRET")
+
+
+
