@@ -10,6 +10,26 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
     {%csrf_token%}
     <title>Jersey Box</title>
+      <style>
+    /* Add your CSS styles here */
+    #myDiv {
+      display: none; /* Set the initial display property to 'none' */
+      /* Add other styling for your div */
+    }
+  </style>
+      <style>
+    /* Add your CSS styles here */
+    .navbar-burger {
+      position: relative;
+    }
+
+    #dropdown {
+      position: absolute;
+      top: 100%; /* Position the dropdown below the navbar-burger */
+      right: 0;
+      z-index: 10;
+    }
+  </style>
     <style>
         .image-container {
             
@@ -271,11 +291,50 @@
           </span>
         </span>
       </a>
-      <a class="navbar-burger self-center mr-12 xl:hidden" href="#">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hover:text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-      </a>
+<a id="navbarBurger" class="navbar-burger self-center mr-12 xl:hidden" href="#">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hover:text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+  </svg>
+
+  <!-- Dropdown menu -->
+  <div id="dropdown" class="hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+      <li>
+        <a href="{% url 'wishlist_view' %}" class="block  px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">wishlist</a>
+      </li>
+      <li>
+        <a href="{% url 'gender_products' 'male' %}" class="block md:hidden px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">men</a>
+      </li>
+      <li>
+        <a href="{% url 'gender_products' 'female' %}" class="block md:hidden px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">women</a>
+      </li>
+      <li>
+        <a href="{% url 'gender_products' 'kids' %}" class="block md:hidden px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">kids</a>
+      </li>
+      <li>
+          {% if user.is_authenticated %}
+            <a class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" href="{% url 'signout'%}">logout</a>
+            {% else %} 
+            <a class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" href="{% url 'login' %}">login</a>
+          {% endif %}
+      </li>
+    </ul>
+  </div>
+</a>
+
+<script>
+  // Add JavaScript to handle the dropdown toggle
+  document.addEventListener('DOMContentLoaded', function () {
+    var navbarBurger = document.getElementById('navbarBurger');
+    var dropdown = document.getElementById('dropdown');
+
+    navbarBurger.addEventListener('click', function (e) {
+      e.preventDefault(); // Prevent the default behavior of the anchor element
+      dropdown.classList.toggle('hidden');
+    });
+  });
+</script>
+
     </nav>
 
 

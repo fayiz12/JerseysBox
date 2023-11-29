@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["65.1.220.142","localhost"]
 
 
 # Application definition
@@ -114,12 +114,12 @@ WSGI_APPLICATION = 'jerseybox.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'JERSEYBOX1',
-        'USER':'postgres',
-        'PASSWORD':'test123',
-        'HOST':'127.0.0.1',
-        'PORT':'5432',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'jerseybox1',
+        'USER':'fayiz',
+        'PASSWORD':'Faiz@2516',
+        'HOST':'localhost',
+        'PORT':'',
     }
 }
 
@@ -171,7 +171,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
-
+STATIC_ROOT = os.path.join(BASE_DIR, "assets")
 
 
 AUTH_USER_MODEL = "users.UserProfile"
