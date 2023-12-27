@@ -8,7 +8,7 @@ from products.models import *
 
 class WishlistModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True,related_name='wishlist')
     product = models.ManyToManyField(Product, related_name='wishlist_items') 
 
     def __str__(self):

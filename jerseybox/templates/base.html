@@ -234,7 +234,7 @@
         
   </head>
   <body>
-      <nav class="sticky top-0 flex justify-between bg-gray-800 text-white w-screen ">
+      <nav class="sticky z-30 top-0 flex justify-between bg-gray-800 text-white w-screen ">
       <div class="px-5 xl:px-12 py-6 flex w-full items-center">
         <a class="text-3xl font-bold font-heading" href="{% url 'home'  %}">
          <img src="{% static 'logo.png' %}" alt="Logo" class="h-12  mr-2">
@@ -252,16 +252,34 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
+            {% comment %} {% if user.is_authenticated %}
+              {% if user.wishlist.all|length > 0 %}
+            
+         
+          
+            <span class="flex absolute -mt-7 ml-4">
+              <span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-pink-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500">
+                </span>
+              </span>
+                {% endif %}  
+            {% endif %} {% endcomment %}
           </a>
           <a class="flex items-center hover:text-gray-200" href="{% url 'cart_view' %}">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
+            
+            {% if user.cart.cart.all %}
+            
+         
+          
             <span class="flex absolute -mt-5 ml-4">
               <span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-pink-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500">
                 </span>
               </span>
+                {% endif %}
           </a>
           <!-- Sign In / Register      -->
           <a class="flex items-center hover:text-gray-200" href="{% url 'userprofile'%}">
@@ -281,15 +299,20 @@
         </div>
       </div>
       <!-- Responsive navbar -->
-      <a class="flex items-center hover:text-gray-200" href="{% url 'cart_view' %}">
+      <a class="flex items-center hover:text-gray-200 xl:hidden" href="{% url 'cart_view' %}">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
+                        {% if user.cart.cart.all %}
+            
+         
+          
             <span class="flex absolute -mt-5 ml-4">
               <span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-pink-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500">
                 </span>
               </span>
+                {% endif %}
           </a>
 <a id="navbarBurger" class="navbar-burger self-center mr-12 xl:hidden" href="#">
   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hover:text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -344,8 +367,7 @@
 <!-- Breadcrumb -->
 <nav class="flex px-5 py-3 text-gray-700 border border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
   <ol class="inline-flex items-center space-x-1 md:space-x-3">
-
-  <div id="breadcrumbs"></div>
+    <div id="breadcrumbs"></div>
   </ol>
 </nav>
 
@@ -363,82 +385,30 @@ function updateBreadcrumbs() {
 
     // Create a Home link
     const homeLink = document.createElement('a');
-    homeLink.textContent = 'Home >';
+    homeLink.textContent = 'Home';
     homeLink.href = '/';
     breadcrumbsContainer.appendChild(homeLink);
 
-    // Initialize a variable to keep track of the last segment
-    let currentPath = '';
-
-    // Iterate through the URL segments and create breadcrumb links
-    for (const segment of segments) {
-        // Skip the base URL segment
-        if (segment === '') {
-            continue;
-        }
-
-        currentPath += `/${segment}`;
-        
-        const breadcrumbLink = document.createElement('a');
-        breadcrumbLink.textContent = segment;
-        
-        // Ensure leading slash and add a trailing slash for URL consistency
-        breadcrumbLink.href = currentPath + '/';
-        
-        breadcrumbsContainer.appendChild(breadcrumbLink);
-
-        // Add a separator (e.g., ' > ') between breadcrumbs
-        if (segment !== segments[segments.length - 1]) {
-            const separator = document.createTextNode(' > ');
-            breadcrumbsContainer.appendChild(separator);
-        }
+    // Add a separator (e.g., ' > ') between home link and breadcrumbs
+    if (segments.length > 0) {
+        const separator = document.createTextNode(' > ');
+        breadcrumbsContainer.appendChild(separator);
     }
+
+    // Get the last segment for display
+    const lastSegment = segments[segments.length - 1];
+
+    // Display the last segment in the breadcrumbs
+    const breadcrumbLink = document.createElement('a');
+    breadcrumbLink.textContent = lastSegment;
+    breadcrumbLink.href = url;
+    breadcrumbsContainer.appendChild(breadcrumbLink);
 }
 
-// Call the updateBreadcrumbs function when the page loads
-window.addEventListener('load', updateBreadcrumbs);
-
-{% comment %} function updateBreadcrumbs() {
-    // Get the current URL and split it into segments
-    const url = window.location.pathname;
-    const segments = url.split('/').filter(segment => segment);
-
-    // Create a container for the breadcrumbs
-    const breadcrumbsContainer = document.getElementById('breadcrumbs');
-
-    // Clear the existing breadcrumbs
-    breadcrumbsContainer.innerHTML = '';
-
-    // Create a Home link
-    const homeLink = document.createElement('a');
-    homeLink.textContent = 'Home/';
-    homeLink.href = '/';
-    breadcrumbsContainer.appendChild(homeLink);
-
-    // Iterate through the URL segments and create breadcrumb links
-    let currentPath = '';
-    for (const segment of segments) {
-        currentPath += '' + segment + '/';
-
-        const breadcrumbLink = document.createElement('a');
-        breadcrumbLink.textContent = segment;
-        breadcrumbLink.href = currentPath;
-        breadcrumbsContainer.appendChild(breadcrumbLink);
-
-        // Add a separator (e.g., ' > ') between breadcrumbs
-        if (segment !== segments[segments.length - 1]) {
-            const separator = document.createTextNode(' > ');
-            breadcrumbsContainer.appendChild(separator);
-        }
-    }
-}
-
-// Call the updateBreadcrumbs function when the page loads
-window.addEventListener('load', updateBreadcrumbs);
- {% endcomment %}
-
-
+// Call the function to update breadcrumbs
+updateBreadcrumbs();
 </script>
+
 
     
 

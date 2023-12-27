@@ -2,7 +2,7 @@ import hashlib
 from django.http import Http404
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
-
+from order.models import *
 from .models import UserProfile
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
@@ -12,7 +12,7 @@ from products.models import *
 from django.views import View
 import random
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-
+import re
 from cart.models import *
 
 
@@ -34,10 +34,13 @@ class SignupView(View):
         if userobj.exists():
             messages.warning(request, "You are already registered. Please login.")
             return redirect("register")
-
+        if not pass1 and not pass2 and not name:
+            messages.warning(request, "provide All field")
+            return redirect("register")
         if pass1 != pass2:
             messages.warning(request, "Password does not match.")
             return redirect("register")
+
 
         otp = str(random.randint(100000, 999999))
         send_otp_email(email, name, otp)
@@ -150,7 +153,7 @@ class LoginView(View):
         pass1 = request.POST.get("pass1")
 
         user = authenticate(request, username=name, password=pass1)
-        if user is not None:
+        if user is not None and not user.is_superuser:
             auth_login(request, user)
             messages.success(request, "logged in")
 
@@ -180,9 +183,12 @@ class UserProfileView(View):
         user=request.user
         return render(request,'user_profile.html',{'user':user})
 
-
-
-class Custom404View(View):
-    def get(self, request, exception=None):
-        return render(request, '404.html', status=404)
+class AllAddressView(View):
+    def get(self,request):
+        user=request.user
+        address=user.address.all()
+        return render(request,'address.html',{'address':address})
+# class Custom404View(View):
+#     def get(self, request, exception=None):
+#         return render(request, '404.html', status=404)
 

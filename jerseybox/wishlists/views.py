@@ -59,3 +59,4 @@ class RemoveFromWishlistView(View):
         else:
             # Handle the case when the user is not authenticated, e.g., redirect to a login page.
             return redirect('login')
+

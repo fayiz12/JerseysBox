@@ -474,7 +474,7 @@
 
         <div class="flex flex-col mt-3">
             <div class="mb-2">
-                <a href="#" class="font-medium">{{ product.name }}</a>
+                <a href="#" class="font-medium">{{ product.name|truncatechars:25 }}</a>
                 <span class="flex items-center h-8 bg-gray-200 text-gray-600 text-sm px-2 rounded">
                     {{ product.club_id.name }}{{ product.country_id.country.name }}
                 </span>
@@ -503,27 +503,16 @@
 
     <!-- Pagination Buttons -->
    <div class="flex justify-center mt-10 space-x-1">
-    <button class="flex items-center justify-center h-8 w-8 rounded text-gray-400">
-        <!-- Previous button -->
-    </button>
-    <!-- Previous page button (with URL) -->
-    <button class="flex items-center justify-center h-8 px-2 rounded text-sm font-medium text-gray-400"
-            {% if not page.has_previous %}disabled{% endif %}>
-        Prev
-    </button>
-    {% for page_num in page.paginator.page_range %}
-        <a href="?page={{ page_num }}" class="flex items-center justify-center h-8 w-8 rounded
-           {% if page_num == page.number %}bg-indigo-200 text-indigo-600{% else %}hover:bg-indigo-200 text-sm font-medium text-gray-600 hover:text-indigo-600{% endif %}">
-            {{ page_num }}
-        </a>
+<nav aria-label="Page navigation example">
+  <ul class=" flex gap-3 justify-center">
+    <li class="flex items-center justify-center h-8 px-2 rounded text-sm font-medium text-gray-400" style="cursor: pointer;" {% if page.has_previous %} onclick="pagination('{{ page.previous_page_number }}')"{% endif %}>&laquo;</li>
+    {% for num in page.paginator.page_range %}
+      <li class=" flex items-center justify-center h-8 w-8{% if num == page.number %}bg-indigo-200 text-red-500{% endif %}" style="cursor: pointer;" onclick="pagination('{{ num }}')">
+      {{ num }}</li>
     {% endfor %}
-    <!-- Next page button (with URL) -->
-    <button class="flex items-center justify-center h-8 px-2 rounded {% if not page.has_next %}disabled{% endif %}">
-        Next
-    </button>
-    <button class="flex items-center justify-center h-8 w-8 rounded text-gray-600 hover:text-indigo-600">
-        <!-- Next button -->
-    </button>
+    <li class="flex items-center justify-center h-8 px-2 rounded text-sm font-medium text-gray-400" style="cursor: pointer;" {% if page.has_next %} onclick="pagination('{{ page.next_page_number }}')" {% endif %}>&raquo;</li>    
+  </ul>
+</nav>
 </div>
     <!-- Component End -->
           </div>
@@ -687,6 +676,15 @@ nationSelect.addEventListener("change", populateLeagueDropdown);
 
 </script>
 
+<script>
+  let currentUrl = new URL(window.location.href);
+  let urlparams = new URLSearchParams(currentUrl.search);
 
+  function pagination(page_number){
+    urlparams.set('page', page_number);
+    currentUrl.search = urlparams.toString();
+    window.location.href = currentUrl.toString();
+  }
+</script>
 
 {% endblock %}

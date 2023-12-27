@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["65.1.220.142","localhost"]
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -69,14 +69,14 @@ INSTALLED_APPS = [
     'payment',
     'coupon',
     'dashboard',
-    'debug_toolbar',
+    # 'debug_toolbar',
     
     
 ]
 TAILWIND_APP_NAME = 'theme'
 
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -114,12 +114,12 @@ WSGI_APPLICATION = 'jerseybox.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'jerseybox1',
-        'USER':'fayiz',
-        'PASSWORD':'Faiz@2516',
-        'HOST':'localhost',
-        'PORT':'',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'JERSEYBOX1',
+        'USER':'postgres',
+        'PASSWORD':'test123',
+        'HOST':'127.0.0.1',
+        'PORT':'5432',
     }
 }
 
@@ -274,10 +274,8 @@ JAZZMIN_SETTINGS = {
 # LOGIN_URL = '/login/'
 
 
-
+# key_id :rzp_test_44So9Mr9PHVm6s
+# key_secret: CWVNkyRT1kGnJJAEJ9szTj5u
 
 RAZORPAY_API_KEY = os.environ.get("RAZORPAY_API_KEY")
 RAZORPAY_API_SECRET = os.environ.get("RAZORPAY_API_SECRET")
-
-
-

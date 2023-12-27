@@ -23,7 +23,8 @@ from xhtml2pdf import pisa
 from payment.models import *
 from decimal import Decimal
 from products.breadcrumbs import *
-
+from django.db.models import Q
+from django.db import transaction
 
 
 
@@ -153,19 +154,23 @@ class LeagueProductsView(View):
 
 class GenderProductsView(View):
     template_name = "gender_products.html"
-    items_per_page = 4  # Define how many items you want to display per page
+    items_per_page = 4 
     
     def get(self, request, gender):
+        country=CountryModel.objects.all()
+        club=Club.objects.all()
         # Get the selected sorting parameter from the form
         sort_param = request.GET.get('sort', 'price_low')
 
         # Get the selected product type (Home/Away)
-        selected_product_type = request.GET.get('product_type')
+        selected_product_type = request.GET.getlist('product_type')
 
         # Get the selected category (Country/Club)
-        selected_category = request.GET.get('category')
+        selected_category = request.GET.getlist('category')
+ 
         
-        selected_year=request.GET.get('years')
+
+        selected_year=request.GET.getlist('years')
         if sort_param == 'name':
             sort_order = 'name'  # Sort by name (ascending)
         elif sort_param == 'name_desc':
@@ -177,17 +182,35 @@ class GenderProductsView(View):
 
         # Fetch Product objects for the selected gender and apply filters/sorting
         gender_products = Product.objects.filter(gender=gender, is_active=True).order_by(sort_order)
+        if 'away' in selected_product_type and 'home' in selected_product_type:
+            gender_products=gender_products.filter(Q(type='away') | Q(type='home')) 
+
+        elif 'away' in selected_product_type:
+            gender_products = gender_products.filter(type='away')    
+        elif 'home' in selected_product_type:
+            gender_products = gender_products.filter(type='home') 
+        
+        if 'country' in selected_category and 'club' in selected_category:
+            gender_products=gender_products.filter(Q(category='club') | Q(category='country'))
 
         # Apply product type filter
-        if selected_product_type:
-            gender_products = gender_products.filter(type=selected_product_type)
+
 
         # Apply category filter
-        if selected_category:
-            gender_products = gender_products.filter(category=selected_category)
+        elif 'country' in selected_category:
+            gender_products = gender_products.filter(category='country')
+        elif 'club' in selected_category:
+            gender_products = gender_products.filter(category='club')
 
-        if selected_year:
-            gender_products = gender_products.filter(year=selected_year)
+
+        print(selected_year)
+        if '23-24' in selected_year and '22-23':
+            gender_products = gender_products.filter(Q(year='22-23')| Q(year='23-24'))
+        elif '23-24' in selected_year:
+            gender_products = gender_products.filter(year='23-24')
+
+        elif '22-23' in selected_year:
+            gender_products = gender_products.filter(year='22-23')
 
         # Fetch unique years for the filter
         years = Product.objects.values_list('year', flat=True).distinct()
@@ -196,7 +219,8 @@ class GenderProductsView(View):
         page_number = request.GET.get('page')
         paginator = Paginator(gender_products, self.items_per_page)
         page = paginator.get_page(page_number)
-
+        print(selected_category)
+        print(selected_product_type)
         # Filter data based on the selected filters
         
         context = {
@@ -206,6 +230,7 @@ class GenderProductsView(View):
             "sort_param": sort_param,
             "selected_product_type": selected_product_type,
             "selected_category": selected_category,
+           
             
         }
 
@@ -416,6 +441,7 @@ class ProductDetailView(View):
 
 class CheckoutView(View):
     def get(self, request):
+        
         if not request.user.is_authenticated:
             return redirect('login')
         user = request.user
@@ -449,6 +475,7 @@ class CheckoutView(View):
 
         print('dfghj,')
         user = request.user
+        
         selected_address_id = request.POST.get('selectedAddress')
         selected_payment_method = request.POST.get('payment_method')
         payment_order_id=request.POST.get('order_id')
@@ -457,10 +484,13 @@ class CheckoutView(View):
 
         cart = get_object_or_404(Cart, user=user)
         cart_items = CartItem.objects.filter(cart=cart)
-        selected_address = Address.objects.get(id=selected_address_id)
-
+        if selected_address_id:
+            selected_address = Address.objects.get(id=selected_address_id)
+        else:
+            messages.error(request,"Add Address")
+            return redirect(request.META.get('HTTP_REFERER'))
         
-        if selected_address and selected_payment_method and cart and cart_items:
+        if selected_payment_method and cart and cart_items:
 
             order = Order.objects.create(
                 user=user,
@@ -472,13 +502,22 @@ class CheckoutView(View):
             )
 
             for cart_item in cart_items:
-                OrderItem.objects.create(
-                    order=order,
-                    product=cart_item.product_item,
-                    quantity=cart_item.quantity,
-                    price=cart_item.product_item.product_id.price,  
-                    status='processing',
-                )
+                if cart_item.quantity<=cart_item.product_item.stock:
+                    with transaction.atomic():
+                        product_item = ProductItem.objects.select_for_update().get(id=cart_item.product_item.id)
+                        OrderItem.objects.create(
+                            order=order,
+                            product=product_item,
+                            quantity=cart_item.quantity,
+                            price=product_item.product_id.price,  
+                            status='processing',
+                        )
+
+                        product_item.stock-=cart_item.quantity
+                        product_item.save()
+                else:
+                    messages.error(request,"not enough stock ")
+                    return redirect(request.META.get('HTTP_REFERER'))
             if selected_payment_method == 'razorpay':
                 payment_order=client.order.fetch(payment_order_id)
                 print(payment_order)
@@ -511,6 +550,9 @@ class CheckoutView(View):
             
             }
             return render(request, 'order_confirmed.html', {'data': data})
+        else:
+            messages.error(request,"select all")
+            return redirect(request.META.get('HTTP_REFERER'))
 
             
 

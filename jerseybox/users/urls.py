@@ -12,4 +12,5 @@ urlpatterns=[
     path('rreset_password/<str:encrypt_id>/',views.UserResetPassword.as_view(),name='reset'),
     path('signout/',views.UserSignout.as_view(),name='signout'),
     path('user_profile/',views.UserProfileView.as_view(),name='userprofile'),
+    path('user_address/',views.AllAddressView.as_view(),name='address'),
 ]

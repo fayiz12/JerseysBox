@@ -36,7 +36,7 @@
                 name="username"
                 id="name"
                 autofocus
-                class="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
+                class="required px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
               />
             </div>
 
@@ -47,6 +47,7 @@
               <input
                 type="email"
                 name="email"
+                pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
                 id="email"
                 autofocus
                 class="required px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
@@ -64,9 +65,12 @@
               <input
                 type="password"
                 name="pass1"
-                id="password"
+                id="pass1"
+                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$"
+                title="Password must contain at least one uppercase letter, one lowercase letter, one digit, and be at least 8 characters long"
                 class="required px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
               />
+              
             </div>
             <div class="flex flex-col space-y-1">
               <div class="flex items-center justify-between">
@@ -79,7 +83,7 @@
               <input
                 type="password"
                 name="pass2"
-                id="password"
+                id="pass2"
                 class="required px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-gray-200"
               />
             </div>
@@ -90,6 +94,7 @@
               <button
                 type="submit"
                 class="w-full px-4 py-2 text-lg font-semibold text-white transition-colors duration-300 bg-black rounded-md shadow hover:bg-gray-600 focus:outline-none focus:ring-gray-200 focus:ring-4"
+                onclick="validateForm()"
               >
                 CREATE
               </button>
@@ -109,5 +114,7 @@
         </div>
       </div>
     </div>
+    
+
   
 {%endblock%}

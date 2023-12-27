@@ -32,8 +32,7 @@ def custom_admin_context(request):
         labelz = [entry['status'] for entry in order_status_data]
         counts = [entry['count'] for entry in order_status_data]
 
-        # Query the data for the chart
-        # Depending on the chosen interval (daily or monthly), use TruncDay or TruncMonth
+
         if interval == 'daily':
             sales_data = (
                 Order.objects
@@ -53,7 +52,7 @@ def custom_admin_context(request):
         elif interval == 'yearly':
             sales_data = (
                 Order.objects
-                .annotate(year=Extract('created_at', 'year'))  # Use 'Extract' with 'year' lookup
+                .annotate(year=Extract('created_at', 'year')) 
                 .values('year')
                 .annotate(total_revenue=Sum('total_price'))
                 .order_by('year')
@@ -71,7 +70,7 @@ def custom_admin_context(request):
             'counts':counts,
             'product_names': product_names,
             'total_sales': total_sales,
-            'total_price': total_price,  # Use numerical total_price data
+            'total_price': total_price, 
             'formatted_total_price': formatted_total_price, 
         }
 

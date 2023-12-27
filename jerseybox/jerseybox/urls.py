@@ -18,8 +18,10 @@ from django.contrib import admin
 from django.urls import path,include,re_path
 from django.conf import settings
 from django.conf.urls.static import static
-from users.views import Custom404View
+# from users.views import Custom404View
 from django.contrib.staticfiles.views import serve
+
+
 
 
 
@@ -46,15 +48,15 @@ if settings.DEBUG:
     
     ] + urlpatterns
 
-    urlpatterns += [
-        re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
-    ]
+    # urlpatterns += [
+    #     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
+    # ]
 
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
-urlpatterns += [
-    re_path(r'^.*$', Custom404View.as_view(), name='custom_404'),
-]
+# urlpatterns += [
+#     re_path(r'^.*$', Custom404View.as_view(), name='custom_404'),
+# ]

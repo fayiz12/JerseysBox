@@ -1,0 +1,39 @@
+{% extends 'base.html' %}{%load static%} {%csrf_token%} {% block content %}
+
+    {% if address %}
+    <div class='px-10 w-screen h-screen'>
+    <p class='text-3xl flex flex-row justify-center py-8'>All Addresses</p>
+            <p class='flex flex-row justify-end'><a href="{% url 'add_address' %}" class=" bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 border border-gray-700 rounded">
+                                    Add Address
+                                </a></p>
+        <ul class='shadow-xl p-10'>
+            <!-- Loop through each address and display its details -->
+            {% for address in address %}
+                <li class="mb-4">
+                    <strong>{{ address.name }}</strong><br>
+                    {{ address.street_address }}<br>
+                    {{ address.city }}, {{ address.state }} {{ address.zip_code }}<br>
+                    {{ address.country }}<br>
+                    <!-- Add other address fields as needed -->
+                </li>
+            {% endfor %}
+                         
+                                
+        </ul>
+
+        </div>
+    {% else %}
+    <div class="w-screen h-screen flex flex-row justify-center ">
+    <div class='flex flex-col justify-center'>
+        <p class="py-10">No addresses found. Add new Address</p>
+               <p>
+                                <a href="{% url 'add_address' %}" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 border border-gray-700 rounded">
+                                    Add Address
+                                </a></p>
+    </div>
+    </div>
+    {% endif %}
+
+
+
+{% endblock %}
