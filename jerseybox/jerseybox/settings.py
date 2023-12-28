@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+AALLOWED_HOSTS = ["65.1.220.142","localhost","www.jerseysbox.shop"]
 
 
 # Application definition
@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     
     
 
-    #Custom Apps
+        #Custom Apps
     
     'users',
     'products',
@@ -69,14 +69,14 @@ INSTALLED_APPS = [
     'payment',
     'coupon',
     'dashboard',
-    # 'debug_toolbar',
+    'debug_toolbar',
     
     
 ]
 TAILWIND_APP_NAME = 'theme'
 
 MIDDLEWARE = [
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -88,7 +88,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'jerseybox.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -114,14 +113,16 @@ WSGI_APPLICATION = 'jerseybox.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'JERSEYBOX1',
-        'USER':'postgres',
-        'PASSWORD':'test123',
-        'HOST':'127.0.0.1',
-        'PORT':'5432',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'jerseybox1',
+        'USER':'fayiz',
+        'PASSWORD':'Faiz@2516',
+        'HOST':'localhost',
+        'PORT':'',
     }
 }
+
+
 
 
 # Password validation
@@ -169,21 +170,19 @@ INTERNAL_IPS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-STATIC_URL = '/static/'
+STATIC_URL = '/assets/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 STATIC_ROOT = os.path.join(BASE_DIR, "assets")
 
 
 AUTH_USER_MODEL = "users.UserProfile"
 
-CSRF_TRUSTED_ORIGINS=['http://127.0.0.1:8000/']
+CSRF_TRUSTED_ORIGINS=['http://127.0.0.1:8000/',"https://www.jerseysbox.shop"]
 
 
 
 MEDIA_URL="/media/"
 MEDIA_ROOT=os.path.join(BASE_DIR,"media")
-
-
 
 
 EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
@@ -217,7 +216,7 @@ JAZZMIN_SETTINGS = {
     "site_icon": None,
     # Add your own branding here
     "site_logo": "adminlogo.png",
-    "welcome_sign": "Welcome to the Jersey Box",
+   "welcome_sign": "Welcome to the Jersey Box",
     # Copyright on the footer
     "copyright": "Jersey Box",
     "user_avatar": None,
@@ -232,7 +231,6 @@ JAZZMIN_SETTINGS = {
         {"model": "auth.User"},
     ],
    }
-
 
 
 # UNFOLD = {
@@ -273,9 +271,6 @@ JAZZMIN_SETTINGS = {
 
 # LOGIN_URL = '/login/'
 
-
-# key_id :rzp_test_44So9Mr9PHVm6s
-# key_secret: CWVNkyRT1kGnJJAEJ9szTj5u
 
 RAZORPAY_API_KEY = os.environ.get("RAZORPAY_API_KEY")
 RAZORPAY_API_SECRET = os.environ.get("RAZORPAY_API_SECRET")

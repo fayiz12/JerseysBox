@@ -1,0 +1,14 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "build",
+			"path": "jerseybox/theme/static_src",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: build - jerseybox/theme/static_src",
+			"detail": "npm run build:clean && npm run build:tailwind"
+		}
+	]
+}

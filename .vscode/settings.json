@@ -1,0 +1,4 @@
+{
+    "git.useIntegratedAskPass": false,
+    "python.terminal.focusAfterLaunch": true
+}
