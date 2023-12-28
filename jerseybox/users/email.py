@@ -11,8 +11,7 @@ def send_otp_email(email, name, otp):
         'emailOTP.html', {'username': name, 'otp': otp})
 
     subject = 'Account verification OTP'
-    send_mail(subject, '', settings.EMAIL_HOST_USER,
-              [email], html_message=html_content)
+    send_mail(subject, '', settings.EMAIL_HOST_USER,[email], html_message=html_content)
 
 def reset_password_email(email,reset_link):
   subject = 'Password Reset Request'
