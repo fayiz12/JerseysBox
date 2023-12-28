@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-AALLOWED_HOSTS = ["65.1.220.142","localhost","www.jerseysbox.shop"]
+ALLOWED_HOSTS = ["65.1.220.142","localhost","www.jerseysbox.shop"]
 
 
 # Application definition
