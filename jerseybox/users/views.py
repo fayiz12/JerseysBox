@@ -45,24 +45,28 @@ class SignupView(View):
         otp = str(random.randint(100000, 999999))
         send_otp_email(email, name, otp)
         messages.success(request, "OTP send to mail ")
-        key = hashlib.sha256(email.encode()).hexdigest()
-        cache.set(
-            key,
-            {"email": email, "name": name, "password": pass1, "otp": otp},
-            timeout=600,
-        )
-        return redirect("otp", key=key)
+        # key = hashlib.sha256(email.encode()).hexdigest()
+        # cache.set(
+        #     key,
+        #     {"email": email, "name": name, "password": pass1, "otp": otp},
+        #     timeout=600,
+        # )
+        request.session['signup_data'] = {'email': email, 'name': name,'password': pass1, 'otp': otp}
+        return redirect("otp")
 
 
 class VerifyOtpView(View):
     def get(self, request, key):
         # Render the OTP verification form
-        return render(request, "otp.html", {"key": key})
+        signup_data =  request.session.get('signup_data',{})
+        print(signup_data,"verify get")
+        return render(request, "otp.html")
 
     def post(self, request, key):
         receivedotp = request.POST.get("otp")
 
-        signup_data = cache.get(key)
+        # signup_data = cache.get(key)
+        signup_data =  request.session.get('signup_data',{})
         print(signup_data)
         if not signup_data:
             messages.warning(request, "OTP expired or invalid")
@@ -80,25 +84,28 @@ class VerifyOtpView(View):
             username=name, email=email, password=password
         )
         user.save()
-        cache.delete(key)
+        # cache.delete(key)
+        del request.session['signup_data']
         return redirect("login")
 
 
 class ResendOTP(View):
     def get(self, request, key):
-        signup_data = cache.get(key)
+        # signup_data = cache.get(key)
+        signup_data = request.session.get('signup_data',{})
         if signup_data:
             email = signup_data.get("email")
             name = signup_data.get("name")
             otp = str(random.randint(100000, 999999))
             print(otp)
-            send_otp_email(email, name, otp)
+            account_verification_email(email, name, otp)
             messages.success(request, "OTP resend ")
             signup_data["otp"] = otp
-            existing_timeout = signup_data.get("timeout", None)
-            cache.set(key, signup_data, timeout=existing_timeout)
-            return redirect("otp", key=key)
-        return redirect("signup")
+            # existing_timeout = signup_data.get("timeout", None)
+            # cache.set(key, signup_data, timeout=existing_timeout)
+            # return redirect("otp", key=key)
+            request.session['signup_data'] = signup_data
+        return redirect("otp")
 
 
 class ForgotPassword(View):

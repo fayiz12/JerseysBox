@@ -19,3 +19,11 @@ def reset_password_email(email,reset_link):
   from_email = settings.EMAIL_HOST_USER
   recipient_list = [email]
   send_mail(subject, message, from_email, recipient_list)
+
+def account_verification_email(email, name, otp):
+    subject = 'Account verification OTP'
+    message = ''
+    from_email = settings.EMAIL_HOST_USER
+    recipient_list = [email]
+    html_content = render_to_string('emailOTP.html', {'username': name,'otp':otp})
+    send_mail(subject,message,from_email,recipient_list,html_message=html_content)
