@@ -56,13 +56,13 @@ class SignupView(View):
 
 
 class VerifyOtpView(View):
-    def get(self, request, key):
+    def get(self, request):
         # Render the OTP verification form
         signup_data =  request.session.get('signup_data',{})
         print(signup_data,"verify get")
         return render(request, "otp.html")
 
-    def post(self, request, key):
+    def post(self, request):
         receivedotp = request.POST.get("otp")
 
         # signup_data = cache.get(key)
@@ -70,7 +70,7 @@ class VerifyOtpView(View):
         print(signup_data)
         if not signup_data:
             messages.warning(request, "OTP expired or invalid")
-            return redirect("otp", key=key)
+            return redirect("otp")
         otp = signup_data.get("otp")
         name = signup_data.get("name")
         email = signup_data.get("email")
@@ -78,7 +78,7 @@ class VerifyOtpView(View):
         print(receivedotp, otp)
         if receivedotp != otp:
             messages.warning(request, "OTP mismatch")
-            return redirect("otp", key=key)
+            return redirect("otp")
 
         user = UserProfile.objects.create_user(
             username=name, email=email, password=password
@@ -90,7 +90,7 @@ class VerifyOtpView(View):
 
 
 class ResendOTP(View):
-    def get(self, request, key):
+    def get(self, request):
         # signup_data = cache.get(key)
         signup_data = request.session.get('signup_data',{})
         if signup_data:
